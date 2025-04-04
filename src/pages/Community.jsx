@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Card from "../Card";
+import Card from "../components/Card/Card";
 import testimg1 from "../assets/react.svg";
 import testimg2 from "../../public/vite.svg";
 

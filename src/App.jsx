@@ -1,22 +1,25 @@
 
-import HelloWorld from "./components/Hello";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import HelloWorld from "./components/Hello/Hello";
+import Header from "./components/Header/Header";
+import Footer from "./components/Footer/Footer";
 import Community from "./pages/Community";
-import UserGreeting from "./components/UserGreeting";
+import UserGreeting from "./components/UserGreeting/UserGreeting";
 import Login from "./pages/Login";
-
+import ErrorPage from "./pages/404page/ErrorPage";
+import SVGComponent from "./pages/404page/SVGComponent";
 
 function App() {
 
   return (
     <>
-      <Header />
-      <UserGreeting isLoggedIn={true} username={"white"}/>
+      {/* <Header />
+      <UserGreeting isLoggedIn={true} username={"white"}/> */}
+      <ErrorPage/>
+     
       {/* <HelloWorld />
       <Community /> */}
       {/* <Login/> */}
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }
