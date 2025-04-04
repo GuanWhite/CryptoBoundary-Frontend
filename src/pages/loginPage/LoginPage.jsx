@@ -1,4 +1,4 @@
-import "./Login.less"
+import "./Login.less";
 function Login() {
   // const [isLoggedIn, setIsLoggedIn] = useState(false);
   // const signUpButton = document.getElementById('signUp');

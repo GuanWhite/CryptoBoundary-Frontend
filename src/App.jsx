@@ -5,8 +5,8 @@ import Footer from "./components/Footer/Footer";
 import Community from "./pages/Community";
 import UserGreeting from "./components/UserGreeting/UserGreeting";
 import Login from "./pages/Login";
-import ErrorPage from "./pages/404page/ErrorPage";
-import SVGComponent from "./pages/404page/SVGComponent";
+import ErrorPage from "./pages/errorPage/ErrorPage";
+import SVGComponent from "./pages/errorPage/SVGComponent";
 
 function App() {
 

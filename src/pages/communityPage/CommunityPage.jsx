@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import Card from "../components/Card/Card";
-import testimg1 from "../assets/react.svg";
-import testimg2 from "../../public/vite.svg";
+import Card from "../../components/Card/Card";
+import testimg1 from "../../assets/react.svg";
+import testimg2 from "../../assets/vite.svg";
 
 function Community() {
   const simulateCardData = [
