@@ -12,6 +12,7 @@ const HelloWorld = () => {
 
   const [isAnimating, setIsAnimating] = useState(false);
 
+  
   useEffect(() => {
     // 初始延迟后启动动画
     const startTimer = setTimeout(() => {
