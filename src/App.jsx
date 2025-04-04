@@ -1,9 +1,9 @@
 
-import HelloWorld from "./component/HelloWorld";
-import Header from "./Header";
-import Footer from "./Footer";
+import HelloWorld from "./components/Hello";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 import Community from "./pages/Community";
-import UserGreeting from "./UserGreeting";
+import UserGreeting from "./components/UserGreeting";
 import Login from "./pages/Login";
 
 

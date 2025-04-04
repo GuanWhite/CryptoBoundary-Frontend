@@ -1,6 +1,7 @@
 // 用户欢迎界面
 import React from 'react';
 import PropTypes from 'prop-types';
+import './UserGreeting.less';
 
 function UserGreeting({ isLoggedIn = false, username = "Guest" }) {
   return (

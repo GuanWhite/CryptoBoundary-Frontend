@@ -1,7 +1,7 @@
-import './HelloWorld.less';
+import './Hello.less';
 import React, { useState, useEffect } from 'react';
 
-const HelloWorld = () => {
+const Hello = () => {
 
   // const [isFin, setIsFin] = useState(false);
 
@@ -48,4 +48,4 @@ const HelloWorld = () => {
   );
 };
 
-export default HelloWorld;
+export default Hello;

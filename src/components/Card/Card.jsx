@@ -1,3 +1,4 @@
+import "./Card.less";
 
 function Card(props) {
   return (
