@@ -3,6 +3,7 @@
 @--blue: #0e0620;
 @--white: #fff;
 @--green: #2ccf6d;
+@--CornFlowerBlue: #6495ED;
 
 
 .errorpage-outdiv {
@@ -71,8 +72,8 @@
   margin: 5px 0px;
 
   &.green {
-    border: 4px solid @--green;
-    color: @--blue;
+    border: 4px solid @--CornFlowerBlue;
+    // color: @--white;
 
     &:before {
       content: "";
@@ -81,14 +82,14 @@
       top: 0;
       width: 0%;
       height: 100%;
-      background: @--green;
+      background: @--CornFlowerBlue;
       z-index: -1;
       transition: 0.2s ease;
     }
 
     &:hover {
       color: @--white;
-      background: @--green;
+      background: @--CornFlowerBlue;
       transition: 0.2s ease;
 
       &:before {
@@ -97,6 +98,15 @@
     }
   }
 }
+
+// .errorpage-link {
+//   /* 去除默认的下划线 */
+//   text-decoration: none;
+//   /* 去除旧版浏览器的点击后的外虚线框 */
+//   outline: none;
+//   /* 去除默认的颜色和点击后变化的颜色 */
+//   // color: #000;
+// }
 
 // @media screen and (max-width:768px) {
 //   body {
