@@ -8,16 +8,21 @@ import UserGreeting from "./components/UserGreeting/UserGreeting";
 import ErrorPage from "./pages/notFoundPage/NotFoundPage";
 import SVGComponent from "./pages/notFoundPage/SVGComponent";
 import { createBrowserRouter } from "react-router";
+import StartButton from "./components/StartButton/StartButton";
+
+
+
 
 function App() {
 
   return (
     <>
       <Header />
+      <StartButton buttonName="Login" navProps="/login" />
       <UserGreeting isLoggedIn={true} username={"white"} />
-      {/* <ErrorPage/> */}
 
-      <Hello />
+      {/* <ErrorPage/> */}
+      {/* <Hello /> */}
       {/* <Community /> */}
       {/* <Login/> */}
       <Footer />

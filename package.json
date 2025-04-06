@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ant-design/icons": "^6.0.0",
+    "antd": "^5.24.6",
     "less": "^4.2.2",
     "prop-types": "^15.8.1",
     "react": "^19.0.0",

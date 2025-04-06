@@ -1,75 +1,121 @@
 import "./LoginPage.less";
+import StartButton from "../../components/StartButton/StartButton";
+import { MailOutlined, LockOutlined, GoogleOutlined, FacebookOutlined, GithubOutlined, LinkedinOutlined } from "@ant-design/icons";
+import { Input } from 'antd';
 function Login() {
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
-  // const signUpButton = document.getElementById('signUp');
-  // const signInButton = document.getElementById('signIn');
-  // const container = document.getElementById('container');
+  const container = document.querySelector('.container')
+const registerBtn = document.querySelector('.register-btn')
+const loginBtn = document.querySelector('.login-btn')
 
-  // signUpButton.addEventListener('click', () => {
-  //   container.classList.add("right-panel-active");
-  // });
+registerBtn.addEventListener('click', () => {
+  container.classList.add('active')
+})
 
-  // signInButton.addEventListener('click', () => {
-  //   container.classList.remove("right-panel-active");
-  // });
+loginBtn.addEventListener('click', () => {
+  container.classList.remove('active')
+})
   return (
     <>
-      {/* <h2>Weekly Coding Challenge #1: Sign in/up Form</h2> */}
-      <div className="container" id="container">
-        <div className="form-container sign-up-container">
-          <form action="#">
-            <h1>Create Account</h1>
-            <div className="social-container">
-              <a href="#" className="social"><i className="fab fa-facebook-f"></i></a>
-              <a href="#" className="social"><i className="fab fa-google-plus-g"></i></a>
-              <a href="#" className="social"><i className="fab fa-linkedin-in"></i></a>
+
+      {/* <div className="login-back-box">
+        <div className="login-container">
+          <div className="form-box login">
+            <form className="login-form" action="">
+              <h1 className="login-h1">Login</h1>
+              <div className="input-box">
+                <Input className="input-input" placeholder="Email" />
+                <MailOutlined className="input-icon" />
+              </div>
+              <div className="input-box">
+                <Input.Password className="input-input" placeholder="Password" />
+                <LockOutlined className="input-icon" />
+              </div>
+              <div className="forgot-link">
+                <a href="#">Forget Password?</a>
+              </div>
+              <button type="submit" className="login-btn">Login</button>
+              <p>or login with social platforms</p>
+              <div className="social-icons">
+                <a href="#"><GoogleOutlined /></a>
+                <a href="#"><FacebookOutlined /></a>
+                <a href="#"><GithubOutlined /></a>
+                <a href="#"><LinkedinOutlined /></a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div> */}
+
+      <div class="container">
+        <div class="form-box login">
+          <form action="">
+            <h1>Login</h1>
+            <div class="input-box">
+              <input type="text" placeholder="Username" required />
+                <i class="bx bxs-user"></i>
             </div>
-            <span>or use your email for registration</span>
-            <input type="text" placeholder="Name" />
-            <input type="email" placeholder="Email" />
-            <input type="password" placeholder="Password" />
-            <button>Sign Up</button>
+            <div class="input-box">
+              <input type="password" placeholder="Password" required />
+                <i class="bx bxs-lock-alt"></i>
+            </div>
+            <div class="forgot-link">
+              <a href="#">Forgot Password?</a>
+            </div>
+            <button type="submit" class="btn">Login</button>
+            <p>or login with social platforms</p>
+            <div class="social-icons">
+              <a href="#"><i class="bx bxl-google"></i></a>
+              <a href="#"><i class="bx bxl-facebook"></i></a>
+              <a href="#"><i class="bx bxl-github"></i></a>
+              <a href="#"><i class="bx bxl-linkedin"></i></a>
+            </div>
           </form>
         </div>
-        <div className="form-container sign-in-container">
-          <form action="#">
-            <h1>Sign in</h1>
-            <div className="social-container">
-              <a href="#" className="social"><i className="fab fa-facebook-f"></i></a>
-              <a href="#" className="social"><i className="fab fa-google-plus-g"></i></a>
-              <a href="#" className="social"><i className="fab fa-linkedin-in"></i></a>
+
+        <div class="form-box register">
+          <form action="">
+            <h1>Registration</h1>
+            <div class="input-box">
+              <input type="text" placeholder="Username" required />
+                <i class="bx bxs-user"></i>
             </div>
-            <span>or use your account</span>
-            <input type="email" placeholder="Email" />
-            <input type="password" placeholder="Password" />
-            <a href="#">Forgot your password?</a>
-            <button>Sign In</button>
+            <div class="input-box">
+              <input type="email" placeholder="Email" required />
+                <i class="bx bxs-envelope"></i>
+            </div>
+            <div class="input-box">
+              <input type="password" placeholder="Password" required />
+                <i class="bx bxs-lock-alt"></i>
+            </div>
+            <div class="forgot-link">
+              <a href="#">Forgot Password?</a>
+            </div>
+            <button type="submit" class="btn">Register</button>
+            <p>or register with social platforms</p>
+            <div class="social-icons">
+              <a href="#"><i class="bx bxl-google"></i></a>
+              <a href="#"><i class="bx bxl-facebook"></i></a>
+              <a href="#"><i class="bx bxl-github"></i></a>
+              <a href="#"><i class="bx bxl-linkedin"></i></a>
+            </div>
           </form>
         </div>
-        <div className="overlay-container">
-          <div className="overlay">
-            <div className="overlay-panel overlay-left">
-              <h1>Welcome Back!</h1>
-              <p>To keep connected with us please login with your personal info</p>
-              <button className="ghost" id="signIn">Sign In</button>
-            </div>
-            <div className="overlay-panel overlay-right">
-              <h1>Hello, Friend!</h1>
-              <p>Enter your personal details and start journey with us</p>
-              <button className="ghost" id="signUp">Sign Up</button>
-            </div>
+
+        <div class="toggle-box">
+          <div class="toggle-panel toggle-left">
+            <h1>Hello, Welcome!</h1>
+            <p>Don's have an account?</p>
+            <button class="btn register-btn">Register</button>
+          </div>
+
+          <div class="toggle-panel toggle-right">
+            <h1>Welcome Back!</h1>
+            <p>Already have an account?</p>
+            <button class="btn login-btn">Login</button>
           </div>
         </div>
       </div>
 
-      <footer>
-        <p>
-          Created with <i className="fa fa-heart"></i> by
-          <a target="_blank" href="https://florin-pop.com">Florin Pop</a>
-          - Read how I created this and how you can join the challenge
-          <a target="_blank" href="https://www.florin-pop.com/blog/2019/03/double-slider-sign-in-up-form/">here</a>.
-        </p>
-      </footer>
     </>
   );
 }

@@ -5,13 +5,6 @@ import './index.less';
 import router from './router/routerConfig';
 import { RouterProvider } from "react-router";
 
-// const router = createBrowserRouter([
-//   {
-//     path: "/",
-//     element: <App />,
-//     errorElement: <ErrorPage />,
-//   },
-// ]);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

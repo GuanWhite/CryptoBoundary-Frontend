@@ -1,8 +1,10 @@
 import "./NotFoundPage.less";
 import SVGComponent from "./SVGComponent";
-import {NavLink} from "react-router";
+import StartButton from "../../components/StartButton/StartButton";
 
-function ErrorPage() {
+
+function NotFoundPage() {
+  
   return (
     <main className="errorpage-outdiv">
       <div className="errorpage-container">
@@ -17,16 +19,12 @@ function ErrorPage() {
               How you got here is a mystery.
               But you can click the button below to go back to the homepage.
             </p>
-            <button className="btn green">
-              {/* <NavLink className="errorpage-link" to="/">HOME</NavLink> */}
-              HOME
-            </button>
+            <StartButton buttonName="HOME" navProps="/" />
           </div>
         </div>
       </div>
     </main>
-
   );
 }
 
-export default ErrorPage;
+export default NotFoundPage;
