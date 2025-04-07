@@ -19,7 +19,7 @@ function NotFoundPage() {
               How you got here is a mystery.
               But you can click the button below to go back to the homepage.
             </p>
-            <StartButton buttonName="HOME" navProps="/" />
+            <StartButton buttonName="HOME" navProps="/home" />
           </div>
         </div>
       </div>

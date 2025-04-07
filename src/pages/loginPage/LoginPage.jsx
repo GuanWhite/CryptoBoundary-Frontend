@@ -1,7 +1,7 @@
 import "./LoginPage.less";
 import StartButton from "../../components/StartButton/StartButton";
 import { MailOutlined, LockOutlined, UserOutlined, GoogleOutlined, FacebookOutlined, GithubOutlined, LinkedinOutlined } from "@ant-design/icons";
-import { Input } from 'antd';
+import { Input, Button } from 'antd';
 import React, { useState } from 'react';
 function Login() {
   //   const container = document.querySelector('.container')
@@ -220,9 +220,13 @@ function Login() {
             </div>
             <div className="reg-input-box">
               <Input className="code-input-input" placeholder="Verification code" required maxLength={6} />
-              <a className="send-code" onClick={() => handleSendEmailCode()}>
-                {isShowCode ? `Resend in ${time}s` : 'Send Code'}
-              </a>
+              {/* 如果handleSendEmailCode不加括号，则点击时才会触发该函数；
+                  如果加了括号，则进入页面就会触发该函数，如果不想则要将其包装在一个函数中:()=>handleSendEmailCode() 
+                  当回调函数有参数要传递时，必须要将其包装在函数中。*/}
+              <div className="send-code">
+                {isShowCode ? (<Button type="primary" disabled>{`Resend ${time}s`}</Button>) : (<Button type="primary" onClick={handleSendEmailCode}>{`Send Code`}</Button>)}
+                {/* {isShowCode ? `Resend ${time}s` : 'Send Code'} */}
+              </div>
             </div>
             <div className="reg-input-box">
               <Input.Password className="input-input" placeholder="Password" required />

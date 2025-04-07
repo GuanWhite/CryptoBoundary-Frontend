@@ -1,6 +1,7 @@
 import App from "../App";
 import LoginPage from "../pages/loginPage/LoginPage";
 import NotFoundPage from "../pages/notFoundPage/NotFoundPage";
+import HomePage from "../pages/homePage/HomePage";
 import { createBrowserRouter } from "react-router";
 
 const routes = [
@@ -12,10 +13,10 @@ const routes = [
     path: "/login",
     element: <LoginPage />,
   },
-  // {
-  //   path: "/home",
-  //   element: <HomePage />,
-  // },
+  {
+    path: "/home",
+    element: <HomePage />,
+  },
   {
     path: "*",
     element: <NotFoundPage />,
