@@ -1,15 +1,21 @@
 
-@import url('https://fonts.googleapis.com/css?family=Nunito+Sans');
-@baseFontFamily: 'Nunito Sans', system-ui, Avenir, Helvetica, Arial, sans-serif;
+// @import url('https://fonts.googleapis.com/css?family=Nunito+Sans');
+// @baseFontFamily: 'Nunito Sans', system-ui, Avenir, Helvetica, Arial, sans-serif;
+@baseFontFamily: "lucida grande", "lucida sans unicode", lucida, helvetica, "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
 @--white: #fff;
 @--green: #2ccf6d;
 @--CornFlowerBlue: #6495ED;
 
+* {
+  margin: 0; /* 去掉默认的外边距 */
+  padding: 0;
+  box-sizing: border-box;
+  font-family: @baseFontFamily;
+}
+
+
 html,
 body {
   height: 100%;
-  margin: 0;
-  /* 去掉默认的外边距 */
-  font-family: @baseFontFamily;
 }
 
