@@ -9,6 +9,7 @@ import ErrorPage from "./pages/notFoundPage/NotFoundPage";
 import SVGComponent from "./pages/notFoundPage/SVGComponent";
 import { createBrowserRouter } from "react-router";
 import StartButton from "./components/StartButton/StartButton";
+import Counter from "./components/Counter/Counter";
 
 
 
@@ -20,7 +21,7 @@ function App() {
       <Header />
       <StartButton buttonName="Login" navProps="/login" />
       <UserGreeting isLoggedIn={true} username={"white"} />
-
+      <Counter />
       {/* <ErrorPage/> */}
       {/* <Hello /> */}
       {/* <Community /> */}
