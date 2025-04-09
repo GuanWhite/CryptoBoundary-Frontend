@@ -10,7 +10,7 @@ import SVGComponent from "./pages/notFoundPage/SVGComponent";
 import { createBrowserRouter } from "react-router";
 import StartButton from "./components/StartButton/StartButton";
 import Counter from "./components/Counter/Counter";
-
+import ColorPicker from "./components/ColorPicker/ColorPicker";
 
 
 
@@ -21,7 +21,8 @@ function App() {
       <Header />
       <StartButton buttonName="Login" navProps="/login" />
       <UserGreeting isLoggedIn={true} username={"white"} />
-      <Counter />
+      <ColorPicker />
+      {/* <Counter /> */}
       {/* <ErrorPage/> */}
       {/* <Hello /> */}
       {/* <Community /> */}
