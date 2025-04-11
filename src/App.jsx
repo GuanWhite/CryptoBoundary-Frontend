@@ -22,8 +22,7 @@ function App() {
       <StartButton buttonName="Login" navProps="/login" />
       <UserGreeting isLoggedIn={true} username={"white"} />
       <ColorPicker />
-      <p className="oneline">sssssssssssaaaaaaaaaaaaaaaaaaaaddddddd</p>
-      <textarea tpye="text" className="mutiyline"></textarea>
+
       {/* <Counter /> */}
       {/* <ErrorPage/> */}
       {/* <Hello /> */}
