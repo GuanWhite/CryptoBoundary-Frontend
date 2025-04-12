@@ -1,119 +1,110 @@
-## JS自定义事件
+## 监听 `DOM` 元素的宽高变化
 
-在日常开发中，我们习惯监听页面许多事件，诸如：点击事件（ `click` ）、鼠标移动事件（ `mousemove` ）、元素失去焦点事件（ `blur` ）等等。
+普通 `DOM` 元素没有 `onresize` 事件，只有在 `window` 对象下有此事件。
 
-事件本质是一种通信方式，是一种消息，只有在多对象多模块时，才有可能需要使用事件进行通信。在多模块化开发时，可以使用**自定义事件**进行模块间通信。
+**`ResizeObserver`** 接口监视 `Element`内容盒或边框盒或者 `SVGElement`边界尺寸的变化。`ResizeObserver` 避免了通过回调函数调整大小时，通常创建的无限回调循环和循环依赖项。它只能通过在后续的帧中处理 DOM 中更深层次的元素来做到这一点。如果它的实现遵循规范，则应在绘制前和布局后调用 resize 事件。
 
-目前实现**自定义事件**的两种主要方式是 JS 原生的 `Event()` 构造函数和 `CustomEvent()` 构造函数来创建。
+- `ResizeObserver()`：创建并返回一个新的 `ResizeObserver` 对象。
 
-### Event
+  ```js
+  const resizeObserver = new ResizeObserver(entries => {
+      //回调
+      this.$chart.resize();
+  });
+  ```
 
-```js
-let myEvent = new Event(typeArg, eventInit);
-```
+- `ResizeObserver.observe()`：开始对指定`Element`的监听。
 
-- `typeArg` ： `DOMString` 类型，表示创建事件的名称；
-- `eventInit` ：可选配置项，包括：
+  ```js
+  //监听对应的dom
+  resizeObserver.observe(this.$refs.chart);
+  ```
 
-|   字段名称   |                       说明                        | 是否可选 |   类型    | 默认值 |
-| :----------: | :-----------------------------------------------: | :------: | :-------: | :----: |
-|  `bubbles`   |             表示该事件**是否冒泡**。              |   可选   | `Boolean` | false  |
-| `cancelable` |            表示该事件**能否被取消**。             |   可选   | `Boolean` | false  |
-|  `composed`  | 指示事件是否会在**影子DOM根节点之外**触发侦听器。 |   可选   | `Boolean` | false  |
+- `ResizeObserver.unobserve()`：结束对指定`Element`的监听。
 
-
-
-示例代码：
-
-```js
-// 创建一个支持冒泡且不能被取消的 pingan 事件
-let myEvent = new Event("pingan", {"bubbles":true, "cancelable":false});
-document.dispatchEvent(myEvent);
-
-// 事件可以在任何元素触发，不仅仅是document
-testDOM.dispatchEvent(myEvent);
-```
-
-
-
-### CustomEvent
-
-```
-let myEvent = new CustomEvent(typeArg, eventInit);
-```
-
-- `typeArg` ： `DOMString` 类型，表示创建事件的名称；
-- `eventInit` ：可选配置项，包括：
-
-|   字段名称   |                          说明                           | 是否可选 |   类型    | 默认值 |
-| :----------: | :-----------------------------------------------------: | :------: | :-------: | :----: |
-|   `detail`   | 表示该事件中需要被传递的数据，在 `EventListener` 获取。 |   可选   |   `Any`   |  null  |
-|  `bubbles`   |                表示该事件**是否冒泡**。                 |   可选   | `Boolean` | false  |
-| `cancelable` |               表示该事件**能否被取消**。                |   可选   | `Boolean` | false  |
-
-示例代码：
-
-```js
-// 创建事件
-let myEvent = new CustomEvent("pingan", {
-    detail: { name: "wangpingan" }
-});
-
-// 添加适当的事件监听器
-window.addEventListener("pingan", e => {
-    alert(`pingan事件触发，是 ${e.detail.name} 触发。`);
-});
-document.getElementById("leo2").addEventListener(
-  "click", function () {
-    // 派发事件
-    window.dispatchEvent(myEvent);
-  }
-)
-```
-
-
-
-### 区别
-
-从两者支持的参数中，可以看出：
-`Event()` 适合创建简单的自定义事件，而 `CustomEvent()` 支持参数传递的自定义事件，它支持 `detail` 参数，作为事件中**需要被传递的数据**，并在 `EventListener` 获取。
-
-注意：
-
-当一个事件触发时，若相应的元素及其上级元素没有进行事件监听，则不会有回调操作执行。 当需要对于子元素进行监听，可以在其父元素进行事件托管，让事件在事件冒泡阶段被监听器捕获并执行。此时可以使用 `event.target` 获取到具体触发事件的元素。
-
-## ==JS的继承方式==
-
-1. 函数声明和类声明的区别
-
-   函数声明会提升，类声明不会。首先需要声明你的类，然后访问它，否则像下面的代码会抛出一个ReferenceError。
-
-2. ES5继承和ES6继承的区别
-
-   - ES5的继承实质上是先创建子类的实例对象，然后再将父类的方法添加到this上（Parent.call(this)）。
-   - ES6的继承有所不同，实质上是先创建父类的实例对象this，然后再用子类的构造函数修改this。因为子类没有自己的this对象，所以必须先调用父类的super()方法，否则新建实例报错。
-
-
-
-继承的目的是为了多个实例让可以共享原型上的属性和方法，以实现代码复用。
+  ```js
+  resizeObserver.unobserve(this.$refs.chart);
+  ```
 
 
 
 
-继承方法关系图：
+## 设置DIV元素的内容
 
-```mermaid
-graph LR;
-  继承方法-->不使用object.create
-  继承方法-->使用object.create
-  不使用object.create-->原型链继承
-  不使用object.create-->构造函数继承
-  使用object.create-->原型式继承
-  使用object.create-->寄生式继承
-  原型链继承--组合为-->组合继承
-  构造函数继承--组合为-->组合继承
-  组合继承--改造为-->寄生组合继承
-  原型式继承--改造为-->寄生组合继承
-  寄生式继承--改造为-->寄生组合继承
-  寄生组合继承--类似于-->ES6:extends
-```
+| 属性/方法     | 功能描述                     | 是否解析 HTML 标签 | 是否会替换元素的所有内容 | 性能 | 适用场景               |
+| :------------ | :--------------------------- | :----------------- | :----------------------- | :--- | :--------------------- |
+| `innerHTML`   | 获取或设置元素的 HTML 内容   | 是                 | 是                       | 一般 | 需要插入带标签的内容   |
+| `innerText`   | 获取或设置元素的可见文本内容 | 否                 | 是                       | 较差 | 需要获取或设置可见文本 |
+| `textContent` | 获取或设置元素的所有文本内容 | 否                 | 是                       | 较好 | 需要获取或设置所有文本 |
+| `appendChild` | 在元素末尾添加一个子节点     | 否                 | 否                       | 较好 | 需要动态添加节点       |
+
+归属区别：
+
+- textContent 是 Node 对象的属性；
+- innerHTML 是 Element 对象的属性；
+- innerText 是 HTMLElement 对象的属性；
+- appendChild 是 Node 对象的方法；
+
+
+
+使用场景：
+
+1. **`innerHTML`**：
+   - 需要插入带 HTML 标签的内容时。
+   - 示例：动态加载一段富文本内容。
+2. **`innerText`**：
+   - 需要获取或设置用户可见的文本时。
+   - 示例：显示用户输入的纯文本。
+3. **`textContent`**：
+   - 需要获取或设置所有文本内容时（包括隐藏内容）。
+   - 示例：处理文本数据，不关心样式。
+4. **`appendChild`**：
+   - 需要动态添加 DOM 节点时。
+   - 示例：在列表中追加一个新项。
+
+
+
+注意事项：
+
+1. **安全性**：
+   - 使用 `innerHTML` 时，避免直接插入用户输入的内容，以防止 XSS 攻击。
+   - 推荐使用 `textContent` 或 `innerText` 处理纯文本。
+2. **性能**：
+   - `innerText` 会触发重排，性能较差，尽量避免频繁使用。
+   - `textContent` 和 `appendChild` 性能较好，适合动态操作 DOM。
+   - 在执行速度的比较上，使用 appendChild 比 innerHTML 要快，特别是内容包括 html 标记时，appendChild 明显要快于  innerHTML，这可能是因为 innerHTML 在铺到页面之前还要对内容进行解析才能铺到页面上，当包含 html 标记过多时， innerHTML速度会明显变慢。
+
+
+
+## 单位px，em和rem的区别
+
+[【基础】EM 还是 REM？这是一个问题！ - 知乎](https://zhuanlan.zhihu.com/p/37956549)
+
+
+
+# Tailwind CSS
+
+## 如何使用Tailwind在项目中管理样式
+
+- 在项目中，我主要通过 Tailwind CSS 的实用类（Utility Classes）来管理样式。Tailwind 提供了丰富的原子化类名，可以直接在 HTML 或 JSX 中通过组合这些类名来实现样式定义。
+- 对于复杂的组件，我会使用 `@apply` 指令将常用的实用类提取到自定义的 CSS 类中，以减少重复代码。
+- 对于全局样式（如重置样式或字体定义），我会在 `index.css` 或 `global.css` 中定义，并通过 `@layer` 指令将其注入到 Tailwind 的基础层（Base Layer）中。
+
+## 如何解决样式冲突的问题
+
+在 Tailwind 中，样式冲突较少，因为它的类名是原子化的，且优先级明确。但在与第三方组件库（如 AntDesign 或 Element UI）结合时，可能会出现样式冲突。下面是解决方式：
+
+- 使用 `@layer` 指令将自定义样式注入到 Tailwind 的组件层（Components Layer）或工具层（Utilities Layer），以确保优先级正确。
+- 使用 `!important` 强制覆盖第三方库的样式（不推荐，尽量避免）。
+- 通过配置 `tailwind.config.js` 中的 `prefix` 选项，为 Tailwind 的类名添加前缀，避免与第三方库的类名冲突。
+
+
+
+# Less.js
+
+## 如何在项目中使用Less
+
+- 在项目中，我通常会将 Less 文件与组件或模块一一对应，例如为每个 React 组件或 Vue 组件创建一个同名的 `.less` 文件。
+- 通过 Webpack 或 Vite 的 Less 插件（如 `less-loader`）将 Less 文件编译为 CSS，并在组件中引入编译后的 CSS。
+
+## Less的优势有哪些

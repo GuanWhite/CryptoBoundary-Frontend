@@ -420,7 +420,7 @@ translate 是 transform 属性的⼀个值。改变transform或opacity不会触�
 
 ## 对 CSS Sprites 的理解
 
-CSSSprites（精灵图），将一个页面涉及到的所有图片都包含到一张大图中去，然后利用CSS的 background-image，background-repeat，background-position属性的组合进行背景定位。
+CSS Sprites（精灵图），将一个页面涉及到的所有图片都包含到一张大图中去，然后利用CSS的 background-image，background-repeat，background-position属性的组合进行背景定位。
 
 **优点：**
 
@@ -430,7 +430,7 @@ CSSSprites（精灵图），将一个页面涉及到的所有图片都包含到�
 **缺点：**
 
 - 在图片合并时，要把多张图片有序的、合理的合并成一张图片，还要留好足够的空间，防止板块内出现不必要的背景。在宽屏及高分辨率下的自适应页面，如果背景不够宽，很容易出现背景断裂；
-- `CSSSprites`在开发的时候相对来说有点麻烦，需要借助`photoshop`或其他工具来对每个背景单元测量其准确的位置。
+- `CSS Sprites`在开发的时候相对来说有点麻烦，需要借助`photoshop`或其他工具来对每个背景单元测量其准确的位置。
 - 维护方面：`CSS Sprites`在维护的时候比较麻烦，页面背景有少许改动时，就要改这张合并的图片，无需改的地方尽量不要动，这样避免改动更多的`CSS`，如果在原来的地方放不下，又只能（最好）往下加图片，这样图片的字节就增加了，还要改动`CSS`。
 
 
@@ -891,7 +891,934 @@ my-image { background: (low.png); }
 
 # 页面布局
 
+## CSS布局单位
 
+常用的布局单位包括像素（`px`），百分比（`%`），`em`，`rem`，`vw/vh`。
+
+**（1）像素**（`px`）是页面布局的基础，一个像素表示终端（电脑、手机、平板等）屏幕所能显示的最小的区域，像素分为两种类型：CSS像素和物理像素：
+
+- **CSS像素**：为web开发者提供，在CSS中使用的一个抽象单位；
+- **物理像素**：只与设备的硬件密度有关，任何设备的物理像素都是固定的。
+
+**（2）百分比**（`%`），当浏览器的宽度或者高度发生变化时，通过百分比单位可以使得浏览器中的组件的宽和高随着浏览器的变化而变化，从而实现响应式的效果。一般认为子元素的百分比相对于直接父元素。
+
+**（3）em和rem**相对于px更具灵活性，它们都是相对长度单位，它们之间的区别：**em相对于父元素，rem相对于根元素。**
+
+- **em：** 文本相对长度单位。相对于当前对象内文本的字体尺寸。如果当前行内文本的字体尺寸未被人为设置，则相对于浏览器的默认字体尺寸(默认16px)。(相对父元素的字体大小倍数)。
+- **rem：** rem是CSS3新增的一个相对单位，相对于根元素（html元素）的font-size的倍数。**作用**：利用rem可以实现简单的响应式布局，可以利用html元素中字体的大小与屏幕间的比值来设置font-size的值，以此实现当屏幕分辨率变化时让元素也随之变化。
+
+**（4）vw/vh**是与视图窗口有关的单位，vw表示相对于视图窗口的宽度，vh表示相对于视图窗口高度，除了vw和vh外，还有vmin和vmax两个相关的单位。
+
+- vw：相对于视窗的宽度，视窗宽度是100vw；
+- vh：相对于视窗的高度，视窗高度是100vh；
+- vmin：vw和vh中的较小值；
+- vmax：vw和vh中的较大值；
+
+
+
+**vw/vh** 和百分比很类似，两者的区别：
+
+- 百分比（`%`）：大部分相对于祖先元素，也有相对于自身的情况比如（border-radius、translate等)
+- vw/vm：相对于视窗的尺寸
+
+**三者的区别：**
+
+- px是固定的像素，一旦设置了就无法因为适应页面大小而改变。
+- em是相对于其自身的font-size的px值来参考的，若自身没有设置font-size的px值，则根据其父元素的font-size的px值来设置大小，并且该值是可继承的，若父元素也没有设置则会一直向上溯源。
+- rem是相对于根元素，这样就意味着，只需要在根元素确定一个参考值。
+
+
+
+**使用场景：**
+
+- 对于只需要适配少部分移动设备，且分辨率对页面影响不大的，使用px即可 。
+- 对于需要适配各种移动设备，使用rem，例如需要适配iPhone和iPad等分辨率差别比较挺大的设备。
+
+
+
+## Flex 布局
+
+Flex是FlexibleBox的缩写，意为"弹性布局"，用来为盒状模型提供最大的灵活性。任何一个容器都可以指定为Flex布局。行内元素也可以使用Flex布局。注意，设为Flex布局以后，**子元素的float、clear和vertical-align属性将失效**。
+
+采用Flex布局的元素，称为Flex容器（flex container），简称"容器"。它的所有子元素（仅子元素，不是全部后代元素）自动成为容器成员，称为Flex项目（flex item），简称"项目"。
+
+![image-20250412212023103](CSS.assets/image-20250412212023103.png)
+
+容器默认存在两根轴：水平的主轴（main axis）和垂直的交叉轴（cross axis），主轴的开始位置（与边框的交叉点）叫做`main start`，结束位置叫做`main end`；交叉轴的开始位置叫做`cross start`，结束位置叫做`cross end`。
+
+项目默认沿主轴排列。单个项目占据的主轴空间叫做`main size`，占据的交叉轴空间叫做`cross size`。
+
+
+
+### 容器属性
+
+#### flex-direction
+
+flex-direction 属性决定主轴的方向（即项目的排列方向）。
+
+```css
+.box {
+  flex-direction: row | row-reverse | column | column-reverse;
+}
+```
+可选的属性值及其含义：
+
+| 属性值         | 含义                                                         |
+| -------------- | ------------------------------------------------------------ |
+| row            | 默认值，主轴为水平方向（水平布局），起点在左端，从左向右排列 |
+| row-reverse    | 主轴为水平方向（水平布局），起点在右端，从右向左排列         |
+| column         | 主轴为垂直方向（垂直布局），起点在上沿，从上往下排列         |
+| column-reverse | 主轴为垂直方向（垂直布局），起点在下沿，从下往上排列         |
+
+
+
+#### flex-wrap
+
+默认情况下，项目都排在一条线（又称"轴线"）上。`flex-wrap`属性定义，如果一条轴线排不下，如何换行。
+
+```css
+.box{
+  flex-wrap: nowrap | wrap | wrap-reverse;
+}
+```
+
+可选的属性值及其含义：
+
+| 属性值       | 含义                                                         |
+| ------------ | ------------------------------------------------------------ |
+| nowrap       | 默认值，不换行。当主轴的长度是固定并且空间不足时，项目尺寸会随之进行调整，而不会换行。 |
+| wrap         | 换行，第一行在上面。                                         |
+| wrap-reverse | 换行，第一行在下面。                                         |
+
+#### flex-flow
+
+`flex-flow`属性是`flex-direction`属性和`flex-wrap`属性的简写形式，默认值为`row nowrap`。
+
+```css
+.box {
+  flex-flow: <flex-direction> || <flex-wrap>;
+  /* initial表示设置为默认值；inherit表示采用其父元素flex-flow的属性值 */
+}
+```
+
+#### justify-content
+
+`justify-content`属性定义了项目在主轴上的对齐方式。
+
+```css
+.box {
+  justify-content: flex-start | flex-end | center | space-between | space-around;
+}
+```
+
+可选的属性值及其含义：
+
+| 属性值        | 含义                                                         |
+| ------------- | ------------------------------------------------------------ |
+| flex-start    | 默认值，左对齐                                               |
+| flex-end      | 右对齐                                                       |
+| center        | 居中                                                         |
+| space-between | 两端对齐，项目之间的间隔都相等                               |
+| space-around  | 每个项目两侧的间隔相等。所以，项目之间的间隔比项目与边框的间隔大一倍 |
+
+![image-20250412213534532](CSS.assets/image-20250412213534532.png)
+
+#### align-items
+
+`align-items`属性定义项目在交叉轴上如何对齐。
+
+```css
+.box {
+  align-items: flex-start | flex-end | center | baseline | stretch;
+}
+```
+
+可选的属性值及其含义：
+
+| 属性值     | 含义                                                         |
+| ---------- | ------------------------------------------------------------ |
+| flex-start | 交叉轴的起点对齐                                             |
+| flex-end   | 交叉轴的终点对齐                                             |
+| center     | 交叉轴的中点对齐                                             |
+| baseline   | 项目的第一行文字的基线对齐                                   |
+| stretch    | （默认值） 如果项目未设置高度或设为auto，将占满整个容器的高度 |
+
+（1）`flex-start`: 交叉轴的起点对齐（上面或左边）。设置容器高度为 100px，项目高度分别为 20px、40px、60px、80px、100px，效果如图所示：
+
+![image-20250412213839654](CSS.assets/image-20250412213839654.png)
+
+（2）`flex-end`: 交叉轴的终点对齐（下面或右边）。设置容器高度为 100px，项目高度分别为 20px、40px、60px、80px、100px，效果如图所示：
+
+![image-20250412213912440](CSS.assets/image-20250412213912440.png)
+
+（3）`center`: 交叉轴的中点对齐。设置容器高度为 100px，项目高度分别为 20px、40px、60px、80px、100px，效果如图所示：
+
+![image-20250412213932575](CSS.assets/image-20250412213932575.png)
+
+（4）`baseline`:以元素的第一行文字的基线对齐
+
+![image-20250412214004752](CSS.assets/image-20250412214004752.png)
+
+（5）`stretch`: 默认值。如果项目未设置高度或设为auto，将占满整个容器的高度。假设容器高度设置为 100px，而项目没有设置高度，则项目的高度也为 100px，如图：
+
+![image-20250412214023902](CSS.assets/image-20250412214023902.png)
+
+#### align-content
+
+`align-content`属性定义了换行后多条项目元素主轴线的对齐方式。如果项目只有一根主轴线（项目都在一行上），该属性不起作用。该属性类似 `justify-content` 但对齐交叉轴。
+
+```css
+.box {
+  align-content: flex-start | flex-end | center | space-between | space-around | stretch;
+}
+```
+
+可选的属性值及其含义：
+
+| 属性值        | 含义                                                         |
+| ------------- | ------------------------------------------------------------ |
+| flex-start    | 与交叉轴的起点对齐，所有行紧贴容器起点                       |
+| flex-end      | 与交叉轴的终点对齐，所有行紧贴容器终点                       |
+| center        | 与交叉轴的中点对齐，所有行整体居中                           |
+| space-between | 与交叉轴两端对齐，轴线之间的间隔平均分布，首尾行贴边，中间均匀分布 |
+| space-around  | 每根轴线（每行）两侧的间隔都相等。所以，轴线之间的间隔比轴线与边框的间隔大一倍。 |
+| stretch       | 默认值，轴线占满整个交叉轴，行项目元素拉伸填满容器           |
+
+`align-items` 和 `align-content` 的区别：
+
+| 属性                | 作用对象               | 生效条件              | 典型应用场景             |
+| :------------------ | :--------------------- | :-------------------- | :----------------------- |
+| **`align-items`**   | **单行/单列** 内的项目 | 始终生效              | 控制项目在交叉轴上的对齐 |
+| **`align-content`** | **多行/多列** 的整体   | 仅在有多行/多列时生效 | 控制行/列在容器内的分布  |
+
+
+
+### 项目属性
+
+#### order
+
+`order`属性用来定义项目的排列顺序。数值越小，排列越靠前，默认为 0 。使用形式如下：
+
+```css
+.item {
+    order: <integer>;
+}
+```
+
+![image-20250412225412599](CSS.assets/image-20250412225412599.png)
+
+#### flex-grow
+
+`flex-grow`属性定义项目的放大比例，默认为 0 ，即如果存在剩余空间，也不放大。
+
+```css
+.item {
+  flex-grow: <number>; /* default 0 */
+}
+```
+
+如果所有项目的`flex-grow`属性都为 1，则它们将等分剩余空间（如果有的话）。
+
+![image-20250412225520491](CSS.assets/image-20250412225520491.png)
+
+如果一个项目的`flex-grow`属性为2，其他项目都为1，则前者占据的剩余空间将比其他项多一倍。
+
+![image-20250412225535232](CSS.assets/image-20250412225535232.png)
+
+
+
+#### flex-shrink
+
+`flex-shrink`属性定义了项目的缩小比例，默认为 1 ，即如果空间不足，该项目将缩小。
+
+```css
+.item {
+  flex-shrink: <number>; /* default 1 */
+}
+```
+
+如果所有项目的`flex-shrink`属性都为 1，当空间不足时，都将等比例缩小。
+
+![image-20250412225623533](CSS.assets/image-20250412225623533.png)
+
+如果一个项目的`flex-shrink`属性为 0，其他项目都为 1，则空间不足时，前者不缩小。
+
+![image-20250412225640886](CSS.assets/image-20250412225640886.png)
+
+负值对该属性无效。
+
+#### flex-basis
+
+`flex-basis`属性定义了在分配多余空间之前，项目占据的主轴空间（main size）。浏览器根据这个属性，计算主轴是否有多余空间。它的默认值为`auto`，即项目的本来大小。
+
+```css
+.item {
+  flex-basis: <length> | auto; /* default auto */
+}
+```
+
+它可以设为跟`width`或`height`属性一样的值（比如350px），则项目将占据固定空间。
+
+当主轴设置为水平时，当设置了`flex-basis`，设置的项目宽度值会失效，`flex-basis`需要跟`flex-grow`和`flex-shrink`配合使用才能生效。有两种特殊的值:
+
+- 当 flex-basis 值为 0 % 时，项目尺寸会被认为是0，因此无论项目尺寸设置多少都没用；
+- 当 flex-basis 值为 auto 时，则跟根据尺寸的设定值来设置大小。
+
+
+
+#### flex
+
+`flex`属性是`flex-grow`, `flex-shrink` 和 `flex-basis`的简写，默认值为`0 1 auto`。后两个属性可选。
+
+```css
+.item {
+  flex: auto | none | [ <'flex-grow'> <'flex-shrink'>? || <'flex-basis'> ]
+}
+```
+
+该属性有两个快捷值`auto (1 1 auto)` 和 `none (0 0 auto)`。
+
+（1）默认值：`flex:0 1 auto`，即在有剩余空间时，只放大不缩小。
+
+```css
+.item {
+  flex:0 1 auto;
+  /* 等价于
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: auto;
+  */
+}
+```
+
+（2）`flex: auto`，即元素尺寸可以弹性增大，也可以弹性变小，具有十足的弹性，但在尺寸不足时会优先最大化内容尺寸。
+
+```css
+.item {
+  flex:1 1 auto;
+  /* 等价于
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: auto;
+  */
+}
+```
+
+（3）`flex: none`，即有剩余空间时，不放大也不缩小，最终尺寸通常表现为最大内容宽度。
+
+```css
+.item {
+  flex:0 0 auto;
+  /* 等价于
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: auto;
+  */
+}
+```
+
+（4）`flex: 0`，即当有剩余空间时，项目宽度为其内容的宽度，最终尺寸表现为最小内容宽度。
+
+```css
+.item {
+  flex:0 1 0%;
+  /* 等价于
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: 0%;
+  */
+}
+```
+
+（5）`flex: 1`，即元素尺寸可以弹性增大，也可以弹性变小，具有十足的弹性，但是在尺寸不足时会优先最小化内容尺寸。
+
+```css
+.item {
+  flex:1 1 0%;
+  /* 等价于
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 0%;
+  */
+}
+```
+
+
+
+#### align-self
+
+
+
+## 两栏布局的实现
+
+一般两栏布局指的是**左边一栏宽度固定，右边一栏宽度自适应**。下面是常用的实现方法总结
+
+| 方法         | 兼容性 | 等高布局 | 响应式 | 代码简洁度 | 适用场景      |
+| :----------- | :----- | :------- | :----- | :--------- | :------------ |
+| Flexbox      | IE10+  | ✅        | ✅      | ⭐⭐⭐⭐       | 通用布局      |
+| Grid         | IE11+  | ✅        | ✅      | ⭐⭐⭐⭐⭐      | 现代项目      |
+| Float        | IE6+   | ❌        | ⚠️      | ⭐⭐         | 传统项目      |
+| Columns      | IE10+  | ❌        | ✅      | ⭐⭐⭐        | 新闻/杂志排版 |
+| Position     | IE6+   | ❌        | ❌      | ⭐⭐⭐        | 固定位置元素  |
+| Inline-Block | IE8+   | ❌        | ⚠️      | ⭐⭐         | 文本对齐需求  |
+
+### 方法一：Flexbox 弹性布局（推荐）
+
+**原理**：利用 Flex 容器的主轴排列特性，简单高效。
+
+```css
+.container {
+  display: flex;
+  gap: 20px; /* 间距 */
+}
+.left {
+  flex: 0 0 200px; /* 固定左侧宽度 */
+}
+.right {
+  flex: 1; /* 右侧自适应 */
+}
+```
+
+**特点**：
+
+- 天然等高布局
+- 无需清除浮动
+- 支持响应式调整（通过 `flex-direction`）
+
+### 方法二：Grid 网格布局（现代方案）
+
+**原理**：通过网格划分实现精准控制。
+
+```css
+.container {
+  display: grid;
+  grid-template-columns: 200px 1fr; /* 两列定义 */
+  gap: 20px;
+}
+```
+
+**特点**：
+
+- 代码最简洁
+- 支持复杂嵌套布局
+- 可配合 `minmax()` 实现弹性约束
+
+### 方法三：Float + Margin（传统方案）
+
+**原理**：浮动脱离文档流，需手动处理清除。
+
+将左边元素宽度设置为200px，并且设置向左浮动。将右边元素的margin-left设置为200px，宽度设置为auto（默认为auto，撑满整个父元素）。
+
+```css
+.outer {
+  height: 100px;
+}
+.left {
+  float: left;
+  width: 200px;
+  background: red;
+}
+.right {
+  margin-left: 220px; /* 200px + 20px间距 */
+  width: auto;
+  background: gold;
+}
+```
+
+**特点**：
+
+- 兼容性好（IE8+）
+- 需要额外处理浮动清除
+
+### 方法四：CSS Columns 多列布局
+
+**原理**：将容器分为多列（适合文字内容）。
+
+```css
+.container {
+  column-count: 2;
+  column-gap: 20px;
+}
+.left, .right {
+  break-inside: avoid; /* 防止内容断裂 */
+}
+```
+
+**特点**：
+
+- 内容自动平衡填充
+- 不适合复杂结构
+
+### 方法五：Position 绝对定位
+
+**原理**：通过绝对定位脱离文档流。父元素相对定位，子元素绝对定位，
+
+```css
+.container {
+  position: relative;
+}
+.left {
+  position: absolute;
+  left: 0;   /* 将 .left 紧贴父容器（.container）的左侧边缘。类似于 float: left 的定位效果，但更精确。 */
+  width: 200px;  /* 绝对定位元素的宽度默认由内容撑开，需显式设置宽度。 */
+}
+.right {
+  position: absolute;
+  left: 220px; /* 将 .right 的左侧边缘定位在距父容器左侧 220px 处, 200px + 20px间距 ,也可用 margin-left: 220px; 实现类似效果。*/
+  right: 0; /* 将 .right 的右侧边缘紧贴父容器右侧边缘。与 left: 220px 共同作用，实现右侧栏的自适应宽度（自动填充剩余空间）。 */
+}
+```
+
+**特点**：
+
+- 需已知高度
+- 可能影响其他元素布局
+
+
+
+## 三栏布局的实现
+
+### 方法一：Flexbox 弹性布局
+
+利用flex布局，左右两栏设置固定大小，中间一栏设置为flex:1，自适应宽度。
+
+```css
+.container {
+  display: flex;
+  height: 100px;
+}
+
+.left {
+  width: 100px;
+  background: tomato;
+}
+
+.right {
+  width: 100px;
+  background: gold;
+}
+
+.center {
+  flex: 1; /* 中间自适应 */
+  background: lightgreen;
+}
+```
+
+**特点**：
+
+- 天然等高布局
+- 支持动态调整顺序（通过 `order` 属性）
+- 响应式适配只需修改 `flex-direction`
+
+### 方法二：Grid 网格布局（现代方案）
+
+通过网格模板精确控制三栏的尺寸和位置。
+
+```css
+.container {
+  display: grid;
+  grid-template-columns: 200px 1fr 200px; /* 三列定义 */
+  height: 100vh;
+}
+.left { background: #f0f0f0; }
+.right { background: #f0f0f0; }
+.center { background: #e0e0e0; }
+```
+
+**特点**：
+
+- 代码最简洁
+- 支持复杂嵌套布局
+- 可配合 `minmax()` 实现弹性约束（如 `minmax(200px, 300px)`）
+
+
+
+### 方法三：Float + Margin（传统方案）
+
+利用浮动，左右两栏设置固定大小，并设置对应方向的浮动。中间一栏设置左右两个方向的margin值避开浮动元素。
+
+```css
+.left {
+  float: left;
+  width: 200px;
+  background: #f0f0f0;
+}
+.right {
+  float: right;
+  width: 200px;
+  background: #f0f0f0;
+}
+/* CSS 样式的书写顺序（无论是将 .center 的样式写在前面还是后面）对布局结果无影响，因为浏览器会先解析 HTML 结构，再应用 CSS 样式。 */
+.center {
+  margin-left: 100px;
+  margin-right: 200px; /* 避开左右浮动元素 */
+  background: #e0e0e0;
+}
+
+/* 清除浮动 */
+.container::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+```
+
+注意：这种方式，HTML 中中间栏的 DOM 元素必须写在左右栏之后。原因是，当元素设置 `float` 时，会**脱离普通文档流**，后续的**非浮动元素**会尝试填充浮动元素留下的空间。只有按照left、right、center的顺序，让中间栏最后渲染，才能正确计算左右浮动元素占据的空间。
+
+如果在HTML中按照center、left、right的顺序写DOM元素，渲染时，浏览器会先看到 `center`，此时左右栏尚未浮动，`center` 会占据整行宽度。接着渲染左右栏时，它们会浮动到两侧，但**无法将已经渲染的 `center` 挤到中间**，导致布局错乱。
+
+如果在HTML中按照正常的left、center、right的顺序写DOM元素，会导致右边的浮动盒子在右下方。
+
+正确的书写顺序是left、right、center，即：
+
+```html
+<div class="left">左栏（float: left）</div>
+<div class="right">右栏（float: right）</div>
+<div class="center">中间栏（最后渲染）</div>
+```
+
+**特点**：
+
+- 兼容性好（IE8+）
+- 需要手动清除浮动
+- 中间栏必须最后渲染（HTML 中顺序为左→右→中）
+
+### 方法四：Position 绝对定位
+
+利用**绝对定位**，左右两栏设置为绝对定位，中间设置对应方向大小的margin的值。
+
+```css
+.container {
+  position: relative;
+  height: 100vh;
+}
+.left, .right {
+  position: absolute;
+  top: 0;
+  width: 200px;
+  background: #f0f0f0;
+}
+.left { left: 0; }
+.right { right: 0; }
+.center {
+  margin: 0 200px;
+  height: 100%;
+  background: #e0e0e0;
+}
+```
+
+**特点**：
+
+- 脱离文档流，需手动处理高度
+- 适合固定宽度侧边栏场景
+
+### 方法五：圣杯布局
+
+[双飞翼布局、圣杯布局 - xiaoxustudy - 博客园](https://www.cnblogs.com/xiaoxuStudy/p/13412057.html)
+
+利用浮动和负边距来实现。使三个区域都处于左浮动方式，并使 `center` 的宽度成为父容器的 100%，实现三栏布局的左右固定，中间自适应。然后为主容器`container`设置左右 padding 值，使其为以后的侧边栏定位空出位置，padding 的值为侧边栏的宽。为两侧侧边栏添加负 margin，用以调整位置，其中摆在左边的 left 的 `margin-left` 为 -100%，而右边 right 的 `margin-left` 则为负的自身宽度。（利用了浮动元素的 margin 负到一定值后会使自身往上一行移动的原理）。接下来对 left 和 right 添加 `position:relative`，然后对它们进行定位，移动到两侧，圣杯布局就完成了。
+
+html代码：
+
+```html
+<body>
+  <div className='container'>
+    <div className='center'>中间栏</div>
+    <div className='left'>左边栏</div>
+    <div className='right'>右边栏</div>
+  </div>
+</body>
+```
+
+CSS代码：
+
+```css
+.container{
+  min-width:400px;
+  height:200px;
+  background:green;
+  padding:0 200px;
+}
+
+.left{
+  float:left;
+  width:200px;
+  height:200px;
+  background:red;
+  
+  margin-left:100%;
+  position:relative;
+  left:-200px
+}
+
+.right{
+  float:left;
+  width:200px;
+  height:200px;
+  background:red;
+  
+  margin-left:-200px;
+  position:relative;
+  right:-200px
+}
+
+.center{
+  float:left;
+  width:100%;
+  height:200px;
+  background:blue;
+}
+```
+
+
+
+### 方法六：双飞翼布局
+
+跟圣杯布局实现方式相似，不同的是通过在`center`内部插入一个div `center-content`后，设置`center-content`的左右 margin 值为左右侧边栏的宽度来为左、右边栏留出位置的，而不是通过父容器元素的padding值。但其本质上来说，也是通过浮动和外边距负值来实现的。
+
+html代码：
+
+```html
+<body>
+  <div className='container'>
+    <div className='center'>中间栏</div>
+    <div className='left'>左边栏</div>
+    <div className='right'>右边栏</div>
+  </div>
+</body>
+```
+
+css代码：
+
+```css
+.container{
+  min-width:400px;
+  height:200px;
+  background:green;
+}
+
+.left{
+  float:left;
+  width:200px;
+  height:200px;
+  background:red;
+  
+  margin-left:-100%;
+}
+
+.right{
+  float:left;
+  width:200px;
+  height:200px;
+  background:red;
+  
+  margin-left:-200px;
+}
+
+.center{
+  float:left;
+  width:100%;
+  height:200px;
+  background:blue;
+}
+
+/* 不同点 */
+.center-content{
+  margin: 0 200px;
+}
+```
+
+
+
+## 水平垂直居中
+
+### 方法一：Flexbox 弹性布局
+
+给待居中的块状元素的父元素添加属性 `display: flex;` ，`justify-content: center;` 和 `align-items: center;` 即可。
+
+```html
+<style>
+    #father {
+        width: 500px;
+        height: 300px;
+        background-color: skyblue;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+		}
+ 
+    #son {
+        background-color: green;
+		}
+</style>
+ 
+<div id="father">
+    <div id="son">我是块级元素</div>
+</div>
+```
+
+**优点：**
+
+1. **简单直观**
+   - 只需几行代码即可实现居中，无需计算偏移量。
+   - 适用于大多数现代布局场景。
+2. **响应式友好**
+   - Flexbox 自动适应容器大小，适合不同屏幕尺寸。
+   - 调整 `flex-direction` 可轻松切换水平/垂直布局。
+3. **子元素自动对齐**
+   - 子元素默认按主轴（`justify-content`）和交叉轴（`align-items`）对齐，无需额外调整。
+4. **无依赖父元素尺寸**
+   - 即使父元素没有固定宽高，Flexbox 仍然有效。
+
+**缺点：**
+
+1. **兼容性稍旧**
+   - IE 11 部分支持（需 `-ms-` 前缀），但对现代浏览器完全兼容。
+2. **不适合绝对定位场景**
+   - 如果子元素需要脱离文档流（如 `position: absolute`），Flexbox 的对齐方式可能失效。
+
+
+
+### 方法二：Grid 网格布局
+
+这个方法不同于flex，在父元素上添加`display: grid;`，然后在子元素上添加`align-self: center;`和`justify-self: center;`即可。
+
+```html
+<style>
+    #father {
+      width: 500px;
+      height: 300px;
+      background-color: skyblue;
+      
+      display: grid;
+		}
+ 
+    #son {
+      background-color: green;
+      align-self: center;
+    	justify-self: center;
+		}
+</style>
+ 
+<div id="father">
+    <div id="son">我是块级元素</div>
+</div>
+```
+
+注意：
+
+- 该方法但兼容性不如flex，不推荐使用。
+
+
+
+### 方法三：Position 绝对定位 + translate
+
+设置父元素为相对定位，给子元素设置绝对定位，然后在要居中的元素身上设置 `left: 50%; top: 50%;` 让其左上角定位到页面的中心，然后再设置 ` transform: translateX(-50%) translateY(-50%);` 或 `transform: translate(-50%,-50%);` 来将元素的中心点调整到页面的中心。
+
+```css
+.parent {
+    position: relative;
+}
+ 
+.child {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+		transform: translate(-50%, -50%);
+    /* 也可以这样写 transform: translateX(-50%) translateY(-50%); */
+}
+```
+
+**优点:**
+
+- 精准控制
+  - 适用于需要精确计算位置的场景（如模态框、悬浮菜单）。
+  - 不受 Flexbox 布局限制，可单独调整。
+- 脱离文档流
+  - position: absolute 让子元素不受父元素流式布局影响，适合叠加元素（如弹窗）。
+- 兼容性极佳
+  - 支持所有浏览器，包括旧版 IE。
+
+**缺点:**
+
+- 依赖父元素定位
+  - 必须设置 position: relative | absolute | fixed，否则可能相对于视口定位。
+- 需要手动计算偏移
+  - 必须用 transform: translate(-50%, -50%) 修正元素自身宽高，否则无法真正居中。
+- 不适用于流式布局
+  - 如果父元素尺寸变化（如响应式设计），可能需要额外 JS 计算。
+- 该方法需要考虑浏览器兼容问题。
+  - ie9及以上可以支持使用。
+
+
+
+### 方法四：Position 绝对定位 + margin auto
+
+利用绝对定位，设置四个方向的值都为0，并将margin设置为auto，由于宽高固定，因此对应方向实现平分，可以实现水平和垂直方向上的居中。
+
+```css
+.parent {
+    position: relative;
+}
+ 
+.child {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+```
+
+注意：
+
+- 该方法适用于**盒子有宽高**的情况。
+- 对于绝对定位元素来说：
+  - 定位参照对象的宽度= left + right + margin-left + margin-right + 绝对定位元素实际占用的宽度
+  - 定位参照对象的高度 = top + bottom + margin-top + margin-bottom +绝对定位元素实际占用的高度
+
+
+
+### 方法五：Position 绝对定位 + margin 负的宽高的一半
+
+利用绝对定位，先将元素的左上角通过top:50%和left:50%定位到页面的中心，然后再通过margin负值来调整元素的中心点到页面的中心。
+
+```css
+.parent {
+    position: relative;
+}
+ 
+.child {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -50px;     /* 自身 height 的一半 */
+    margin-left: -50px;    /* 自身 width 的一半 */
+}
+```
+
+注意：
+
+- 该方法适用于**子元素盒子宽高已知**的情况。
+
+
+
+### 方法六：Position 绝对定位 + calc
+
+这种方式也要求居中元素的宽高必须固定，所以我们为box增加size类
+
+```css
+.parent {
+    position: relative;
+}
+ 
+.child {
+    position: absolute;
+    top: calc(50% - 50px); 	 /* 50px是自身 height 的一半 */
+    left: calc(50% - 50px);  /* 50px是自身 width 的一半 */
+}
+```
 
 
 
