@@ -20,8 +20,53 @@ body {
   height: 100%;
 }
 
-
+// 选中字体的颜色及背景
 // ::selection {
 //   color: pink;
 //   background: red;
 // }
+
+.wrapper {
+  display: grid;
+  height: 800px;
+  grid-gap: 10px;
+  // grid-template-columns: 100px auto 50px;
+  // grid-template-rows: 100px auto 50px;
+  // grid-template-areas:
+  //   "header header header"
+  //   "leftSideBar content rightSideBar"
+  //   "footer footer  footer";
+
+  grid-template:
+    "header header header" 100px
+    "leftSideBar content rightSideBar" auto
+    "footer footer  footer" 50px / 100px auto 50px;
+
+  // background: pink;
+  // color: #444;
+}
+
+.item:nth-child(1) {
+  // background: red;
+  grid-area: header;
+}
+
+.item:nth-child(2) {
+  // background: blue;
+  grid-area: leftSideBar;
+}
+
+.item:nth-child(3) {
+  // background: green;
+  grid-area: content;
+}
+
+.item:nth-child(4) {
+  // background: darkblue;
+  grid-area: rightSideBar;
+}
+
+.item:nth-child(5) {
+  // background: darkgreen;
+  grid-area: footer;
+}

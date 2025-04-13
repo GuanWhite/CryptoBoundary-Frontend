@@ -18,19 +18,30 @@ function App() {
 
   return (
     <>
-      <Header />
-      <StartButton buttonName="Login" navProps="/login" />
-      <UserGreeting isLoggedIn={true} username={"white"} />
-      <ColorPicker />
+      <div className="wrapper">
+        <div className="item">
+          <Header />
+          <StartButton buttonName="Login" navProps="/login" />
+          <UserGreeting isLoggedIn={true} username={"white"} />
+        </div>
+        <div className="item">2</div>
+        <div className="item">
+          <ColorPicker />
+        </div>
+        <div className="item">4</div>
+        <div className="item">
+          <Footer />
+        </div>
+      </div>
 
       {/* <Counter /> */}
       {/* <ErrorPage/> */}
       {/* <Hello /> */}
       {/* <Community /> */}
       {/* <Login/> */}
-      <Footer />
 
-      
+
+
     </>
   );
 }
