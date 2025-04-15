@@ -1,0 +1,32 @@
+.welcomePage-container {
+  display: grid;
+  height: 100%;
+  grid-gap: 10px;
+  grid-template-columns: 100%;
+  grid-template-rows: 100px 800px 50px;
+  grid-template-areas:
+    "header"
+    "content"
+    "footer";
+  place-content: center;
+
+  text-align: center;
+}
+
+.item:nth-child(1) {
+  // background: red;
+  grid-area: header;
+}
+
+.item:nth-child(2) {
+  // background: blue;
+  grid-area: content;
+  width: 60%;
+  padding: 0, 300px;
+  // height: 950px;
+}
+
+.item:nth-child(3) {
+  // background: green;
+  grid-area: footer;
+}

@@ -1,8 +1,8 @@
 function Footer() {
   return (
-    <footer>
+    <footer className="footer">
       <hr></hr>
-      <p>&copy; {new Date().getFullYear()} My Website: CryptoBoundary. All rights reserved.</p>
+      <p className="footer-p">&copy; {new Date().getFullYear()} Our AI Agent Website: 呕像炼稀生. All rights reserved.</p>
     </footer>
   );
 }

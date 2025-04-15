@@ -903,6 +903,44 @@ my-image { background: (low.png); }
 
 
 
+## 回流和重绘
+
+[前端面试 第四篇 重绘和重排（回流）前端八股文 怎么能不懂一点呢~ 你会不会存在这样一些质疑： 什么是浏览器的重绘重 - 掘金](https://juejin.cn/post/7159155955987382309?searchId=20250413235731DD12E7E0983B7441A96E)
+
+
+
+## 层叠顺序
+
+（1）背景和边框：建立当前层叠上下文元素的背景和边框。
+
+（2）负的z-index：当前层叠上下文中，z-index属性值为负的元素。
+
+（3）块级盒：文档流内非行内级非定位后代元素。
+
+（4）浮动盒：非定位浮动元素。
+
+（5）行内盒：文档流内行内级非定位后代元素。
+
+（6）z-index:0：层叠级数为0的定位元素。
+
+（7）正z-index：z-index属性值为正的定位元素。
+
+**注意:** 当定位元素z-index:auto，生成盒在当前层叠上下文中的层级为 0，不会建立新的层叠上下文，除非是根元素。
+
+## z-index属性在什么情况下会失效
+
+通常 z-index 的使用是在有两个重叠的标签，在一定的情况下控制其中一个在另一个的上方或者下方出现。z-index值越大就越是在上层。z-index元素的position属性需要是relative，absolute或是fixed。
+
+
+
+z-index属性在下列情况下会失效：
+
+- 父元素position为relative时，子元素的z-index失效。解决：父元素position改为absolute或static；
+- 元素没有设置position属性为非static属性。解决：设置该元素的position属性为relative，absolute或是fixed中的一种；
+- 元素在设置z-index的同时还设置了float浮动。解决：float去除，改为display：inline-block；
+
+
+
 # 页面布局
 
 ## CSS布局单位
@@ -2679,7 +2717,22 @@ div {
 
 [css中display所有属性简单了解及使用_css display属性的值及用法-CSDN博客](https://blog.csdn.net/weixin_48040732/article/details/137255412)
 
-该属性定义元素的显示类型，常用的值有：`block`、`inline`、`inline-block`、`flex`、`grid`、`none`。
+该属性定义元素的显示类型。
+
+常用的值：
+
+| 值              | 效果                                                         |
+| :-------------- | :----------------------------------------------------------- |
+| `block`         | 块级元素（独占一行，可设宽高）                               |
+| `inline`        | 行内元素（不独占一行，不可设宽高）                           |
+| `inline-block`  | 行内块（不独占一行，可设宽高）                               |
+| `flex` / `grid` | 弹性盒或网格布局                                             |
+| `none`          | **完全移除元素**（不占空间，不渲染）                         |
+| `inherit`       | 继承父元素的display属性。                                    |
+| `initial`       | 不管父元素怎么设定，恢复到浏览器最初始时的display属性。      |
+| `unset`         | unset混合了inherit和initial。如果父元素设值了，就用父元素的设定，如果父元素没设值，就用浏览器的缺省设定。 |
+
+
 
 ## overflow
 
@@ -2694,37 +2747,9 @@ div {
 | `scroll`  | 始终显示滚动条（即使内容未溢出）             |
 | `auto`    | 仅在内容溢出时显示滚动条                     |
 
-## 隐藏一个元素
 
-隐藏一个元素不可见，但仍占用空间
-
-## 单行、多行文本溢出隐藏
-
-- 单行文本溢出
-
-```css
-overflow: hidden;            // 溢出隐藏
-text-overflow: ellipsis;      // 溢出用省略号显示
-white-space: nowrap;         // 规定段落中的文本不进行换行
-```
-
-- 多行文本溢出
-
-```css
-overflow: hidden;            // 溢出隐藏
-text-overflow: ellipsis;     // 溢出用省略号显示
-display: -webkit-box;         // 作为弹性伸缩盒子模型显示。
--webkit-box-orient:vertical; // 设置伸缩盒子的子元素排列方式：从上到下垂直排列
--webkit-line-clamp:3;        // 显示的行数
-```
-
-注意：由于上面的三个属性都是 CSS3 的属性，有些浏览器不兼容，所以要在前面加一个`-webkit-` 来兼容一部分浏览器。
 
  ## visibility
-
-[【CSS】元素显示与隐藏 ( display 隐藏对象 | visibility 隐藏对象 | overflow 隐藏对象 )_隐藏显示-CSDN博客](https://blog.csdn.net/shulianghan/article/details/130157997)
-
-[前端基础篇之CSS世界这些基本概念有些可能不易理解但却都很重要，如果看完还是很不理解的话需要自己谷歌或百度，网上关于这些 - 掘金](https://juejin.cn/post/6844903894313598989?searchId=2025041321394399C7805A9D9A2E516637#heading-36)
 
 控制元素**视觉上的可见性**，但**保留其布局空间**。
 
@@ -2894,7 +2919,33 @@ float的特性：
 - 没有任何`margin`合并；
 - 脱离文档流：设置了`float`的元素会脱离文档流，失去原来的空间占有，这就导致了父元素的高度坍塌。
 
+浮动元素导致的问题：
 
+- 父元素的高度无法被撑开，导致了父元素的高度坍塌，影响了与父元素同级的元素
+- 与浮动元素同级的非浮动元素会跟随其后占据他原来的位置。
+- 若浮动的元素不是第一个元素，则该元素之前的元素也要浮动，否则会影响页面的显示结构
+
+清除浮动的方式：
+
+1. 给父元素指定高度。
+
+2. 给父元素也设置浮动，带来其他影响。
+
+3. 给父元素设置 `overflow:hidden` 。
+
+4. 在所有浮动元素的最后面，添加一个块级元素，并给该块级元素设置 `clear:both` 。
+
+5. 给浮动元素的父元素，设置伪元素，通过伪元素清除浮动，原理与方案四相同。
+
+   ```css
+   .parent::after {
+   	content: ""; 
+     display: block;
+     clear:both; 
+   }  
+   ```
+
+clear属性只有块级元素才有效的，而::after等伪元素默认都是内联水平，这就是借助伪元素清除浮动影响时需要设置display属性值的原因。
 
 ## Clear
 
@@ -2921,17 +2972,28 @@ clear: none | left | right | both
 
 - html根元素；
 - float的值不为none；
-- overflow的值为auto、scroll或者hidden；
-- display的值为table-cell、table-caption和inline-block中的任何一个；
 - position的值不为relative和static；
+- display的值为inline-block，即行内块元素；
+- display的值为flow-root；
+- display的值为flex的弹性布局中的项目为BFC；
+- display的值为table，即表格单元格：table、thead、tbody、tfoot、th、td、tr、caption均默认是BFC；
+- overflow的值为auto、scroll或者hidden，即不为visible均可；
+- 指定了column-count值的多列容器为BFC；
+- 指定的column-span为all的元素为BFC；
+
+
 
 ### 解决高度塌陷问题
 
-### 阻止边距重叠
+当元素开启 BFC 后，就算其子元素浮动，元素自身的高度也不会塌陷。
 
-### 避免文字环绕浮动元素
+### 避免边距重叠问题
 
+元素开启 BFC 后，其子元素不会再产生 margin 塌陷（重叠）的问题。
 
+### 避免被其他浮动元素覆盖
+
+元素开启 BFC 后，自己不会被其他浮动元素所覆盖。
 
 ## display、float和position之间的关系
 
@@ -2943,35 +3005,28 @@ clear: none | left | right | both
 
 ### 优先级与覆盖关系
 
-#### **(1) 当 `position` 为非 `static` 时：**
+![image-20250414132451391](CSS.assets/image-20250414132451391.png)
 
-- **`position` 优先级最高**：
-  - 若元素设置了 `absolute`、`fixed` 或 `sticky`，`float` 会被强制设为 `none`（无效）。
-  - `display` 值可能被浏览器自动调整（如 `inline` → `block`）。
+1. 首先判断display属性是否为none，如果为none，则元素完全移除布局，position和float属性的值不影响元素最后的表现。
 
-#### **(2) 当 `float` 设为 `left/right` 时：**
+2. 然后判断position的值是否为absolute或者fixed，如果是，则float属性会被强制设为none（失效），并且display的值应按照下面的规则进行修改重设：
 
-- **`float` 触发 BFC**：
-  - 元素 `display` 值可能被隐式修改（如 `inline` → `block`）。
-  - 但若同时设置 `position: absolute/fixed`，`float` 失效。
+   | 指定值                                                       | 计算值（重设值） |
+   | ------------------------------------------------------------ | ---------------- |
+   | inline-table                                                 | table            |
+   | inline, <BR>table-row-group, table-column, table-column-group, table-header-group, table-footer-group, table-row, table-cell, table-caption, <BR>inline-block | block            |
+   | inline-flex                                                  | flex             |
+   | others                                                       |                  |
 
-#### **(3) `display: none` 时：**
+3. 然后看float的值是否非none，若是，则display的值应按照上面的规则进行修改重设。
 
-- **完全移除布局**：
-  - 无论 `float` 或 `position` 如何设置，元素不参与渲染。
+4. 然后看元素是否是根元素，若是，则display的值应按照上面的规则进行修改重设。
+
+5. 应用指定的display属性值。
 
 
 
-### 规则总结
-
-1. **`position: absolute/fixed` 优先级最高**：
-   - 覆盖 `float` 和部分 `display` 行为。
-2. **`float` 会强制修改 `display`**：
-   - 行内元素浮动后变为块级（`display: block`）。
-3. **Flex/Grid 布局中 `float` 无效**：
-   - 现代布局模型（Flexbox/Grid）会忽略 `float`。
-4. **`display: none` 绝对优先**：
-   - 元素不参与任何布局计算。
+总的来说，可以把它看作是一个类似优先级的机制，"position:absolute"和"position:fixed"优先级最高，有它存在的时候，浮动不起作用，'display'的值也需要调整；其次，元素的'float'特性的值不是"none"的时候或者它是根元素的时候，调整'display'的值；最后，非根元素，并且非浮动元素，并且非绝对定位的元素，'display'特性值按照设置值渲染。
 
 
 
@@ -2983,17 +3038,86 @@ clear: none | left | right | both
 | `display: none`      | ❌ 否             | ✅ 是             | ❌ 否             | 彻底移除元素（响应式布局）      |
 | `visibility: hidden` | ✅ 是             | ❌ 否             | ❌ 否             | 隐藏元素但保留占位（动画/占位） |
 
+### `display: none`与`visibility: hidden`的区别
+
+1. `display: none`的元素不占据任何空间，`visibility: hidden`的元素空间保留；
+2. `display: none`会影响css3的`transition`过渡效果，`visibility: hidden`不会；
+3. `display: none`隐藏产生重绘 ( repaint ) 和回流 ( relfow )，`visibility: hidden`只会触发重绘；
+4. 株连性：`display: none`的节点和子孙节点元素全都不可见，`visibility: hidden`的节点的子孙节点元素可以设置 `visibility: visible`显示。`visibility: hidden`属性值具有继承性，所以子孙元素默认继承了`hidden`而隐藏，但是当子孙元素重置为`visibility: visible`就不会被隐藏。
+
 
 
 ## float、transform和position的区别
+
+| **属性**    | **是否脱离文档流**      | **主要用途**               | **现代替代方案** |
+| :---------- | :---------------------- | :------------------------- | :--------------- |
+| `float`     | ✅ 是                    | 文字环绕、旧版布局         | Flexbox/Grid     |
+| `position`  | 部分脱离（非 `static`） | 精准定位（弹窗、悬浮按钮） | 无完全替代       |
+| `transform` | ❌ 否                    | 视觉变换（动画、微调位置） | 无替代           |
 
 
 
 # 场景应用
 
+## 隐藏一个元素
 
+[【CSS】元素显示与隐藏 ( display 隐藏对象 | visibility 隐藏对象 | overflow 隐藏对象 )_隐藏显示-CSDN博客](https://blog.csdn.net/shulianghan/article/details/130157997)
 
+[前端基础篇之CSS世界这些基本概念有些可能不易理解但却都很重要，如果看完还是很不理解的话需要自己谷歌或百度，网上关于这些 - 掘金](https://juejin.cn/post/6844903894313598989?searchId=2025041321394399C7805A9D9A2E516637#heading-36)
 
+### 不可见但占据空间
+
+1. 如果希望元素不可见、不能点击、占据空间、资源会加载，可以使用： `visibility: hidden`；
+2. 如果希望元素不可见、可以点击、占据空间，可以使用： `opacity: 0`；
+3. 如果希望元素不可见、不能点击、占据空间，可以使用： `position: relative; z-index: -1;`；
+
+### 不可见且不占据空间
+
+1. 如果希望元素不可见、不占据空间、资源会加载、DOM 可访问： `display: none`；
+
+2. 如果希望元素不可见、不占据空间、显隐时可以又`transition`淡入淡出效果：
+
+   ```css
+   div{
+     position: absolute;
+     visibility: hidden;
+     opacity: 0;
+     transition: opacity .5s linear;
+     background: cyan;
+   }
+   div.active{
+     visibility: visible;
+     opacity: 1;
+   }
+   ```
+
+   这里使用`visibility: hidden`而不是`display: none`，是因为`display: none`会影响css3的`transition`过渡效果。 但是`display: none`并不会影响css`animation`动画的效果。
+
+3. 如果希望元素不可见、可以点击、不占据空间，可以使用： `opacity: 0; position: absolute;`；
+
+4. 如果希望元素不可见、不能点击、不占据空间，可以使用： `position: absolute ; z-index: -1;`；
+
+## 单行、多行文本溢出隐藏
+
+- 单行文本溢出
+
+```css
+overflow: hidden;            // 溢出隐藏
+text-overflow: ellipsis;      // 溢出用省略号显示
+white-space: nowrap;         // 规定段落中的文本不进行换行
+```
+
+- 多行文本溢出
+
+```css
+overflow: hidden;            // 溢出隐藏
+text-overflow: ellipsis;     // 溢出用省略号显示
+display: -webkit-box;         // 作为弹性伸缩盒子模型显示。
+-webkit-box-orient:vertical; // 设置伸缩盒子的子元素排列方式：从上到下垂直排列
+-webkit-line-clamp:3;        // 显示的行数
+```
+
+注意：由于上面的三个属性都是 CSS3 的属性，有些浏览器不兼容，所以要在前面加一个`-webkit-` 来兼容一部分浏览器。
 
 
 
@@ -3089,16 +3213,99 @@ function isInViewport(el) {
 
 
 
-## z-index属性在什么情况下会失效
+## 实现一个三角形
 
-通常 z-index 的使用是在有两个重叠的标签，在一定的情况下控制其中一个在另一个的上方或者下方出现。z-index值越大就越是在上层。z-index元素的position属性需要是relative，absolute或是fixed。
+CSS绘制三角形主要用到的是border属性，也就是边框。平时在给盒子设置边框时，往往都设置很窄，就可能误以为边框是由矩形组成的，实际上，border属性是由三角形组成的。
+
+实现方法：通过上下左右边框来控制三角形的方向，用边框的宽度比来控制三角形的角度。
+
+将div的长宽都设置为0，让边框有一定的宽度并且为实线，用三边的边框拼凑出一个等腰三角形，并把腰的两边透明化：
+
+```css
+.triangle {
+    width: 0;
+    height: 0;
+    border-top: 50px solid red;
+    border-right: 50px solid transparent;
+    border-left: 50px solid transparent;
+}
+```
 
 
 
-z-index属性在下列情况下会失效：
+## 实现一个扇形
 
-- 父元素position为relative时，子元素的z-index失效。解决：父元素position改为absolute或static；
-- 元素没有设置position属性为非static属性。解决：设置该元素的position属性为relative，absolute或是fixed中的一种；
-- 元素在设置z-index的同时还设置了float浮动。解决：float去除，改为display：inline-block；
+```css
+div{
+    border: 100px solid transparent;
+    width: 0;
+    height: 0;
+    border-radius: 100px;
+    border-top-color: red;
+}
+```
+
+
+
+## 实现一个半圆
+
+```css
+div {
+  background-color: red;
+  width: 100px;
+  height: 50px;
+  border-radius: 0px 0px 100px 100px;
+}
+```
+
+
+
+## 实现一个圆
+
+```css
+div {
+  background-color: red;
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+}
+```
+
+为什么border-radius设置成100%和50%都能画成圆呢？
+
+因为，在W3C中对重合曲线做了规定：如果两个相邻的半径和超过了对应的盒子的边的长度，那么浏览器要重新计算以保证它们不重合。也就是说，如果相邻圆角的半径都设置成大于50%，那么浏览器会根据图形的实际情况做一些计算。
+
+
+
+## 画一条0.5px的线
+
+- **采用transform: scale()的方式**，该方法用来定义元素的2D 缩放转换：
+
+```css
+transform: scale(0.5,0.5);
+```
+
+- **采用meta viewport的方式**
+
+```css
+<meta name="viewport" content="width=device-width, initial-scale=0.5, minimum-scale=0.5, maximum-scale=0.5"/>
+```
+
+这样就能缩放到原来的0.5倍，如果是1px那么就会变成0.5px。viewport只针对于移动端，只在移动端上才能看到效果
+
+
+
+## 设置小于12px的字体
+
+在谷歌下css设置字体大小为12px及以下时，显示都是一样大小，都是默认12px。
+
+**解决办法：**
+
+- 使用Webkit的内核的-webkit-text-size-adjust的私有CSS属性来解决，只要加了-webkit-text-size-adjust:none;字体大小就不受限制了。但是chrome更新到27版本之后就不可以用了。所以高版本chrome谷歌浏览器已经不再支持-webkit-text-size-adjust样式，所以要使用时候慎用。
+- 使用css3的transform缩放属性-webkit-transform:scale(0.5); 注意-webkit-transform:scale(0.75);收缩的是整个元素的大小，这时候，如果是内联元素，必须要将内联元素转换成块元素，可以使用display：block/inline-block/...；
+- 使用图片：如果是内容固定不变情况下，使用将小于12px文字内容切出做图片，这样不影响兼容也不影响美观。
+- 使用 zoom 可以改变页面上元素的尺寸，属于真实尺寸，可以用`zoom:50%`或`zoom:0.5`来表示缩小到原来的一半。
+
+
 
 # END
