@@ -1,0 +1,82 @@
+.app-container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  transition: all 0.3s ease;
+  background-color: #2d3748;
+  color: white;
+  padding: 1rem;
+}
+
+.sidebar.closed {
+  width: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Main Content 动态宽度 */
+.main-content {
+  transition: all 0.3s ease;
+  flex-grow: 1;
+  background-color: #f7fafc;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.toggle-button {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #3182ce;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  z-index: 10;
+  cursor: pointer;
+}
+
+/* Chat Wrapper */
+.chat-wrapper {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat-box {
+  background-color: white;
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.chat-group {
+  margin-bottom: 1.5rem;
+
+  h3 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: #cbd5e0;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  li {
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+  }
+}

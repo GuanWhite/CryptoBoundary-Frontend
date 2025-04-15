@@ -2,6 +2,7 @@ import App from "../App";
 import LoginPage from "../pages/loginPage/LoginPage";
 import NotFoundPage from "../pages/notFoundPage/NotFoundPage";
 import HomePage from "../pages/homePage/HomePage";
+import ChatPage from "../pages/chatPage/ChatPage";
 import { createBrowserRouter } from "react-router";
 
 const routes = [
@@ -16,6 +17,10 @@ const routes = [
   {
     path: "/home",
     element: <HomePage />,
+  },
+  {
+    path: "/chat",
+    element: <ChatPage />,
   },
   {
     path: "*",

@@ -15,7 +15,7 @@ const WelcomePage = () => {
         </p>
         <div>
           <h2>use it now!</h2>
-          <StartButton buttonName="Start" navProps="/home"></StartButton>
+          <StartButton buttonName="Start" navProps="/chat"></StartButton>
         </div>
       </div>
 
