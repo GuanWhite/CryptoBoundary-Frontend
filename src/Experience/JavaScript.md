@@ -475,17 +475,7 @@ console.log(bigIntNum); // 1234567890123456789012345678901234567890n
 - BigInt只能表示整数，不能表示小数。
 - BigInt与Number类型的数值不能直接混合运算，需要进行类型转换。
 
-### Function
-
-#### 实例属性
-
-##### Function.length
-
-funtion 实例的 **`length`** 数据属性表示函数期望的参数数量。
-
-一个 Funtion 对象的 `length` 属性表示函数期望的参数个数，即形参的个数。这个数字不包括剩余参数，只包括在第一个具有默认值的参数之前的参数。相比之下，`arguments.length` 是局限于函数内部的，它提供了实际传递给函数的参数个数。 
-
-在JavaScript中，Number类型采用双精度64位二进制格式（IEEE 754标准），因此能安全表示的整数范围是$-(2^{53}-1)$到$2^{53}-1$，即`Number.MIN_SAFE_INTEGER` 到 `Number.MAX_SAFE_INTEGER`。超过这个范围的整数将无法精确表示，可能导致计算错误。为了解决这个问题，`BigInt`应运而生。
+### ----------
 
 
 ### Object
@@ -527,7 +517,17 @@ for(x in obj){
 console.log(i)
 ```
 
+### Function
 
+#### 实例属性
+
+##### Function.length
+
+funtion 实例的 **`length`** 数据属性表示函数期望的参数数量。
+
+一个 Funtion 对象的 `length` 属性表示函数期望的参数个数，即形参的个数。这个数字不包括剩余参数，只包括在第一个具有默认值的参数之前的参数。相比之下，`arguments.length` 是局限于函数内部的，它提供了实际传递给函数的参数个数。 
+
+在JavaScript中，Number类型采用双精度64位二进制格式（IEEE 754标准），因此能安全表示的整数范围是$-(2^{53}-1)$到$2^{53}-1$，即`Number.MIN_SAFE_INTEGER` 到 `Number.MAX_SAFE_INTEGER`。超过这个范围的整数将无法精确表示，可能导致计算错误。为了解决这个问题，`BigInt`应运而生。
 
 ### Array
 
@@ -535,11 +535,14 @@ console.log(i)
 
 - 数组和字符串的转换方法：toString()、toLocalString()、join() 其中 join() 方法可以指定转换为字符串时的分隔符。
 - 数组尾部操作的方法 pop() 和 push()，push 方法可以传入多个参数。
-- 数组首部操作的方法 shift() 和 unshift() 重排序的方法 reverse() 和 sort()，sort() 方法可以传入一个函数来进行比较，传入前后两个值，如果返回值为正数，则交换两个参数的位置。
+- 数组首部操作的方法 shift() 和 unshift()。
+- 重排序的方法 reverse() 和 sort()，sort() 方法可以传入一个函数来进行比较，传入前后两个值，如果返回值为正数，则交换两个参数的位置。
 - 数组连接的方法 concat() ，返回的是拼接好的数组，不影响原数组。
-- 数组截取办法 slice()，用于截取数组中的一部分返回，不影响原数组。
-- 数组插入方法 splice()，影响原数组查找特定项的索引的方法，indexOf() 和 lastIndexOf() 迭代方法 every()、some()、filter()、map() 和 forEach() 方法
-- 数组归并方法 reduce() 和 reduceRight() 方法
+- 数组截取办法 slice()，用于截取数组中的一部分返回，不影响原数组，而是返回一个新的数组。
+- 数组插入方法 splice()，影响原数组。
+- 查找特定项的索引的方法，indexOf() 和 lastIndexOf()。
+- 迭代方法 every()、some()、filter()、map() 和 forEach() 方法。
+- 数组归并方法 reduce() 和 reduceRight() 方法。
 
 
 
@@ -711,7 +714,7 @@ console.log(newArr)
 
 ##### Array.join()
 
-
+**`join()`** 方法将一个数组（或类数组对象）的所有元素连接成一个字符串并返回这个字符串，用逗号或指定的分隔符字符串分隔。如果数组只有一个元素，那么将返回该元素而不使用分隔符。
 
 ```js
 // 数组join力法把数组转换为字符串
@@ -722,50 +725,105 @@ console.log(newArr.join('')) // red颜色blue颜色pink颜色
 console.log(newArr.join('|')) // red颜色|blue颜色|pink颜色
 ```
 
+所有数组元素被转换成字符串并连接到一个字符串中。如果一个元素是 `undefined` 或 `null`，它将被转换为空字符串，而不是字符串 `"undefined"` 或 `"null"`。
 
+##### Array.reduce()
+
+`reduce()` 方法是一个迭代方法。它按升序对数组中的所有元素运行一个“reducer”回调函数，并将它们累积到一个单一的值中。每次调用时，`callbackFn` 的返回值都作为 `accumulator` 参数传递到下一次调用中。`accumulator` 的最终值（也就是在数组的最后一次迭代中从 `callbackFn` 返回的值）将作为 `reduce()` 的返回值。
+
+第一次执行回调函数时，不存在“上一次的计算结果”。如果需要回调函数从数组索引为 0 的元素开始执行，则需要传递初始值。否则，数组索引为 0 的元素将被用作初始值，迭代器将从第二个元素开始执行（即从索引为 1 而不是 0 的位置开始）。
+
+`reduce()` 不会改变被调用的数组，但是作为 `callbackFn` 提供的函数可能会改变数组。但需要注意的是，在第一次调用 `callbackFn` *之前*，数组的长度会被保存。因此：
+
+- 当开始调用 `reduce()` 时，`callbackFn` 将不会访问超出数组初始长度的任何元素。
+- 对已访问索引的更改不会导致再次在这些元素上调用 `callbackFn`。
+- 如果数组中一个现有的、尚未访问的元素被 `callbackFn` 更改，则它传递给 `callbackFn` 的值将是该元素被修改后的值。
+
+reduce()的边界情况：
+
+- 如果提供了 `initialValue`且数组不为空，则 `reduce` 方法将始终从索引 0 开始调用回调函数。
+
+  ```js
+  const getMax = (a, b) => Math.max(a, b);
+  // 从索引 0 开始为数组中的每个元素调用回调函数
+  [1, 100].reduce(getMax, 50); // 100
+  [50].reduce(getMax, 10); // 50
+  ```
+
+- 如果提供了 `initialValue`但数组为空，则将返回该提供的初始值，而不调用 `callbackFn`。
+
+  ```js
+  // 不调用回调函数
+  [].reduce(getMax, 1); // 1
+  ```
+
+- 如果未提供 `initialValue`，则对于长度大于 1、等于 1 和 0 的数组，`reduce` 方法将有不同的表现，如以下示例所示：
+
+  ```js
+  // 仅为索引 1 处的元素调用回调函数
+  [1, 100].reduce(getMax); // 100
+  
+  // 不调用回调函数
+  [50].reduce(getMax); // 50
+  
+  // 报错
+  [].reduce(getMax); // TypeError
+  ```
+
+  
 
 
 
 #### 遍历数组的方法
 
-其中可以中断的有哪些？
+| **方法**                            | **可中断** | **修改原数组** | **用途**                               | **示例**                               |
+| :---------------------------------- | :--------- | :------------- | :------------------------------------- | :------------------------------------- |
+| `for` / `while` / `do...while`循环  | ✅ 是       | ❌ 否           | 通用遍历，灵活控制                     | `for (let i = 0; i < arr.length; i++)` |
+| `for...of`                          | ✅ 是       | ❌ 否           | 遍历值（支持 `break`）                 | `for (const item of arr)`              |
+| `forEach()`                         | ❌ 否       | ❌ 否           | 仅遍历，无返回值。（无法中断）         | `arr.forEach(item => {})`              |
+| `map()`                             | ❌ 否       | ❌ 否           | 返回新数组，适合链式调用。             | `arr.map(x => x * 2)`                  |
+| `filter()`                          | ❌ 否       | ❌ 否           | 返回过滤后的新数组                     | `arr.filter(x => x > 5)`               |
+| `reduce()` / `reduceRight()`        | ❌ 否       | ❌ 否           | 累积计算                               | `arr.reduce((sum, x) => sum + x, 0)`   |
+| `some()`                            | ✅ 是       | ❌ 否           | 检查是否有元素满足条件（可提前退出）   | `arr.some(x => x > 10)`                |
+| `every()`                           | ✅ 是       | ❌ 否           | 检查是否所有元素满足条件（可提前退出） | `arr.every(x => x > 0)`                |
+| `find()` / `findIndex()`            | ✅ 是       | ❌ 否           | 查找首个匹配元素/索引（可提前退出）    | `arr.find(x => x === 5)`               |
+| `entries()` / `keys()` / `values()` | ✅ 是       | ❌ 否           | 遍历键/值/键值对（配合 `for...of`）    | `for (const [i, v] of arr.entries())`  |
+| `splice()`                          | ❌ 否       | ✅ 是           | 删除/替换元素                          | `arr.splice(0, 1)`                     |
+| `sort()`                            | ❌ 否       | ✅ 是           | 排序                                   | `arr.sort((a, b) => a - b)`            |
+| `reverse()`                         | ❌ 否       | ✅ 是           | 反转数组                               | `arr.reverse()`                        |
+| `fill()`                            | ❌ 否       | ✅ 是           | 填充数组                               | `arr.fill(0)`                          |
+| `copyWithin()`                      | ❌ 否       | ✅ 是           | 内部复制元素                           | `arr.copyWithin(0, 1)`                 |
+| `Object.keys()`                     | ❌ 否       | ❌ 否           | 遍历对象，返回由可枚举属性组成的数组   | `Object.keys(['a', 'b', 'c'])`         |
 
-其中会修改原数组的有哪些？
+其中可中断为`是`的，可以通过 `return`、`break` 或 `throw` 提前终止遍历；
 
-##### for
+其中会修改原数组为`是`的，表明其方法会在原数组上做修改，而非返回新数组。
 
-##### for of
 
-for of 和 for in的区别？
 
-##### array.map
+##### `for...of` 和 `for...in` 的区别
 
-##### forEach
+| **特性**       | `for...of`                     | `for...in`                 |
+| :------------- | :----------------------------- | :------------------------- |
+| **遍历目标**   | 值（如数组元素、字符）         | 键（如对象属性、数组索引） |
+| **适用对象**   | 可迭代对象（数组、Map、Set等） | 任意对象（包括普通对象）   |
+| **原型链属性** | 不遍历                         | 遍历（需过滤）             |
+| **中断支持**   | 支持 `break`/`continue`        | 支持 `break`/`continue`    |
+| **索引类型**   | 无索引（直接访问值）           | 字符串（如 `"0"`）         |
 
-forEach()方法用于调用数组的每个元素，并将元素传递给回调函数。
+**总结：**
 
-语法：
+- for...in 循环主要是为了遍历对象而生，不适用于遍历数组；for...of 循环可以用来遍历数组、类数组对象，字符串、Set、Map 以及 Generator 对象。
+- 对于数组的遍历，for…in 会返回数组中所有可枚举的属性(包括原型链上可枚举的属性)，for…of 只返回数组的下标对应的属性值；
 
-```js
-被遍历的数组.forEach(function(当前数组元素，当前元素索引号){
-	// 函数体
-})
-```
+##### `forEach()` 和 `map()` 的区别
 
-举例：
-
-```js
-const arr =['pink', 'red', 'green']
-arr.forEach(function(item, index){
-    console.log(`当前数组元素是:${item}`) // 依次打印数组每一个元素
-    console.log(`当前数组元素的索引是:${index}`) // 依次打印数组每一个元素的索引
-})
-```
-
-注意：
-
-1. forEach 主要是遍历数组
-2. 参数当前数组元素是必须要写的， 索引号可选
+| **特性**       | `forEach()`                        | `map()`                  |
+| :------------- | :--------------------------------- | :----------------------- |
+| **返回值**     | `undefined`                        | 新数组                   |
+| **原数组修改** | 否（但回调内可修改元素）           | 否                       |
+| **中断支持**   | 否                                 | 否                       |
+| **使用场景**   | 执行副作用（如打印、更新外部变量） | 数据转换（如生成新数组） |
 
 
 
@@ -807,7 +865,7 @@ console.log(arr.constructor === Array) // false
 
 ##### 方法三：`__proto__`
 
-实例的 __ proto __ 指向构造函数的原型对象
+实例的 `__proto__` 指向构造函数的原型对象
 
 ```js
 let arr = []
@@ -846,7 +904,7 @@ console.log(Array.prototype.isPrototypeOf(arr)) // true
 
 ##### 方法六：Object.prototype.toString.call()
 
-Object 的原型对象上有一个 toString 方法，toString 方法默认被所有对象继承，返回 "`[object type]`" 字符串。但此方法经常被原型链上的同名方法覆盖，需要通过 Object.prototype.toString.call() 强行调用。
+Object 的原型对象上有一个 toString 方法，toString 方法默认被所有对象继承，返回 "`[object type]`" 字符串。但此方法经常被原型链上的同名方法覆盖，需要通过 `Object.prototype.toString.call()` 强行调用。
 
 ```js
 let arr = [];
@@ -874,9 +932,20 @@ console.log(Array.isArray(arr)) // true
 
 #### 转换类数组的方法
 
-一个拥有 length 属性和若干索引属性的对象就可以被称为类数组对象，类数组对象和数组类似，但是不能调用数组的方法。
+一个拥有 **length 属性**和若干**数字索引属性**的对象就可以被称为类数组对象，类数组对象和数组类似，但它们并不是由`Array`构造函数创建的，因此不继承自`Array.prototype`，也就没有数组的原生方法，例如`push`、`pop`、`map`等。
 
-常见的类数组对象有 arguments 和 DOM 方法的返回结果，还有一个函数也可以被看作是类数组对象，因为它含有 length 属性值，代表可接收的参数个数。
+常见的类数组对象有：
+
+- 字符串；
+- 函数的 arguments 参数；
+- 函数本身：
+  - 因为它含有 length 属性值，代表可接收的参数个数。
+- DOM 方法的返回结果：
+  - 使用`document.getElementsByTagName`来获取元素集合，返回`HTMLCollection`。
+  - 使用`document.querySelectorAll`来获取元素集合，返回`NodeList`。
+- 手动定义的类数组对象
+
+
 
 常见的类数组转换为数组的方法有：
 
@@ -886,16 +955,52 @@ console.log(Array.isArray(arr)) // true
    Array.prototype.slice.call(arrayLike);
    ```
 
-2. 通过 apply 调用数组的 concat 方法来实现转换
+2. 通过 call 调用数组的 splice 方法来实现转换
+
+   ```
+   Array.prototype.splice.call(arrayLike, 0);
+   ```
+
+3. 通过 apply 调用数组的 concat 方法来实现转换
 
    ```
    Array.prototype.concat.apply([], arrayLike);
    ```
 
-3. 通过 Array.from 方法来实现转换
+4. 通过 Array.from 方法来实现转换
 
    ```
    Array.from(arrayLike);
+   ```
+
+#### 遍历类数组的方法
+
+要遍历类数组，有三个方法：
+
+1. 可以使用`call`和`apply`方法将数组的方法应用到类数组上，如：
+
+   ```js
+   function foo(){ 
+     Array.prototype.forEach.call(arguments, a => console.log(a))
+   }
+   ```
+
+2. 使用Array.from方法将类数组转化成数组：‌
+
+   ```js
+   function foo(){ 
+     const arrArgs = Array.from(arguments) 
+     arrArgs.forEach(a => console.log(a))
+   }
+   ```
+
+3. 使用展开运算符将类数组转化成数组
+
+   ```js
+   function foo(){ 
+       const arrArgs = [...arguments] 
+       arrArgs.forEach(a => console.log(a)) 
+   }
    ```
 
 
@@ -1183,6 +1288,8 @@ x === void 0; // true
 
 # 运算符&操作符
 
+## 汇总表
+
 | 运算符                             | 含义                                                         | 举例                                                         | 结果                                 |
 | ---------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------ |
 | **算术运算符**                     | 用于基本的数学运算                                           |                                                              |                                      |
@@ -1212,12 +1319,12 @@ x === void 0; // true
 | `||`                               | 逻辑或（短路运算）                                           | `true || false`                                              | `true`                               |
 | `!`                                | 逻辑非                                                       | `!false`                                                     | `true`                               |
 | **位运算符**                       | 对数字的二进制位进行操作                                     |                                                              |                                      |
-| `&`                                | 按位与                                                       | `5 & 3` （二进制 `101 & 011`）                               | `1`                                  |
-| `|`                                | 按位或                                                       | `5 | 3` （二进制 `101 | 011`）                               | `7`                                  |
-| `^`                                | 按位异或                                                     | `5 ^ 3` （二进制 `101 ^ 011`）                               | `6`                                  |
+| `&`                                | 按位与，两个位都为1时，结果才为1                             | `5 & 3` （二进制 `101 & 011`）                               | `1`                                  |
+| `|`                                | 按位或，两个位都为0时，结果才为0                             | `5 | 3` （二进制 `101 | 011`）                               | `7`                                  |
+| `^`                                | 按位异或，两个位相同为0，相异为1                             | `5 ^ 3` （二进制 `101 ^ 011`）                               | `6`                                  |
 | `~`                                | 按位取反                                                     | `~5` （二进制 `~101`）                                       | `-6`                                 |
-| `<<`                               | 左移                                                         | `5 << 1` （二进制 `101 << 1`）                               | `10`                                 |
-| `>>`                               | 右移（符号位右移）                                           | `-5 >> 1` （二进制 `-101 >> 1`）                             | `-3`                                 |
+| `<<`                               | 左移，各二进制位全部左移若干位，高位丢弃，低位补0            | `5 << 1` （二进制 `101 << 1`）                               | `10`                                 |
+| `>>`                               | 右移（符号位右移），各二进制位全部右移若干位，正数左补0，负数左补1，右边丢弃 | `-5 >> 1` （二进制 `-101 >> 1`）                             | `-3`                                 |
 | `>>>`                              | 无符号右移                                                   | `-5 >>> 1` （二进制 `-101 >>> 1`）                           | `2147483645`                         |
 | **条件运算符**                     | 三元运算符，用于条件判断                                     |                                                              |                                      |
 | `condition ? exprTrue : exprFalse` | 条件表达式                                                   | `let result = 10 > 5 ? 'Yes' : 'No'`                         | `'Yes'`                              |
@@ -2769,6 +2876,582 @@ function deepCopy (src) {
 }
 ```
 
+
+
+## Unicode、UTF-8、UTF-16和UTF-32的区别
+
+- `Unicode` 是编码字符集（字符集），而`UTF-8`、`UTF-16`、`UTF-32`是字符集编码（编码规则）；
+- `UTF-16` 使用变长码元序列的编码方式，相较于定长码元序列的`UTF-32`算法更复杂，甚至比同样是变长码元序列的`UTF-8`也更为复杂，因为其引入了独特的**代理对**这样的代理机制；
+- `UTF-8`需要判断每个字节中的开头标志信息，所以如果某个字节在传送过程中出错了，就会导致后面的字节也会解析出错；而`UTF-16`不会判断开头标志，即使错也只会错一个字符，所以容错能力教强；
+- 如果字符内容全部英文或英文与其他文字混合，但英文占绝大部分，那么用`UTF-8`就比`UTF-16`节省了很多空间；而如果字符内容全部是中文这样类似的字符或者混合字符中中文占绝大多数，那么`UTF-16`就占优势了，可以节省很多空间；
+
+## escape()、encodeURI()、encodeURIComponent()区别详解
+
+1、escape() 方法：
+
+采用`ISO Latin`字符集对指定的字符串进行编码。所有的空格符、标点符号、特殊字符以及其他非ASCII字符都将被转化成`%xx`格式的字符编码（xx等于该字符在字符集表里面的编码的16进制数字）。比如，空格符对应的编码是`%20`。不会被此方法编码的字符： `@ * / +`
+
+```
+javascript:escape("春节");
+//输出 "%u6625%u8282"
+
+javascript:escape("hello word");
+//输出 "hello%20word"
+```
+
+2、encodeURI() 方法：
+
+把URI字符串采用`UTF-8`编码格式转化成escape格式的字符串。该方法不会对 ASCII 字母和数字进行编码，也不会对这些 ASCII 标点符号进行编码： `@ $ & = : ; ? + - * / _ . ! ~ ' ( )` 。
+
+```
+var uri="my test.asp?name=ståle&car=saab"; 
+document.write(encodeURI(uri)); //上面的输出如下： //my%20test.asp?name=st%C3%A5le&car=saab 
+```
+
+3、encodeURIComponent() 方法：
+
+把 URI字符串采用`UTF-8`编码格式转化成escape格式的字符串。与encodeURI()相比，这个方法将对更多的字符进行编码，比如 `/ `等字符。所以如果字符串里面包含了URI的几个部分的话，不能用这个方法来进行编码，否则 / 字符被编码之后URL将显示错误。
+
+该方法不会对 ASCII 字母和数字进行编码，也不会对这些 ASCII 标点符号进行编码：` - _ . ! ~ * ' ( ) `。
+
+其他字符（比如 ：`;/?:@&=+$,#` 这些用于分隔 URI 组件的标点符号），都是由一个或多个十六进制的转义序列替换的。
+
+```
+var uri="http://jb51.net/my test.asp?name=ståle&car=saab"; 
+document.write(encodeURIComponent(uri)); //上面的输出如下： //http%3A%2F%2Fjb51.net%2Fmy%20test.asp%3Fname%3Dst%C3%A5le%26car%3Dsaab 
+```
+
+因此，对于中文字符串来说，如果不希望把字符串编码格式转化成UTF-8格式的（比如原页面和目标页面的charset是一致的时候），只需要使用 escape。如果你的页面是GB2312或者其他的编码，而接受参数的页面是UTF-8编码的，就要采用encodeURI或者 encodeURIComponent。
+
+而且，escape()除了 ASCII 字母、数字和特定的符号外，对传进来的字符串全部进行转义编码，因此如果想对URL编码，最好不要使用此方法。而encodeURI() 用于编码整个URI,因为URI中的合法字符都不会被编码转换。encodeURIComponent方法在编码单个URIComponent（指请求参 数）应当是最常用的，它可以讲参数中的中文、特殊字符进行转义，而不会影响整个URL。
+
+另外，encodeURI/encodeURIComponent是在javascript1.5之后引进的，escape则在javascript1.0版本就有。
+
+## AJAX、Fetch和Axios的区别
+
+[【JavaScript】爆肝 2 万字！一次性搞懂 Ajax、Fetch 和 Axios 的区别~爆肝2万字，深入研究常 - 掘金](https://juejin.cn/post/7211103821082394682?searchId=202504161656078D8CC3B6DA30CE66A3FE)
+
+AJAX是指通过 JavaScript 的 异步通信技术，最原始的方法是使用 `XMLHttpRequest` 对象来发送 HTTP 请求，并通过回调函数处理响应数据。它可以在无需重新加载整个网页的情况下，通过在后台与服务器进行少量数据交换，实现对部分网页进行异步更新。`Ajax` 的优点是简单易用，缺点是需要手动编写大量的回调函数来处理请求和响应，代码可读性较差。
+
+Fetch是在ES6出现的，它是基于ES6中的promise对象来处理请求和响应的，它相较于前者使用了更简洁的语法，也不用再去需要处理 `readyState`复杂的逻辑。
+
+Axios是一个比较常用的HTTP客户端库，也是基于Promise对象实现的，它相较于Fetch带来了更多的扩展功能，如请求取消、拦截请求和响应、转换请求和响应数据等。
+
+区别对比表：
+
+| 特性                     | AJAX (`XMLHttpRequest`)          | Fetch API                                 | Axios                                    |
+| ------------------------ | -------------------------------- | ----------------------------------------- | ---------------------------------------- |
+| ✅ **基本语法**           | 繁琐，需监听状态                 | 简洁，基于 Promise                        | 简洁，基于 Promise                       |
+| ✅ **响应处理**           | 手动解析 JSON                    | 手动 `response.json()`                    | 自动解析为 JSON（默认）                  |
+| ✅ **错误处理**           | 手动监听 `onerror`               | 仅网络错误会 reject，状态码错误需手动处理 | 网络错误 + 非 2xx 状态码都会 reject      |
+| ✅ **超时处理**           | `xhr.timeout + ontimeout`        | 需结合 `AbortController`                  | 内置 `timeout` 参数                      |
+| ✅ **请求/响应拦截器**    | 不支持                           | 不支持                                    | 支持请求/响应拦截器（request/response）  |
+| ✅ **Download 进度监听**  | 支持 `xhr.onprogress`            | 需手动监听 `ReadableStream`               | 支持（配置 `onDownloadProgress`）        |
+| ✅ **并行请求**           | 通过多个 `xhr` 实现              | 使用 `Promise.all` 实现                   | 使用 `axios.all` / `Promise.all` 实现    |
+| ✅ **自动取消请求**       | 手动实现                         | `AbortController`                         | 支持取消令牌 `CancelToken`（或新写法）   |
+| ✅ **请求数据格式**       | 需手动设置 headers + 格式化 body | 手动设置 headers + body                   | 自动处理 JSON、FormData、URLSearchParams |
+| ✅ **兼容性（旧浏览器）** | 高，支持 IE                      | 不支持 IE（需 polyfill）                  | 支持 IE（部分功能限制）                  |
+| ✅ **上传文件**           | 支持                             | 支持                                      | 支持，且处理更简单                       |
+| ✅ **请求配置封装性**     | 差                               | 中等                                      | 强，可配置默认 baseURL、headers 等       |
+
+
+
+浏览器中的 `http请求` 有哪些方式？有这些：
+
+1. `URL`
+2. `Links`
+3. `JavaScript（window.location.href = 'http://www.google.com'`）
+4. `XMLHttpRequest (XHR)`
+5. `Fetch API`
+6. `Axios`
+7. `WebSocket`
+
+在实际开发中，`XHR` 和 `Fetch API` 是发送异步 `HTTP` 请求的两种主要方式，在使用它们时需要注意跨域问题和安全问题。`Axios` 提供了更多易于使用的功能和选项，使得发送 `HTTP` 请求更加方便和灵活。`WebSocket` 则适用于需要实现实时双向通信的应用场景。
+
+
+
+### AJAX
+
+`Ajax`：是一种早期的用于在浏览器中发送异步 `HTTP` 请求的技术。`Ajax` 通过 `XMLHttpRequest` 对象来发送请求，并通过回调函数处理响应数据。`Ajax` 的优点是简单易用，缺点是需要手动编写大量的回调函数来处理请求和响应，代码可读性较差。
+
+
+
+创建AJAX请求的步骤：
+
+- **创建一个 XMLHttpRequest 对象。**
+- 在这个对象上**使用 open 方法创建一个 HTTP 请求**，open 方法所需要的参数是请求的方法、请求的地址、是否异步和用户的认证信息。
+- 在发起请求前，可以为这个对象**添加一些信息和监听函数**。比如说可以通过 setRequestHeader 方法来为请求添加头信息。还可以为这个对象添加一个状态监听函数。一个 XMLHttpRequest 对象一共有 5 个状态，当它的状态变化时会触发onreadystatechange 事件，可以通过设置监听函数，来处理请求成功后的结果。当对象的 readyState 变为 4 的时候，代表服务器返回的数据接收完成，这个时候可以通过判断请求的状态，如果状态是 2xx 或者 304 的话则代表返回正常。这个时候就可以通过 response 中的数据来对页面进行更新了。
+- 当对象的属性和监听函数设置完成后，最后调**用 sent 方法来向服务器发起请求**，可以传入参数作为发送的数据体。
+
+```
+const SERVER_URL = "/server";
+let xhr = new XMLHttpRequest();
+// 创建 Http 请求
+xhr.open("GET", url, true);
+// 设置状态监听函数
+xhr.onreadystatechange = function() {
+  if (this.readyState !== 4) return;
+  // 当请求成功时
+  if (this.status === 200) {
+    handle(this.response);
+  } else {
+    console.error(this.statusText);
+  }
+};
+// 设置请求失败时的监听函数
+xhr.onerror = function() {
+  console.error(this.statusText);
+};
+// 设置请求头信息
+xhr.responseType = "json";
+xhr.setRequestHeader("Accept", "application/json");
+// 发送 Http 请求
+xhr.send(null);
+```
+
+使用Promise封装AJAX：
+
+```
+// promise 封装实现：
+function getJSON(url) {
+  // 创建一个 promise 对象
+  let promise = new Promise(function(resolve, reject) {
+    let xhr = new XMLHttpRequest();
+    // 新建一个 http 请求
+    xhr.open("GET", url, true);
+    // 设置状态的监听函数
+    xhr.onreadystatechange = function() {
+      if (this.readyState !== 4) return;
+      // 当请求成功或失败时，改变 promise 的状态
+      if (this.status === 200) {
+        resolve(this.response);
+      } else {
+        reject(new Error(this.statusText));
+      }
+    };
+    // 设置错误监听函数
+    xhr.onerror = function() {
+      reject(new Error(this.statusText));
+    };
+    // 设置响应的数据类型
+    xhr.responseType = "json";
+    // 设置请求头信息
+    xhr.setRequestHeader("Accept", "application/json");
+    // 发送 http 请求
+    xhr.send(null);
+  });
+  return promise;
+}
+```
+
+特点：
+
+- 语法繁琐，需要手动监听状态变化（readyState）。
+- 错误处理、超时、取消请求等操作复杂。
+- 原生支持老旧浏览器。
+
+### Fetch
+
+`Fetch API`：是一个新的 `JavaScript API`，用于在浏览器中发送异步 `HTTP` 请求。`Fetch` 使用 `Promise` 对象来处理请求和响应，支持链式调用和异步处理，代码可读性较好。`Fetch` 的优点是支持跨域请求、使用标准的 `Promise API`、返回的是 `Response` 对象，可以使用各种方法处理响应数据。缺点是不兼容低版本的浏览器，需要使用 `polyfill` 来解决。
+
+
+
+**优点：**
+
+- 更简洁的代码：相比 `XMLHttpRequest`，`Fetch API` 的语法更加简单易懂，使用起来更加方便。
+- 基于 `Promise` 设计：`Promise` 是 `JavaScript` 中一种非常强大的异步编程机制，可以帮助开发者更好地处理异步操作，避免回调地狱。
+- 支持跨域请求：`Fetch API` 内置了跨域请求的支持，可以让开发者更加轻松地处理跨域问题。
+- 更好的错误处理：`Fetch API` 在网络请求失败时会抛出异常，可以帮助开发者更好地处理错误。
+- 可以自定义请求头：`Fetch API` 允许开发者自定义请求头，可以更好地控制请求。
+
+**缺点：**
+
+- fetch只对网络请求报错，对400，500都当做成功的请求，服务器返回 400，500 错误码时并不会 reject，只有网络错误这些导致请求不能完成时，fetch 才会被 reject。不会自动 reject 非 200 状态码，需要开发者自己处理。
+- fetch默认不会带cookie，需要手动添加配置项：`fetch(url, {credentials: 'include'})`.
+- fetch不支持abort，不支持超时控制，使用setTimeout及Promise.reject的实现的超时控制并不能阻止请求过程继续在后台运行，造成了流量的浪费。取消请求不够方便（早期不能取消，请求需配合 AbortController 实现）。
+- fetch没有办法原生监测请求的进度，而XHR可以。
+- 不兼容低版本的浏览器，需要使用 `polyfill` 来解决。
+
+#### get请求
+
+要发送GET请求，只需调用 `fetch()` 函数并传递URL作为参数即可。`fetch()` 返回一个 `Promise` 对象，该对象将在响应可用时解析为 `Response` 对象。
+
+```js
+fetch(url).then(function(response) {
+  return response.json()  // 处理响应数据
+}).then(function(data) {
+  console.log(data)
+}).catch(function(e) {
+  console.error(e)      // 处理错误
+});
+```
+
+上面的例子中，使用了 `Response对象` 提供的`json`方法将响应正文解析为 `JSON格式` 的数据。并使用 `console.log()` 方法输出解析后的数据。
+
+在 `catch()` 方法中处理错误，并使用 `console.error()` 方法将其输出到控制台。
+
+#### post请求
+
+要发送 `POST` 请求，需要创建一个包含请求选项的对象，并将其作为`fetch()`函数的第二个参数传递。请求选项对象应包含请求的方法、请求头、请求体等信息。
+
+注意，`headers属性` 必须设置为包含 `Content-Type` 标头的对象，以指示请求正文的类型。
+
+```js
+fetch(url, {
+  method: "POST",
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(data),
+}).then(function(data) {
+  console.log(data)
+}).catch(function(e) {
+  console.log(e)
+})
+```
+
+#### 处理HTTP错误
+
+如果服务器返回HTTP错误状态代码（例如404或500），`fetch()` 方法不会引发错误。相反，它会将响应对象传递给 `then()` 方法。您可以使用 `Response` 对象的属性来确定响应的状态代码，并相应地处理响应。
+
+```js
+fetch(url)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  })
+  .then(data => console.log(data))
+  .catch(error => console.error(error));
+```
+
+在上面的例子中，我们使用 `Response对象` 的`.ok属性`来检查响应的状态代码是否成功（即为200-299之间的数字）。如果不是，我们将抛出一个错误，以使 `catch()` 方法被调用。
+
+#### 使用异步语法
+
+`Fetch API` 也可以使用 `async/await` 语法进行异步请求。
+
+```js
+async function fetchData() {
+  try {
+    const response = await fetch('https://example.com/data.json');
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+fetchData();
+```
+
+在这个例子中，我们定义了一个异步函数 `fetchData()`，它使用 `async` 关键字进行标记。在函数中，我们使用await关键字来等待`fetch()` 函数的响应，并将其存储在 `response` 变量中。然后，我们使用await关键字等待将响应解析为JSON的过程，并将结果存储在data变量中。
+
+
+
+### Axios
+
+`Axios`：是一个流行的 `JavaScript HTTP` 客户端库，用于在浏览器和 `Node.js` 环境中发送 `HTTP` 请求。`Axios` 使用 `Promise` 对象来处理请求和响应，支持链式调用和异步处理，代码可读性较好。`Axios` 的优点是具有丰富的功能和选项，如请求取消、拦截请求和响应、转换请求和响应数据等。缺点是需要手动引入库文件，增加了代码量和体积。
+
+特点：
+
+- 从浏览器中发出 [XMLHttpRequests](https://link.juejin.cn?target=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FXMLHttpRequest)
+- 从 `node.js` 发出[http](https://link.juejin.cn?target=http%3A%2F%2Fnodejs.org%2Fapi%2Fhttp.html)请求
+- 支持 [Promise API](https://link.juejin.cn?target=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FJavaScript%2FReference%2FGlobal_Objects%2FPromise)
+- 拦截请求和响应，便于统一处理 token、错误等。
+- 转换请求和响应数据
+- 支持取消请求、超时设置和处理、请求重试。
+- 查询参数序列化，支持嵌套条目
+- 自动将请求主体序列化为:
+  - `JSON (application/json)`
+  - `Multipart/FormData(multipart/form-data)`
+  - `URL编码的表单（application/x-www-form-urlencoded）`
+- 默认发送 JSON 请求，也可以方便地处理表单数据、上传文件。
+- 响应中自动将返回数据转换为 `JSON数据`
+- 为浏览器和 `node.js` 捕捉进度，并提供额外的信息（速度、剩余时间）。
+- 客户端和 Node.js 都能使用，并可以为 `node.js` 设置带宽限制
+- 与符合规范的 `FormData` 和 `Blob`（包括node.js）兼容
+- 客户端支持对 [XSRF](https://link.juejin.cn?target=http%3A%2F%2Fen.wikipedia.org%2Fwiki%2FCross-site_request_forgery) 的保护
+
+
+
+优点：
+
+1. `Promise API`：Axios使用`Promise API`，因此可以轻松处理异步操作。`Promise API`具有更清晰的语法和更好的可读性，因为它们允许在异步操作完成之前进行链式调用，从而避免了回调地狱问题。
+2. 简单易用：`Axios`的API设计简单且易于使用，而且它还提供了许多可用的配置选项，例如设置请求头、超时时间、认证等等，让开发者可以更轻松地定制请求。
+3. 可扩展性：`Axios`可以通过添加拦截器(`interceptors`)来实现许多自定义功能，例如添加请求拦截器、响应拦截器和错误拦截器等等。这些拦截器可以让开发者在请求和响应过程中进行自定义操作。
+4. 支持浏览器和`Node.js`：`Axios`可以同时在浏览器和`Node.js`环境中使用。这意味着开发者可以使用相同的代码库在两个不同的环境中实现网络请求功能。
+5. 轻量级：`Axios`是一个轻量级库，它只依赖于`Promise`和一些基本的`JavaScript`库，因此它的体积相对较小。
+
+缺点：
+
+1. 学习曲线：尽管`Axios`的`API`设计简单且易于使用，但是它仍然需要一些学习和理解。特别是对于初学者来说，可能需要一些时间才能掌握如何使用`Axios`。
+2. 对于大型应用程序可能不够强大：对于大型应用程序来说，`Axios`可能会显得有些简单。因为它不提供复杂的数据管理功能，例如状态管理、数据缓存等等。这时候可能需要使用其他更为强大的`HTTP客户端库`（比如 `TanStack Query`）来实现这些功能。
+3. 可能出现跨域问题：`Axios`不能直接解决跨域请求的问题。尽管`Axios`可以设置跨域请求头，但是它不能绕过浏览器的安全限制。这意味着在某些情况下，开发者可能需要通过其他方式来解决跨域请求的问题。
+
+#### Axios实例
+
+可以用自定义配置创建一个新的 `axios` 实例：
+
+```js
+const instance = axios.create({
+    baseURL: 'https://some-domain.com/api/',
+    timeout: 1000,
+    headers: {'X-Custom-Header': 'foobar'}
+});
+```
+
+#### get请求
+
+```js
+// 写法一，用？带参数
+axios.get('/user?ID=12345').then(function (response) {
+  console.log(response);
+}) .catch(function (error) {
+  console.log(error);
+});
+
+// 写法二，把参数写在params中
+axios.get('/user', {
+    params: {
+      ID: 12345
+    }
+}).then(function (response) {
+    console.log(response);
+  }).catch(function (error) {
+    console.log(error);
+});
+
+// 写法三，异步的方式
+async function getUser() {
+  try {
+    const response = await axios.get('/user?ID=12345');
+    console.log(response);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// 写法四，多个并行请求
+function getUserAccount() {
+    return axios.get('/user/12345');
+}
+function getUserPermissions() {
+    return axios.get('/user/12345/permissions');
+}
+const [acct, perm] = await Promise.all([getUserAccount(), getUserPermissions()]);
+  
+// 写法四的精简版
+Promise.all([getUserAccount(), getUserPermissions()])
+    .then(function ([acct, perm]) {
+        // ...
+    });
+```
+
+#### post请求
+
+```js
+// 写法一，以字符串形式传参
+axios.post("/data.json", "uname=dingding&upwd=123456")
+  .then(res=>{
+      console.log(res)
+});
+
+// 写法二，以对象的形式传参
+axios.post('/user', {
+    firstName: 'Fred',
+    lastName: 'Flintstone'
+  }).then(function (response) {
+    console.log(response);
+  }).catch(function (error) {
+    console.log(error);
+});
+
+// 写法三，通过向axios传递相关配置来创建请求
+let data = {uname:"dingding",upwd:123456};
+axios({
+  method:'post',
+  url:'/data.json',
+  // 与get请求使用params不同的是，post请求使用data属性
+  data:data
+  }).then(res=>{
+    console.log(res)
+});
+
+// 添加请求头处理表单数据发往服务端
+const {data} = await axios.post('/user', document.querySelector('#my-form'), {
+  headers: {
+    'Content-Type': 'application/json' // 表示请求的主体数据是 JSON 格式
+  }
+})
+
+// 添加请求头处理多文件上传
+const {data} = await axios.post('https://httpbin.org/post', {
+    firstName: 'Fred',
+    lastName: 'Flintstone',
+    orders: [1, 2, 3],
+    photo: document.querySelector('#fileInput').files
+  }, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  }
+)
+
+// 添加请求头让表单以编码的形式发送
+const {data} = await axios.post('https://httpbin.org/post', {
+    firstName: 'Fred',
+    lastName: 'Flintstone',
+    orders: [1, 2, 3]
+  }, {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'  // 请求体将以表单编码的形式发送。
+    }
+})
+```
+
+#### 取消请求
+
+`AbortSignal.timeout()`在 `axios` 调用中设置属性会处理与**响应**相关的超时。在某些情况下（例如网络连接变得不可用），`axios` 调用将受益于提前取消 **连接**。如果不取消，`axios` 调用可能会挂起，直到父代码/堆栈超时（在服务器端应用程序中可能是几分钟）。
+
+要终止 `axios` 调用，可以使用`signal`（终止控制器）：
+
+```js
+const controller = new AbortController();
+
+axios.get('/foo/bar', {
+   signal: controller.signal
+}).then(function(response) {
+   //...
+});
+
+// 取消请求
+controller.abort()
+```
+
+带有超时辅助函数的请求取消示例：
+
+```js
+function newAbortSignal(timeoutMs) {
+  const abortController = new AbortController();
+  setTimeout(() => abortController.abort(), timeoutMs || 0);
+
+  return abortController.signal;
+}
+
+axios.get('/foo/bar', {
+   signal: newAbortSignal(5000) //Aborts request after 5 seconds
+}).then(function(response) {
+   //...
+});
+```
+
+#### 请求拦截
+
+请求发出去之前统一做处理，比如加上 token。
+
+```js
+api.interceptors.request.use(
+  config => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`; // 自动加token
+    }
+    return config;
+  },
+  error => {
+    return Promise.reject(error); // 请求错误直接抛出
+  }
+);
+```
+
+#### 响应拦截
+
+统一处理返回结果，比如：
+
+- 统一处理错误弹窗
+- 自动跳转登录页
+- 提取返回 data 数据
+
+```js
+api.interceptors.response.use(
+  response => {
+    // 接口成功返回时，统一只返回 data 部分
+    return response.data;
+  },
+  error => {
+    if (error.response) {
+      const status = error.response.status;
+      switch (status) {
+        case 401:
+          alert('未登录或登录过期，请重新登录');
+          window.location.href = '/login'; // 跳转登录
+          break;
+        case 403:
+          alert('没有权限访问资源');
+          break;
+        case 500:
+          alert('服务器错误，请稍后重试');
+          break;
+        default:
+          alert(`请求错误：${status}`);
+      }
+    } else if (error.request) {
+      alert('请求超时或服务器无响应');
+    } else {
+      alert(`请求配置异常：${error.message}`);
+    }
+
+    return Promise.reject(error); // 抛出异常让业务层能 catch
+  }
+);
+```
+
+#### 错误处理
+
+错误处理一般在相应拦截器中进行处理，但也可以在请求发出后通过`.catch`进行处理：
+
+```js
+axios.get('/user/12345')
+  .catch(function (error) {
+    if (error.response) {
+      // 请求已经发出，但是服务器回应的状态码不是 2xx。
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    } else if (error.request) {
+      // 请求已经发出，但没有收到响应
+      // `error.request`在浏览器中是 XMLHttpRequest 的一个实例
+      // 在node.js中是 http.ClientRequest 的一个实例。  
+      console.log(error.request);
+    } else {
+      // 设置触发错误的请求时需要处理的一些事情
+      console.log('Error', error.message);
+    }
+    console.log(error.config);
+  });
+```
+
+
+
+## 严格模式
+
+use strict 是一种 ECMAscript5 添加的（严格模式）运行模式，这种模式使得 Javascript 在更严格的条件下运行。
+
+设立严格模式的目的如下：
+
+- 消除 Javascript 语法的不合理、不严谨之处，减少怪异行为;
+- 消除代码运行的不安全之处，保证代码运行的安全；
+- 提高编译器效率，增加运行速度；
+- 为未来新版本的 Javascript 做好铺垫。
+
+区别：
+
+- 禁止使用 with 语句。
+- 禁止 this 关键字指向全局对象。
+- 对象不能有重名的属性。
+
+
+
 # ES6
 
 ## let、const、var的区别
@@ -2782,6 +3465,46 @@ function deepCopy (src) {
 5. 暂时性死区：在使用let、const命令声明变量之前，该变量都是不可用的。这在语法上，称为暂时性死区。使用var声明的变量不存在暂时性死区。
 6. 初始值设置：在变量声明时，var 和 let 可以不用设置初始值。而const声明变量必须设置初始值。
 7. 指针指向：let和const都是ES6新增的用于创建变量的语法。 let创建的变量是可以更改指针指向（可以重新赋值）。但const声明的变量是不允许改变指针的指向。
+
+## JavaScript为什么要进行变量提升，这会带来什么问题
+
+变量提升的表现是，无论在函数中何处位置声明的变量，好像都被提升到了函数的首部，可以在变量声明前访问到而不会报错。
+
+造成变量声明提升的**本质原因**是 js 引擎在代码执行前有一个解析的过程，创建了执行上下文，初始化了一些代码执行时需要用到的对象。当访问一个变量时，会到当前执行上下文中的作用域链中去查找，而作用域链的首端指向的是当前执行上下文的变量对象，这个变量对象是执行上下文的一个属性，它包含了函数的形参、所有的函数和变量声明，这个对象的是在代码解析的时候创建的。
+
+首先要知道，JS在拿到一个变量或者一个函数的时候，会有两步操作，即解析和执行。
+
+- **在解析阶段**，JS会检查语法，并对函数进行预编译。解析的时候会先创建一个全局执行上下文环境，先把代码中即将执行的变量、函数声明都拿出来，变量先赋值为undefined，函数先声明好可使用。在一个函数执行之前，也会创建一个函数执行上下文环境，跟全局执行上下文类似，不过函数执行上下文会多出this、arguments和函数的参数。
+
+- - 全局上下文：变量定义，函数声明
+  - 函数上下文：变量定义，函数声明，this，arguments
+
+- **在执行阶段**，就是按照代码的顺序依次执行。
+
+
+
+那为什么要进行变量提升呢？主要有以下两个原因：
+
+- 提高性能：
+
+  在JS代码执行之前，会进行语法检查和预编译，并且这一操作只进行一次。这么做就是为了提高性能，如果没有这一步，那么每次执行代码前都必须重新解析一遍该变量（函数），而这是没有必要的，因为变量（函数）的代码并不会改变，解析一遍就够了。
+
+  在解析的过程中，还会为函数生成预编译代码。在预编译时，会统计声明了哪些变量、创建了哪些函数，并对函数的代码进行压缩，去除注释、不必要的空白等。这样做的好处就是每次执行函数时都可以直接为该函数分配栈空间（不需要再解析一遍去获取代码中声明了哪些变量，创建了哪些函数），并且因为代码压缩的原因，代码执行也更快了。
+
+- 容错性更好
+
+  变量提升可以在一定程度上提高JS的容错性，使一些不规范的代码也可以正常执行
+
+
+
+会导致什么问题？
+
+| **问题类型**       | **原因**                 | **解决方案**               |
+| :----------------- | :----------------------- | :------------------------- |
+| 变量覆盖           | `var` 提升导致作用域混淆 | 使用 `let`/`const`         |
+| 函数与变量声明冲突 | 函数声明优先级高于变量   | 避免同名，或使用函数表达式 |
+| 循环变量泄露       | `var` 无块级作用域       | 循环内用 `let`             |
+| 未定义的函数调用   | 函数表达式未提升         | 优先用函数声明             |
 
 ## 使用 let 全局声明变量，能通过 window 对象取到吗
 
@@ -2999,6 +3722,67 @@ fun1.bind({id: 'Obj'})();   // 'Global'
 
 
 
+## ES6模块与CommonJS模块的异同
+
+ES6 模块（`import/export`）和 CommonJS 模块（`require/module.exports`）是 JavaScript 中两种主流的模块化方案。
+
+
+
+ES6 Module和CommonJS Module的区别： 
+
+- 值传递和引用传递
+
+  import引入的是一个模块的地址，默认是只读的，但是在不改变指向的情况下，可以改变模块里变量的值，所有用到这个值的地方数据都会改变。而require引入的是一个经过拷贝的对象，改变它的值，原模版里的值无法改变。
+
+  | **特性**   | **ES6 模块**                           | **CommonJS 模块**                |
+  | :--------- | :------------------------------------- | :------------------------------- |
+  | **导出值** | 值引用，动态绑定（实时反映原模块变化） | 值拷贝（导出后与原模块断开联系） |
+  | **可变性** | 导入的值随原模块变化而更新             | 导入的值是静态快照               |
+
+- 加载时机不同
+
+  import命令具有提升效果，可以先使用后加载，require必须先加载才能使用。
+
+  | **特性**     | **ES6 模块**                                | **CommonJS 模块**          |
+  | :----------- | :------------------------------------------ | :------------------------- |
+  | **加载方式** | 静态分析（编译时确定依赖，输出接口）        | 动态加载（运行时解析依赖） |
+  | **执行顺序** | 预处理阶段解析所有 `import`，代码按顺序执行 | 运行时按需加载，同步执行   |
+  | **循环依赖** | 通过绑定引用解决（值动态更新）              | 可能缓存未完全初始化的模块 |
+
+- 基本语法不同
+
+  | **特性**     | **ES6 模块**                      | **CommonJS 模块**            |
+  | :----------- | :-------------------------------- | :--------------------------- |
+  | **导出语法** | `export` / `export default`       | `module.exports` / `exports` |
+  | **导入语法** | `import`（有多种写法）            | `require()`（只有一种）      |
+  | **默认导出** | `export default foo;`             | `module.exports = foo;`      |
+  | **命名导出** | `export { foo, bar };`            | `exports.foo = foo;`         |
+  | **动态导入** | `import('./module.js').then(...)` | `require()` 本身是动态的     |
+  
+  ```js
+  //import有多种写法。require只有一种
+  import fs from 'fs'
+  import {readFile} from 'fs' //从 fs 导入 readFile 模块
+  import {default as fs} from 'fs' //从 fs 中导入使用 export default 导出的模块
+  import * as fileSystem from 'fs' //从 fs 导入所有模块，引用对象名为 fileSystem
+  import {readFile as read} from 'fs' //从 fs 导入 readFile 模块，引用对象名为 read
+  
+  const data=require(./content.js)
+  ```
+  
+  
+
+
+
+
+ES6 Module和CommonJS模块的共同点： 
+
+- CommonJS和ES6 Module都可以对引⼊的对象进⾏赋值，即对对象内部属性的值进⾏改变。 
+
+# 原型链与继承
+
+
+
 # API
 
 ## JS的组成
@@ -3006,6 +3790,134 @@ fun1.bind({id: 'Obj'})();   // 'Global'
 JS = ECMAScript + Web APIs
 
 Web APIs是DOM（文档对象模型）+BOM（浏览器对象模型）
+
+## DOM和BOM
+
+- DOM 指的是文档对象模型，它指的是把文档当做一个对象，这个对象主要定义了处理网页内容的方法和接口。
+- BOM 指的是浏览器对象模型，它指的是把浏览器当做一个对象来对待，这个对象主要定义了与浏览器进行交互的方法和接口。BOM的核心是 window，而 window 对象具有双重角色，它既是通过 js 访问浏览器窗口的一个接口，又是一个 Global（全局）对象。这意味着在网页中定义的任何对象，变量和函数，都作为全局对象的一个属性或者方法存在。window 对象含有 location 对象、navigator 对象、screen 对象等子对象，并且 DOM 的最根本的对象 document 对象也是 BOM 的 window 对象的子对象。
+
+
+
+### 常见的DOM操作
+
+#### 获取DOM节点
+
+DOM 节点的获取的API及使用：
+
+```js
+getElementById // 按照 id 查询
+getElementsByTagName // 按照标签名查询
+getElementsByClassName // 按照类名查询
+querySelectorAll // 按照 css 选择器查询
+
+// 按照 id 查询
+var imooc = document.getElementById('imooc') // 查询到 id 为 imooc 的元素
+// 按照标签名查询
+var pList = document.getElementsByTagName('p')  // 查询到标签为 p 的集合
+console.log(divList.length)
+console.log(divList[0])
+// 按照类名查询
+var moocList = document.getElementsByClassName('mooc') // 查询到类名为 mooc 的集合
+// 按照 css 选择器查询
+var pList = document.querySelectorAll('.mooc') // 查询到类名为 mooc 的集合
+```
+
+#### 创建DOM节点
+
+使用`createElement`创建一个新节点，并把它添加到指定节点的后面。已知的 HTML 结构如下：
+
+```html
+<html>
+  <head>
+    <title>DEMO</title>
+  </head>
+  <body>
+    <div id="container"> 
+      <h1 id="title">我是标题</h1>
+    </div>   
+  </body>
+</html>
+```
+
+要求添加一个有内容的 span 节点到 id 为 title 的节点后面，做法就是：
+
+```js
+// 首先获取父节点
+var container = document.getElementById('container')
+// 创建新节点
+var targetSpan = document.createElement('span')
+// 设置 span 节点的内容
+targetSpan.innerHTML = 'hello world'
+// 把新创建的元素塞进父节点里去
+container.appendChild(targetSpan)
+```
+
+#### 删除DOM节点
+
+删除指定的 DOM 节点，已知的 HTML 结构如下：
+
+```html
+<html>
+  <head>
+    <title>DEMO</title>
+  </head>
+  <body>
+    <div id="container"> 
+      <h1 id="title">我是标题</h1>
+    </div>   
+  </body>
+</html>
+```
+
+需要删除 id 为 title 的元素，做法是：
+
+```js
+// 获取目标元素的父元素
+var container = document.getElementById('container')
+
+// 获取目标元素
+var targetNode = document.getElementById('title')
+// 或者通过父元素的子节点数组来完成目标元素的获取
+var targetNode = container.childNodes[1]
+
+// 删除目标元素
+container.removeChild(targetNode)
+```
+
+#### 修改 DOM 元素
+
+修改 DOM 元素这个动作可以分很多维度，比如说移动 DOM 元素的位置，修改 DOM 元素的属性等。
+
+将指定的两个 DOM 元素交换位置，已知的 HTML 结构如下：
+
+```html
+<html>
+  <head>
+    <title>DEMO</title>
+  </head>
+  <body>
+    <div id="container"> 
+      <h1 id="title">我是标题</h1>
+      <p id="content">我是内容</p>
+    </div>   
+  </body>
+</html>
+```
+
+现在需要调换 title 和 content 的位置，可以考虑 `insertBefore` 或者 `appendChild`：
+
+```js
+// 获取父元素
+var container = document.getElementById('container')   
+ 
+// 获取两个需要被交换的元素
+var title = document.getElementById('title')
+var content = document.getElementById('content')
+// 交换两个元素，把 content 置于 title 前面
+container.insertBefore(content, title)
+```
+
+
 
 ### DOM树
 
@@ -3021,6 +3933,8 @@ DOM对象怎么创建的
 
 - 浏览器根据HTML标签生成的JS对象（DOM对象）。
 - DOM的核心就说把内容当成对象来处理。
+
+
 
 
 
