@@ -1,6 +1,8 @@
 import React from 'react';
 import StartButton from "../../components/StartButton/StartButton";
 import Footer from "../../components/Footer/Footer";
+import PickerUser from "../../components/PickerUser/PickerUser";
+import BookableList from "../../components/BookableList/BookableList";
 import './WelcomePage.less';
 const WelcomePage = () => {
   return (
@@ -17,6 +19,8 @@ const WelcomePage = () => {
           <h2>use it now!</h2>
           <StartButton buttonName="Start" navProps="/chat"></StartButton>
         </div>
+        {/* <PickerUser/> */}
+        <BookableList/>
       </div>
 
       <div className="welcomePage-footer">
