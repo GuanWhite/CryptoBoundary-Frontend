@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import './BookableList.less';
 import { bookables } from "../../mockData.json";
 
@@ -15,6 +15,11 @@ const BookableList = () => {
   const changeGroup = (e) => {
     setGroup(e.target.value);
     setBookIndex(0);
+  };
+  const inputRef = useRef(null);
+
+  const getInputValue = () => {
+    console.log(inputRef.current.value);
   };
 
   return (
@@ -46,6 +51,9 @@ const BookableList = () => {
         autoFocus>
         Next
       </button>
+
+      <input ref={inputRef} type="text" />
+      <button onClick={getInputValue}>获取输入框中的值</button>
     </div>
   );
 };
