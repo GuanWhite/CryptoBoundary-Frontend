@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Nunito+Sans');
 @baseFontFamily: 'Nunito Sans', system-ui, Avenir, Helvetica, Arial, sans-serif;
+
 // @baseFontFamily: "lucida grande", "lucida sans unicode", lucida, helvetica, "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
 
 // z-labriary使用的字体
@@ -7,7 +8,9 @@
 
 // chatGPT使用的字体族
 // font-family: var(--default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");
-
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @--white: #fff;
 @--green: #2ccf6d;
@@ -26,6 +29,7 @@ html,
 body {
   height: 100%;
 }
+
 
 // 选中字体的颜色及背景
 // ::selection {
