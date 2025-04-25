@@ -3,6 +3,7 @@ import StartButton from "../../components/StartButton/StartButton";
 import { MobileOutlined, MailOutlined, LockOutlined, UserOutlined, GoogleOutlined, FacebookOutlined, GithubOutlined, LinkedinOutlined } from "@ant-design/icons";
 import { Input, Button } from 'antd';
 import React, { useState } from 'react';
+import axios from "axios";
 
 function Login() {
 
@@ -25,32 +26,22 @@ function Login() {
 
   // 将参数传给后端发送验证码或前端调用其他发送验证码的api
   const sendEmailCode = async (params) => {
-    // const res = await request.post('/user/sendEmailCode', params);
-    // return res;
-    return {
-      responseCode: '000000', // 模拟成功响应
-      responseMsg: "Verification code sent successfully!",
-    };
-  };
-
-  // 发送手机验证码
-  const sendPhoneCode = async (params) => {
-    // const res = await request.post('/user/sendPhoneCode', params);
-    // return res;
-    return {
-      responseCode: '000000', // 模拟成功响应
-      responseMsg: "Verification code sent successfully!",
-    };
-  };
-
-  // 发送邮箱或手机验证码
-  const handleSendCode = async () => {
-    // const fileds = await form.validateFields(['account', 'email']);
-
     if (isShowCode) { // 倒计时未结束,不能重复点击
       return;
     }
     setIsShowCode(true);
+
+    // 调发送短信接口
+    axios.get('/admin/send', {
+      params: {
+        phone: dataForm.phone,
+      }
+    }).then(res => {
+      console.success(res.data);
+    }).catch(error => {
+      console.error(error);
+    });
+
 
     // 倒计时
     const active = setInterval(() => {
@@ -65,16 +56,65 @@ function Login() {
       });
     }, 1000);
 
+    return {
+      responseCode: '000000', // 模拟成功响应
+      responseMsg: "Verification code sent successfully!",
+    };
+  };
+
+  // 发送手机验证码
+  const sendPhoneCode = async (params) => {
+    if (isShowCode) { // 倒计时未结束,不能重复点击
+      return;
+    }
+    setIsShowCode(true);
+    let state = {};
+
+    // 调发送短信接口
+    axios.get('/admin/send', {
+      params: {
+        phone: dataForm.phone,
+      }
+    }).then(res => {
+      console.success(res.data);
+      state = res.data;
+    }).catch(error => {
+      console.error(error);
+      state = res.data;
+    });
+
+
+    // 倒计时
+    const active = setInterval(() => {
+      setTime((preSecond) => {
+        if (preSecond <= 1) {
+          setIsShowCode(false);
+          clearInterval(active);
+          // 重置秒数
+          return 60;
+        }
+        return preSecond - 1;
+      });
+    }, 1000);
+
+    return state;
+  };
+
+  // 发送邮箱或手机验证码
+  const handleSendCode = async () => {
     // 判断要发送手机验证码还是邮箱验证码
     if (registerEmail) {
       // 模拟获取到的邮箱
       userEmail = "123@qq.com";
       // 将邮箱作为参数传入
+      // 解构返回的对象，拿出对象中的成功或失败状态，并进行验证
       const res = await sendEmailCode(userEmail);
       if (res.responseCode === '000000') {
         notification.success({
           message: '发送成功,请填写收到的验证码',
         });
+      } else {
+        // 失败逻辑
       }
     } else if (loginPhone) {
       // 发送手机验证码
@@ -83,9 +123,10 @@ function Login() {
         notification.success({
           message: '发送成功,请填写收到的验证码',
         });
+      } else {
+        // 失败逻辑
       }
     }
-
   };
 
   const handleLogin = () => {
@@ -94,10 +135,11 @@ function Login() {
     // 3.错误则提示“邮箱或密码错误，请重新输入”
   };
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     // 1.验证邮箱验证码是否正确，正确才可以注册
-
+    // if ()
     // 2.提示“注册成功，现在去登陆吧”
+
   };
 
   // 切换注册和登录页面的动画
