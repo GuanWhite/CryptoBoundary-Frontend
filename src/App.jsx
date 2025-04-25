@@ -12,11 +12,11 @@ import ColorPicker from "./components/ColorPicker/ColorPicker";
 import WelcomePage from "./pages/welcomePage/WelcomePage";
 
 function App() {
-  
+
   return (
     <>
       <WelcomePage />
-      
+
 
       {/* <div className="wrapper">
         <div className="item"> */}

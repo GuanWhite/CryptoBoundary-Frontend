@@ -19,8 +19,13 @@ const WelcomePage = () => {
           <h2>use it now!</h2>
           <StartButton buttonName="Start" navProps="/chat"></StartButton>
         </div>
+
+        <div>
+          <h2>Login or register now!</h2>
+          <StartButton buttonName="Login" navProps="/login"></StartButton>
+        </div>
         {/* <PickerUser/> */}
-        <BookableList/>
+        {/* <BookableList/> */}
       </div>
 
       <div className="welcomePage-footer">

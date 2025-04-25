@@ -55,7 +55,6 @@ const InputBox = () => {
           // icon={<PoweroffOutlined />}
           loading={loadings[3]}
           onClick={() => enterLoading(3)}>
-
           Send
         </Button>
       </div>
