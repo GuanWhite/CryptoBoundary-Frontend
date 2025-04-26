@@ -2,7 +2,7 @@ import "./LoginPage.less";
 import StartButton from "../../components/StartButton/StartButton";
 import { MobileOutlined, MailOutlined, LockOutlined, UserOutlined, GoogleOutlined, FacebookOutlined, GithubOutlined, LinkedinOutlined } from "@ant-design/icons";
 import { Input, Button } from 'antd';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from "axios";
 
 function Login() {
@@ -23,6 +23,13 @@ function Login() {
   const [registerEmail, setRegisterEmail] = useState(''); // 注册邮箱
   const [registerPassword, setRegisterPassword] = useState(''); // 注册密码
   const [registerCode, setRegisterCode] = useState(''); // 注册验证码
+
+  useEffect(() => {
+    // 判断是否存储了登录状态
+    if (localStorage.getItem()) {
+      // 导航到home页面
+    }
+  }, []);
 
   // 将参数传给后端发送验证码或前端调用其他发送验证码的api
   const sendEmailCode = async (params) => {
