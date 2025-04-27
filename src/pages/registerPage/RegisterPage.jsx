@@ -1,4 +1,4 @@
-import "./LoginPage.less";
+import "../loginPage/LoginPage.less";
 import StartButton from "../../components/StartButton/StartButton";
 import { registerRoute, loginRoute } from "../../utils/APIRoutes";
 import { MobileOutlined, MailOutlined, LockOutlined, UserOutlined, GoogleOutlined, FacebookOutlined, GithubOutlined, LinkedinOutlined } from "@ant-design/icons";
@@ -6,7 +6,7 @@ import { Input, Button, notification } from 'antd';
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
 
-function Login() {
+function RegisterPage() {
 
   const [isActive, setIsActive] = useState(false);
   const [isPhoneLogin, setIsPhoneLogin] = useState(false); // 是否手机登录
@@ -344,4 +344,4 @@ function Login() {
     </div>
   );
 }
-export default Login;
+export default RegisterPage;
