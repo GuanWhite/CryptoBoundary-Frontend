@@ -181,6 +181,7 @@ function Login() {
   };
 
   const handleRegister = async (event) => {
+    event.preventDefault();
     // 1.验证邮箱验证码是否正确，正确才可以注册
     if (registerCode === '123456') {
       const { data } = await axios.post(registerRoute, {
@@ -205,7 +206,6 @@ function Login() {
         setRegisterCode('');
         // 3.提示“注册成功，现在去登陆吧”
         openNotificationWithIcon('success', 'Registered Successfully', 'Let\'s go log in now!');
-        event.preventDefault();
       }
     } else {
       openNotificationWithIcon('error', 'Registration Failure', 'Verification code filled in incorrectly!');
@@ -295,15 +295,15 @@ function Login() {
             <h1>Registration</h1>
             <div className="reg-input-box">
               {/* <input type="text" placeholder="Username" required /> */}
-              <Input className="input-input" placeholder="Username" required onChange={(e) => setRegisterUsername(e.target.value)} />
+              <Input className="input-input" placeholder="Username" required value={registerUsername} onChange={(e) => setRegisterUsername(e.target.value)} />
               <UserOutlined className="input-icon" />
             </div>
             <div className="reg-input-box">
-              <Input className="input-input" type="email" placeholder="Email" required onChange={(e) => setRegisterEmail(e.target.value)} />
+              <Input className="input-input" type="email" placeholder="Email" required value={registerEmail} onChange={(e) => setRegisterEmail(e.target.value)} />
               <MailOutlined className="input-icon" />
             </div>
             <div className="reg-input-box">
-              <Input className="code-input-input" placeholder="Verification code" required maxLength={6} onChange={(e) => setRegisterCode(e.target.value)} />
+              <Input className="code-input-input" placeholder="Verification code" required value={registerCode} maxLength={6} onChange={(e) => setRegisterCode(e.target.value)} />
               {/* 如果handleSendEmailCode不加括号，则点击时才会触发该函数；
                   如果加了括号，则进入页面就会触发该函数，如果不想则要将其包装在一个函数中:()=>handleSendEmailCode() 
                   当回调函数有参数要传递时，必须要将其包装在函数中。*/}
@@ -313,7 +313,7 @@ function Login() {
               </div>
             </div>
             <div className="reg-input-box">
-              <Input.Password className="input-input" placeholder="Password" required onChange={(e) => setRegisterPassword(e.target.value)} />
+              <Input.Password className="input-input" placeholder="Password" required value={registerPassword} onChange={(e) => setRegisterPassword(e.target.value)} />
               <LockOutlined className="input-icon" />
             </div>
             <button className="btn" onClick={(e) => handleRegister(e)}>Register</button>
