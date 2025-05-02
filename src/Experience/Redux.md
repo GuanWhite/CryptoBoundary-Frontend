@@ -1,347 +1,203 @@
-import "./LoginPage.less";
-import StartButton from "../../components/StartButton/StartButton";
-import { registerRoute, loginRoute } from "../../utils/APIRoutes";
-import { MobileOutlined, MailOutlined, LockOutlined, UserOutlined, GoogleOutlined, FacebookOutlined, GithubOutlined, LinkedinOutlined } from "@ant-design/icons";
-import { Input, Button, notification } from 'antd';
-import React, { useState, useEffect } from 'react';
-import axios from "axios";
+熊猫影院
+首页
+电视剧
+电影
+动漫
+综艺
+剧情
+最新
+输入影片关键词...
+
+首页电视剧欧美剧豺狼的日子豺狼的日子第10集在线观看关灯
 
-function Login() {
+收藏
+订阅
+顶(690)踩(190)
+手机
+上一集没有了
+二号
+二号播放器第10集
+第10集
+第09集
+第08集
+第07集
+第06集
+第05集
+第04集
+第03集
+第02集
+第01集
+剧情介绍
+电视剧豺狼的日子由埃迪·雷德梅恩,拉什纳·林奇,乌苏拉·科尔维罗,查尔斯·丹斯,理查德·多默,楚克武迪·武吉,莉娅·威廉姆斯,赫立德·阿卜杜拉,埃莉诺·松浦,琼乔·奥雷尔,萨勒·利米,Ben,Hall,斯图尔特·惠兰,Florisa,Kamara,亚当·詹姆斯,克里斯蒂·梅尔,李·拜福德,马丁·麦克杜格尔,拉塞尔·巴洛格,Jan-Martin,Müller,露西·拉塞尔,Eddie,Elks倾情出演，豆瓣评分8.9 分，在英国火热播出，影片英文名：chailangderizi ，电视剧豺狼的日子剧情讲述了本剧基于Frederick Forsyth的同名小说和1973年环球影业同名改编电影创作。熊猫影院提供电视剧豺狼的日子全集高清未删减完整版在线观看,豺狼的日子手机免费观看,熊猫影院从互联网自动 收集了精彩电视剧《豺狼的日子》片源供广大影视爱好者分享，请大家支持正版电视剧。
+猜你喜欢
+第42集完结
+新上海滩 黄晓明版
+全10集
+豺狼的日子
+第10集完结
+龙樱2
+第8集
+死亡男孩侦探社
+真实与谎言：梅内德斯兄弟
+完结
+甲铁城的卡巴内瑞序章
+1.完结朝内81号2.HD男歌女唱3.第12期我不恋爱的理由4.HD圣母峰消失之谜5.HD收税人6.完结焦虑满屋7.完结暴走武林学园8.正片昭和64年 前篇9.正片坏蛋先生210.正片相思河畔11.正片史酷比！剑与史酷比12.HD小树的天空13.正片体育皇后193414.正片母亲的天空15.HD尘中之物16.HD九纹龙史进之除恶史家村17.HD愚行录18.完结冰血暴第二季19.完结绿箭侠第四季20.HD警视厅搜查一课长新特别篇
+豺狼的日子评论
+我也要写评论。。。
+当前没有评论，赶紧抢个沙发！
+热门视频
+完结1
+广告狂人第七季战争 年代乔恩·哈姆,伊丽莎白·莫斯,文森特·卡塞瑟,詹纽瑞·琼斯,克里斯蒂娜·亨德里克斯,约翰·斯拉特里未录入 / 其他完结人气：2925
+2下半生赛跑者29253杀人软件29254福山雅治LIVE电影言灵…29245人生密密缝29246火线警告第四季29247迷沙29248世上只有爸爸好2924
+热门资讯
+﻿
+﻿
+﻿ 网站地图-RSS地图-百度地图-360地图-给我留言
+Copyright © 2016-2022 熊猫影院
 
-  const [isActive, setIsActive] = useState(false);
-  const [isPhoneLogin, setIsPhoneLogin] = useState(false); // 是否手机登录
-  const [isShowSwitch, setIsShowSwitch] = useState(true); // 是否显示切换登录方式按钮
-  const [time, setTime] = useState(60);
-  const [isShowCode, setIsShowCode] = useState(false);
+首页
+番剧
+直播
+游戏中心
+会员购
+漫画
+赛事
+开放周
+逛车展图片逛车展
+下载客户端
+大司马回归首秀
 
-  const [loginEmail, setLoginEmail] = useState(''); // 登录邮箱
-  const [loginPassword, setLoginPassword] = useState(''); // 登录密码
+大会员
+99+
+消息
+22
+动态
+收藏
+历史
+创作中心
+投稿
 
-  const [loginPhone, setLoginPhone] = useState(''); // 登录手机号
-  const [loginCode, setLoginCode] = useState(''); // 登录验证码
+B站 b站
 
-  const [registerUsername, setRegisterUsername] = useState(''); // 注册用户名
-  const [registerEmail, setRegisterEmail] = useState(''); // 注册邮箱
-  const [registerPassword, setRegisterPassword] = useState(''); // 注册密码
-  const [registerCode, setRegisterCode] = useState(''); // 注册验证码
-
-  const [api, contextHolder] = notification.useNotification();
-
-  const openNotificationWithIcon = (type, msg, des) => {
-    api[type]({
-      message: msg,
-      description: des,
-    });
-  };
-
-  useEffect(() => {
-    // 判断是否存储了登录状态
-    // if (localStorage.getItem()) {
-    //   // 导航到home页面
-    // }
-  }, []);
-
-  // 将参数传给后端发送验证码或前端调用其他发送验证码的api
-  const sendEmailCode = async (params) => {
-    if (isShowCode) { // 倒计时未结束,不能重复点击
-      return;
-    }
-    setIsShowCode(true);
-
-    // 调发送短信接口
-    axios.get('/admin/send', {
-      params: {
-        phone: dataForm.phone,
-      }
-    }).then(res => {
-      console.success(res.data);
-    }).catch(error => {
-      console.error(error);
-    });
-
-
-    // 倒计时
-    const active = setInterval(() => {
-      setTime((preSecond) => {
-        if (preSecond <= 1) {
-          setIsShowCode(false);
-          clearInterval(active);
-          // 重置秒数
-          return 60;
-        }
-        return preSecond - 1;
-      });
-    }, 1000);
-
-    return {
-      responseCode: '000000', // 模拟成功响应
-      responseMsg: "Verification code sent successfully!",
-    };
-  };
-
-  // 发送手机验证码
-  const sendPhoneCode = async (params) => {
-    if (isShowCode) { // 倒计时未结束,不能重复点击
-      return;
-    }
-    setIsShowCode(true);
-    let state = {};
-
-    // 调发送短信接口
-    axios.get('/admin/send', {
-      params: {
-        phone: dataForm.phone,
-      }
-    }).then(res => {
-      console.success(res.data);
-      state = res.data;
-    }).catch(error => {
-      console.error(error);
-      state = res.data;
-    });
+动态
+热门
+番剧
+电影
+国创
+电视剧
+综艺
+纪录片
+动画
+游戏
+鬼畜
+音乐
+舞蹈
+影视
+娱乐
+知识
+科技数码
+资讯
+美食
+小剧场
+汽车
+时尚美妆
+体育运动
+动物
+vlog
+更多
+专栏
+直播
+活动
+课堂
+社区中心
+新歌热榜
+户外探春进行时，分享你的户外运动灵感
+正在直播KPL：成都AG超玩会 vs 北京WB！
+累计签到奖励时装
+指挥官，辛苦了~
+王宝强X刘昊然，神探组合极限追凶
+约定好了，要组一辈子的乐队！
+假期暴走浑身酸痛？练完超舒服！
+比起修机，我更喜欢你！
+改编VS乱编，魔改注定是烂片吗？
+户外探春进行时，分享你的户外运动灵感
+正在直播KPL：成都AG超玩会 vs 北京WB！
+正在直播KPL：成都AG超玩会 vs 北京WB！
 
 
-    // 倒计时
-    const active = setInterval(() => {
-      setTime((preSecond) => {
-        if (preSecond <= 1) {
-          setIsShowCode(false);
-          clearInterval(active);
-          // 重置秒数
-          return 60;
-        }
-        return preSecond - 1;
-      });
-    }, 1000);
+挑拨
+15.6万
+1699
+23:31
+挑拨
+海东鉴宝
+· 4-6
+《所罗门群岛》第5集：2天1夜荒岛探索，首次抓获巨型斑马皮皮虾，和会喷水的射水鱼
+28.1万
+1786
+19:56
+《所罗门群岛》第5集：2天1夜荒岛探索，首次抓获巨型斑马皮皮虾，和会喷水的射水鱼
+2万点赞
+OK哥环球探海记
+· 8小时前
+站在财富顶端的超级富豪，为什么自毁人设？
+36.3万
+910
+10:55
+站在财富顶端的超级富豪，为什么自毁人设？
+王骁Albert
+· 4-30
+山姆vs开市客！两家“门票300“的超市，到底谁更好吃呢？
+89.4万
+1344
+07:52
+山姆vs开市客！两家“门票300“的超市，到底谁更好吃呢？
+哇塞几张
+· 4-25
+我们在麦当劳尝试了我的世界套餐，讨论了美国与中国的教育差异，还目睹了一场拳击斗殴
+6920
+90
+21:09
+我们在麦当劳尝试了我的世界套餐，讨论了美国与中国的教育差异，还目睹了一场拳击斗殴
+已关注
+evanjolley
+· 8小时前
+主播怎么把直播间的哥们当日本人整？CF怀旧服
+9.2万
+249
+06:34
+主播怎么把直播间的哥们当日本人整？CF怀旧服
+是橘长呀
+· 昨天
+三和大神天花板，十来年只干日结，无忧无虑，混吃等死
+117.1万
+7073
+23:28
+三和大神天花板，十来年只干日结，无忧无虑，混吃等死
+2万点赞
+摩的司机徐师傅
+· 昨天
+神仙打架！大阪烧速食赛，冠军2000元券，高手对决碰触怎样的火花？
+102.7万
+4444
+11:04
+神仙打架！大阪烧速食赛，冠军2000元券，高手对决碰触怎样的火花？
+橙飞一下
+· 4-29
+我仅用半天时间改变大家对我的看法
+15.8万
+564
+07:16
+我仅用半天时间改变大家对我的看法
+已关注
+艺术家阿克曼
+· 4-8
 
-    return state;
-  };
+赛事
+2203.8万
+游戏赛事
+【直播】OMG vs RNG
 
-  // 发送邮箱或手机验证码
-  const handleSendCode = async () => {
-    // 判断要发送手机验证码还是邮箱验证码
-    if (registerEmail) {
-      // 模拟获取到的邮箱
-      userEmail = "123@qq.com";
-      // 将邮箱作为参数传入
-      // 解构返回的对象，拿出对象中的成功或失败状态，并进行验证
-      const res = await sendEmailCode(userEmail);
-      if (res.responseCode === '000000') {
-        notification.success({
-          message: '发送成功,请填写收到的验证码',
-        });
-      } else {
-        // 失败逻辑
-      }
-    } else if (loginPhone) {
-      // 发送手机验证码
-      const res = await sendPhoneCode(loginPhone);
-      if (res.responseCode === '000000') {
-        notification.success({
-          message: '发送成功,请填写收到的验证码',
-        });
-      } else {
-        // 失败逻辑
-      }
-    }
-  };
 
-  const handleLogin = () => {
-    // 1.与数据库对比，验证邮箱和密码是否正确
-    // 2.正确则跳转至home页面
-    // 3.错误则提示“邮箱或密码错误，请重新输入”
-  };
 
-  const handleValidation = () => {
-    const { password, confirmPassword, username, email } = values;
-    if (password !== confirmPassword) {
-      toast.error(
-        "Password and confirm password should be same.",
-        toastOptions
-      );
-      return false;
-    } else if (username.length < 3) {
-      toast.error(
-        "Username should be greater than 3 characters.",
-        toastOptions
-      );
-      return false;
-    } else if (password.length < 8) {
-      toast.error(
-        "Password should be equal or greater than 8 characters.",
-        toastOptions
-      );
-      return false;
-    } else if (email === "") {
-      toast.error("Email is required.", toastOptions);
-      return false;
-    }
-
-    return true;
-  };
-
-  const handleRegister = async (event) => {
-    event.preventDefault();
-    // 1.验证邮箱验证码是否正确，正确才可以注册
-    if (registerCode === '123456') {
-      const { data } = await axios.post(registerRoute, {
-        "username": registerUsername,
-        "email": registerEmail,
-        "password": registerPassword,
-      });
-
-      if (data.status === false) {
-        openNotificationWithIcon('error', 'Registration Failure', 'The server seems to have malfunctioned, please try again later!');
-      }
-      if (data.status === true) {
-        // 设置本地存储 + 向服务器发送cookie
-        // localStorage.setItem(
-        //   process.env.REACT_APP_LOCALHOST_KEY,
-        //   JSON.stringify(data.user)
-        // );
-        // 2.清空注册表单
-        setRegisterUsername('');
-        setRegisterEmail('');
-        setRegisterPassword('');
-        setRegisterCode('');
-        // 3.提示“注册成功，现在去登陆吧”
-        openNotificationWithIcon('success', 'Registered Successfully', 'Let\'s go log in now!');
-      }
-    } else {
-      openNotificationWithIcon('error', 'Registration Failure', 'Verification code filled in incorrectly!');
-    }
-  };
-
-  // 切换注册和登录页面的动画
-  const switchAnimation = () => {
-    setIsActive((prev) => !prev);
-    setIsShowSwitch((prev) => !prev);
-  };
-
-  const switchIsPhoneLogin = () => {
-    setIsPhoneLogin((prev) => !prev);
-  };
-
-  return (
-    <div className="auth-wrapper">
-      {contextHolder}
-      <div className={`container ${isActive ? 'active' : ''}`}>
-        {/* <Button onClick={() => openNotificationWithIcon('success', 'Registered Successfully', 'Let\'s go log in now!')}>Success</Button> */}
-        {isShowSwitch ?
-          <div
-            className="top-0 right-0 absolute cursor-pointer bg-[#7494ec] hover:bg-[#4c6ecb] w-20 h-20 text-4xl text-center rounded-tr-[30px] rounded-bl-[30px] z-10"
-            onClick={switchIsPhoneLogin}>
-            {isPhoneLogin ? <MailOutlined className="h-full text-white" /> : <MobileOutlined className="h-full text-white" />}
-          </div> :
-          null
-        }
-        <div className="form-box login">
-          {isPhoneLogin ?
-            <form action="">
-              <h1>Login with Phone</h1>
-              <div className="input-box">
-                {/* <input type="text" placeholder="Email" required /> */}
-                <Input className="input-input" type="text" placeholder="Phone Number" required value={loginPhone} onChange={(e) => setLoginPhone(e.target.value)} />
-                <MobileOutlined className="input-icon" />
-              </div>
-              <div className="input-box">
-                {/* <input type="password" placeholder="Password" required /> */}
-                <Input className="input-input" placeholder="Verification code" required maxLength={6} value={loginCode} onChange={(e) => setLoginCode(e.target.value)} />
-                <div className="send-code">
-                  {isShowCode ? (<Button type="primary" disabled>{`Resend ${time}s`}</Button>) : (<Button type="primary" onClick={handleSendCode}>{`Send Code`}</Button>)}
-                </div>
-              </div>
-              <div className="forgot-link">
-                <a href="#">Forgot Password?</a>
-              </div>
-              <button type="submit" className="btn">Login</button>
-              <p>or login with social platforms</p>
-              <div className="social-icons">
-                <a href="#"><GoogleOutlined /></a>
-                <a href="#"><FacebookOutlined /></a>
-                <a href="#"><GithubOutlined /></a>
-                <a href="#"><LinkedinOutlined /></a>
-              </div>
-            </form> :
-            <form action="">
-              <h1>Login</h1>
-              <div className="input-box">
-                {/* <input type="text" placeholder="Email" required /> */}
-                <Input className="input-input" type="email" placeholder="Email" required value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} />
-                <MailOutlined className="input-icon" />
-              </div>
-              <div className="input-box">
-                {/* <input type="password" placeholder="Password" required /> */}
-                <Input.Password className="input-input" placeholder="Password" required value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} />
-                <LockOutlined className="input-icon" />
-              </div>
-              <div className="forgot-link">
-                <a href="#">Forgot Password?</a>
-              </div>
-              <button type="submit" className="btn">Login</button>
-              <p>or login with social platforms</p>
-              <div className="social-icons">
-                <a href="#"><GoogleOutlined /></a>
-                <a href="#"><FacebookOutlined /></a>
-                <a href="#"><GithubOutlined /></a>
-                <a href="#"><LinkedinOutlined /></a>
-              </div>
-            </form>
-          }
-        </div>
-
-        <div className="form-box register">
-          <form action="">
-            <h1>Registration</h1>
-            <div className="reg-input-box">
-              {/* <input type="text" placeholder="Username" required /> */}
-              <Input className="input-input" placeholder="Username" required value={registerUsername} onChange={(e) => setRegisterUsername(e.target.value)} />
-              <UserOutlined className="input-icon" />
-            </div>
-            <div className="reg-input-box">
-              <Input className="input-input" type="email" placeholder="Email" required value={registerEmail} onChange={(e) => setRegisterEmail(e.target.value)} />
-              <MailOutlined className="input-icon" />
-            </div>
-            <div className="reg-input-box">
-              <Input className="code-input-input" placeholder="Verification code" required value={registerCode} maxLength={6} onChange={(e) => setRegisterCode(e.target.value)} />
-              {/* 如果handleSendEmailCode不加括号，则点击时才会触发该函数；
-                  如果加了括号，则进入页面就会触发该函数，如果不想则要将其包装在一个函数中:()=>handleSendEmailCode() 
-                  当回调函数有参数要传递时，必须要将其包装在函数中。*/}
-              <div className="send-code">
-                {isShowCode ? (<Button type="primary" disabled>{`Resend ${time}s`}</Button>) : (<Button type="primary" onClick={handleSendCode}>{`Send Code`}</Button>)}
-                {/* {isShowCode ? `Resend ${time}s` : 'Send Code'} */}
-              </div>
-            </div>
-            <div className="reg-input-box">
-              <Input.Password className="input-input" placeholder="Password" required value={registerPassword} onChange={(e) => setRegisterPassword(e.target.value)} />
-              <LockOutlined className="input-icon" />
-            </div>
-            <button className="btn" onClick={(e) => handleRegister(e)}>Register</button>
-            <p>or register with social platforms</p>
-            <div className="social-icons">
-              <a href="#"><GoogleOutlined /></a>
-              <a href="#"><FacebookOutlined /></a>
-              <a href="#"><GithubOutlined /></a>
-              <a href="#"><LinkedinOutlined /></a>
-            </div>
-          </form>
-        </div>
-
-        <div className="toggle-box">
-          <div className="toggle-panel toggle-left">
-            <h1>Welcome Back!</h1>
-            <p>Don't have an account?</p>
-            <button className="btn register-btn" onClick={switchAnimation}>Register</button>
-          </div>
-
-          <div className="toggle-panel toggle-right">
-            <h1>Hello, Welcome!</h1>
-            <p>Already have an account?</p>
-            <button className="btn login-btn" onClick={switchAnimation}>Login</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-export default Login;
+换一换
