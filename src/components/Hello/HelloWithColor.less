@@ -1,0 +1,108 @@
+#container {
+  width: 360px;
+  height: auto;
+}
+
+#container .path {
+  fill: none;
+  stroke-width: 31.7143;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  transition: stroke-dashoffset 2s ease-out;
+}
+
+#container.fin .path {
+  stroke-dashoffset: 0;
+}
+
+.path-1 { transition-delay: 0s; }
+.path-2 { transition-delay: 0.3s; }
+.path-3 { transition-delay: 0.6s; }
+.path-4 { transition-delay: 0.9s; }
+.path-5 { transition-delay: 1.2s; }
+.path-6 { transition-delay: 1.5s; }
+.path-7 { transition-delay: 1.8s; }
+.path-8 { transition-delay: 2.1s; }
+.path-9 { transition-delay: 2.4s; }
+.path-10 { transition-delay: 2.7s; }
+.path-11 { transition-delay: 3s; }
+
+
+// 手动调试版，未成功
+// #container {
+//   width: 360px;
+//   height: auto;
+
+//   &.fin {
+
+//     .path-1,
+//     .path-3,
+//     .path-2 {
+//       stroke-dashoffset: 0;
+//     }
+
+//     .path-4 {
+//       stroke-width: 18px;
+//     }
+//   }
+// }
+
+// .path {
+//   fill: none;
+//   stroke-width: 18px;
+//   stroke-linecap: round;
+//   stroke-linejoin: round;
+
+// }
+
+// .path-1 {
+//   stroke-dasharray: 1850 2000;
+//   stroke-dashoffset: 1851;
+//   transition: 4s linear;
+// }
+
+// .path-2 {
+//   stroke-dasharray: 260 1000;
+//   stroke-dashoffset: 261;
+//   transition: 4s linear 8s;
+// }
+
+// .path-3 {
+//   stroke-dasharray: 260 1000;
+//   stroke-dashoffset: 261;
+//   transition: 4s linear 4s;
+// }
+
+// .path-4 {
+//   transition-delay: 0.9s;
+// }
+
+// .path-5 {
+//   transition-delay: 1.2s;
+// }
+
+// .path-6 {
+//   transition-delay: 1.5s;
+// }
+
+// .path-7 {
+//   transition-delay: 1.8s;
+// }
+
+// .path-8 {
+//   transition-delay: 2.1s;
+// }
+
+// .path-9 {
+//   transition-delay: 2.4s;
+// }
+
+// .path-10 {
+//   transition-delay: 2.7s;
+// }
+
+// .path-11 {
+//   transition-delay: 3s;
+// }
