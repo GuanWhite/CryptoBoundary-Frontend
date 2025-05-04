@@ -4,6 +4,7 @@ import NotFoundPage from "../pages/notFoundPage/NotFoundPage";
 import HomePage from "../pages/homePage/HomePage";
 import ChatPage from "../pages/chatPage/ChatPage";
 import { createBrowserRouter } from "react-router";
+import RegisterPage from "../pages/registerPage/RegisterPage";
 
 const routes = [
   {
@@ -13,6 +14,10 @@ const routes = [
   {
     path: "/login",
     element: <LoginPage />,
+  },
+  {
+    path: "/register",
+    element: <RegisterPage />,
   },
   {
     path: "/home",

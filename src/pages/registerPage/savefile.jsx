@@ -1,12 +1,13 @@
-import "./LoginPage.less";
+import "../loginPage/LoginPage.less";
 import StartButton from "../../components/StartButton/StartButton";
 import { registerRoute, loginRoute } from "../../utils/APIRoutes";
 import { MobileOutlined, MailOutlined, LockOutlined, UserOutlined, GoogleOutlined, FacebookOutlined, GithubOutlined, LinkedinOutlined } from "@ant-design/icons";
 import { Input, Button, notification } from 'antd';
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router";
 import axios from "axios";
 
-function Login() {
+function RegisterPage() {
 
   const [isActive, setIsActive] = useState(false);
   const [isPhoneLogin, setIsPhoneLogin] = useState(false); // 是否手机登录
@@ -14,11 +15,6 @@ function Login() {
   const [time, setTime] = useState(60);
   const [isShowCode, setIsShowCode] = useState(false);
 
-  const [loginEmail, setLoginEmail] = useState(''); // 登录邮箱
-  const [loginPassword, setLoginPassword] = useState(''); // 登录密码
-
-  const [loginPhone, setLoginPhone] = useState(''); // 登录手机号
-  const [loginCode, setLoginCode] = useState(''); // 登录验证码
 
   const [registerUsername, setRegisterUsername] = useState(''); // 注册用户名
   const [registerEmail, setRegisterEmail] = useState(''); // 注册邮箱
@@ -26,6 +22,8 @@ function Login() {
   const [registerCode, setRegisterCode] = useState(''); // 注册验证码
 
   const [api, contextHolder] = notification.useNotification();
+
+  const navigate = useNavigate();
 
   const openNotificationWithIcon = (type, msg, des) => {
     api[type]({
@@ -181,23 +179,18 @@ function Login() {
   };
 
   const handleRegister = async (event) => {
-    // event.preventDefault();
     // 1.验证邮箱验证码是否正确，正确才可以注册
     if (registerCode === '123456') {
-      // const { data } = await axios.post(registerRoute, {
-      //   "username": registerUsername,
-      //   "email": registerEmail,
-      //   "password": registerPassword,
-      // });
-      data = {
-        status: true,
-      }
+      const { data } = await axios.post(registerRoute, {
+        "username": registerUsername,
+        "email": registerEmail,
+        "password": registerPassword,
+      });
 
       if (data.status === false) {
         openNotificationWithIcon('error', 'Registration Failure', 'The server seems to have malfunctioned, please try again later!');
       }
       if (data.status === true) {
-        // event.preventDefault();
         // 设置本地存储 + 向服务器发送cookie
         // localStorage.setItem(
         //   process.env.REACT_APP_LOCALHOST_KEY,
@@ -210,6 +203,7 @@ function Login() {
         setRegisterCode('');
         // 3.提示“注册成功，现在去登陆吧”
         openNotificationWithIcon('success', 'Registered Successfully', 'Let\'s go log in now!');
+        event.preventDefault();
       }
     } else {
       openNotificationWithIcon('error', 'Registration Failure', 'Verification code filled in incorrectly!');
@@ -217,97 +211,39 @@ function Login() {
   };
 
   // 切换注册和登录页面的动画
-  const switchAnimation = () => {
-    setIsActive((prev) => !prev);
-    setIsShowSwitch((prev) => !prev);
-  };
+  // const switchAnimation = () => {
+  //   setIsActive((prev) => !prev);
+  //   setIsShowSwitch((prev) => !prev);
+  // };
 
-  const switchIsPhoneLogin = () => {
-    setIsPhoneLogin((prev) => !prev);
+  // const switchIsPhoneLogin = () => {
+  //   setIsPhoneLogin((prev) => !prev);
+  // };
+  
+  const handleGoToLoginClick = () => {
+    navigate("/login");
   };
 
   return (
-    <div className="auth-wrapper">
+    <div className="flex bg-green justify-center items-center min-h-screen w-full p-[20px]">
       {contextHolder}
-      <div className={`container ${isActive ? 'active' : ''}`}>
+      <div className="relative w-[850px] h-[550px] bg-[#fff] rounded-[30px] rounded-[0 0 30px rgba(0, 0, 0, 0.2)] m-[20px] overflow-hidden">
         {/* <Button onClick={() => openNotificationWithIcon('success', 'Registered Successfully', 'Let\'s go log in now!')}>Success</Button> */}
-        {isShowSwitch ?
-          <div
-            className="top-0 right-0 absolute cursor-pointer bg-[#7494ec] hover:bg-[#4c6ecb] w-20 h-20 text-4xl text-center rounded-tr-[30px] rounded-bl-[30px] z-10"
-            onClick={switchIsPhoneLogin}>
-            {isPhoneLogin ? <MailOutlined className="h-full text-white" /> : <MobileOutlined className="h-full text-white" />}
-          </div> :
-          null
-        }
-        <div className="form-box login">
-          {isPhoneLogin ?
-            <form action="">
-              <h1>Login with Phone</h1>
-              <div className="input-box">
-                {/* <input type="text" placeholder="Email" required /> */}
-                <Input className="input-input" type="text" placeholder="Phone Number" required value={loginPhone} onChange={(e) => setLoginPhone(e.target.value)} />
-                <MobileOutlined className="input-icon" />
-              </div>
-              <div className="input-box">
-                {/* <input type="password" placeholder="Password" required /> */}
-                <Input className="input-input" placeholder="Verification code" required maxLength={6} value={loginCode} onChange={(e) => setLoginCode(e.target.value)} />
-                <div className="send-code">
-                  {isShowCode ? (<Button type="primary" disabled>{`Resend ${time}s`}</Button>) : (<Button type="primary" onClick={handleSendCode}>{`Send Code`}</Button>)}
-                </div>
-              </div>
-              <div className="forgot-link">
-                <a href="#">Forgot Password?</a>
-              </div>
-              <button type="submit" className="btn">Login</button>
-              <p>or login with social platforms</p>
-              <div className="social-icons">
-                <a href="#"><GoogleOutlined /></a>
-                <a href="#"><FacebookOutlined /></a>
-                <a href="#"><GithubOutlined /></a>
-                <a href="#"><LinkedinOutlined /></a>
-              </div>
-            </form> :
-            <form action="">
-              <h1>Login</h1>
-              <div className="input-box">
-                {/* <input type="text" placeholder="Email" required /> */}
-                <Input className="input-input" type="email" placeholder="Email" required value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} />
-                <MailOutlined className="input-icon" />
-              </div>
-              <div className="input-box">
-                {/* <input type="password" placeholder="Password" required /> */}
-                <Input.Password className="input-input" placeholder="Password" required value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} />
-                <LockOutlined className="input-icon" />
-              </div>
-              <div className="forgot-link">
-                <a href="#">Forgot Password?</a>
-              </div>
-              <button type="submit" className="btn">Login</button>
-              <p>or login with social platforms</p>
-              <div className="social-icons">
-                <a href="#"><GoogleOutlined /></a>
-                <a href="#"><FacebookOutlined /></a>
-                <a href="#"><GithubOutlined /></a>
-                <a href="#"><LinkedinOutlined /></a>
-              </div>
-            </form>
-          }
-        </div>
-
-        <div className="form-box register">
-          <form action="">
-            <h1>Registration</h1>
-            <div className="reg-input-box">
+        
+        <div className="absolute right-0 w-1/2 h-full bg-[#fff] flex justify-center items-center text-[#333] text-center p-[40px] z-1">
+          <form className="w-full" action="">
+            <h1 className="text-[36px] my-[-10px] mx-[0px]">Registration</h1>
+            <div className="relative my-[15px] mx-0 font-medium">
               {/* <input type="text" placeholder="Username" required /> */}
-              <Input className="input-input" placeholder="Username" required value={registerUsername} onChange={(e) => setRegisterUsername(e.target.value)} />
-              <UserOutlined className="input-icon" />
+              <Input className="w-full py-[13px] pr-[50px] pl-[20px] bg-[#eee] rounded-lg outline-none border-none text-[16px] font-medium text-[#333] focus:shadow-none focus:z-0 hover:z-0 font-[baseFont]" placeholder="Username" required onChange={(e) => setRegisterUsername(e.target.value)} />
+              <UserOutlined className="absolute right-[20px] top-1/2 text-[20px] text-[#888] translate-y-50" />
             </div>
-            <div className="reg-input-box">
-              <Input className="input-input" type="email" placeholder="Email" required value={registerEmail} onChange={(e) => setRegisterEmail(e.target.value)} />
-              <MailOutlined className="input-icon" />
+            <div className="relative my-[15px] mx-0 font-medium">
+              <Input className="w-full py-[13px] pr-[50px] pl-[20px] bg-[#eee] rounded-lg outline-none border-none text-[16px] font-medium text-[#333] focus:shadow-none focus:z-0 hover:z-0 font-[baseFont]" type="email" placeholder="Email" required onChange={(e) => setRegisterEmail(e.target.value)} />
+              <MailOutlined className="absolute right-[20px] top-1/2 text-[20px] text-[#888] translate-y-50" />
             </div>
-            <div className="reg-input-box">
-              <Input className="code-input-input" placeholder="Verification code" required value={registerCode} maxLength={6} onChange={(e) => setRegisterCode(e.target.value)} />
+            <div className="relative my-[15px] mx-0 font-medium">
+              <Input className="w-full py-[13px] pr-[160px] pl-[20px] bg-[#eee] rounded-lg outline-none border-none text-[16px] font-medium text-[#333] focus:shadow-none focus:z-0 hover:z-0 font-[baseFont]" placeholder="Verification code" required maxLength={6} onChange={(e) => setRegisterCode(e.target.value)} />
               {/* 如果handleSendEmailCode不加括号，则点击时才会触发该函数；
                   如果加了括号，则进入页面就会触发该函数，如果不想则要将其包装在一个函数中:()=>handleSendEmailCode() 
                   当回调函数有参数要传递时，必须要将其包装在函数中。*/}
@@ -316,36 +252,30 @@ function Login() {
                 {/* {isShowCode ? `Resend ${time}s` : 'Send Code'} */}
               </div>
             </div>
-            <div className="reg-input-box">
-              <Input.Password className="input-input" placeholder="Password" required value={registerPassword} onChange={(e) => setRegisterPassword(e.target.value)} />
-              <LockOutlined className="input-icon" />
+            <div className="relative my-[15px] mx-0 font-medium">
+              <Input.Password className="w-full py-[13px] pr-[50px] pl-[20px] bg-[#eee] rounded-lg outline-none border-none text-[16px] font-medium text-[#333] focus:shadow-none focus:z-0 hover:z-0 font-[baseFont]" placeholder="Password" required onChange={(e) => setRegisterPassword(e.target.value)} />
+              <LockOutlined className="absolute right-[20px] top-1/2 text-[20px] text-[#888] translate-y-50" />
             </div>
             <button className="btn" onClick={(e) => handleRegister(e)}>Register</button>
-            <p>or register with social platforms</p>
-            <div className="social-icons">
-              <a href="#"><GoogleOutlined /></a>
-              <a href="#"><FacebookOutlined /></a>
-              <a href="#"><GithubOutlined /></a>
-              <a href="#"><LinkedinOutlined /></a>
+            <p className="text-[14.5px] my-[10px] mx-[0px]">or register with social platforms</p>
+            <div className="flex justify-center">
+              <a className="inline-flex p-[10px] text-[24px] text-[#333] no-underline mx-[8px]" href="#"><GoogleOutlined /></a>
+              <a className="inline-flex p-[10px] text-[24px] text-[#333] no-underline mx-[8px]" href="#"><FacebookOutlined /></a>
+              <a className="inline-flex p-[10px] text-[24px] text-[#333] no-underline mx-[8px]" href="#"><GithubOutlined /></a>
+              <a className="inline-flex p-[10px] text-[24px] text-[#333] no-underline mx-[8px]" href="#"><LinkedinOutlined /></a>
             </div>
           </form>
         </div>
 
-        <div className="toggle-box">
-          <div className="toggle-panel toggle-left">
-            <h1>Welcome Back!</h1>
-            <p>Don't have an account?</p>
-            <button className="btn register-btn" onClick={switchAnimation}>Register</button>
-          </div>
-
+        <div className="absolute w-full h-full">
           <div className="toggle-panel toggle-right">
             <h1>Hello, Welcome!</h1>
             <p>Already have an account?</p>
-            <button className="btn login-btn" onClick={switchAnimation}>Login</button>
+            <button className="btn login-btn" onClick={handleGoToLoginClick}>Login</button>
           </div>
         </div>
       </div>
     </div>
   );
 }
-export default Login;
+export default RegisterPage;
