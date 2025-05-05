@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import HelloWithColor from '../../components/Hello/HelloWithColor';
 import StartButton from '../../components/StartButton/StartButton';
-import { Input, notification, Modal } from 'antd';
+import { Input, notification, Modal, Space, Select } from 'antd';
 import { MailOutlined, LockOutlined, MobileOutlined, GoogleOutlined, FacebookOutlined, GithubOutlined, LinkedinOutlined } from "@ant-design/icons";
+import Header from '../../components/Header/Header';
 
 const LoginPage = () => {
   const [loginMode, setLoginMode] = useState("code"); // "code" or "password"
@@ -25,7 +27,7 @@ const LoginPage = () => {
       }
       setAvailable(true);
 
-      // 调发送验证码接口
+      // 调发送验证码的接口
       // axios.get('/admin/send', {
       //   params: {
       //     phone: dataForm.phone,
@@ -60,12 +62,9 @@ const LoginPage = () => {
   };
 
   const handleSendCode = async () => {
-    // 模拟获取到的邮箱
-    // const { email } = registerData;
-    const email = "123@qq.com";
-    // 将邮箱作为参数传入
+    // 将手机号状态变量作为参数传入
     // 解构返回的对象，拿出对象中的成功或失败状态，并进行验证
-    const res = await sendPhoneCode(email);
+    const res = await sendPhoneCode(phone); // 这里的phone是手机号，实际使用时需要替换为真实的手机号
     if (res.responseCode === '000000') {
       notification.success({
         message: '发送成功,请填写收到的验证码',
@@ -95,25 +94,29 @@ const LoginPage = () => {
       }
     } else {
       // 将邮箱和密码传给后端，若未注册则提示未注册，若注册则跳转到home页面
+      axios.post('/admin/login', {
+        email,
+        password,
+      });
     }
   };
   const options = [
     {
-      value: 'zhejiang',
-      label: 'Zhejiang',
+      value: 'China',
+      label: '+86',
     },
     {
-      value: 'jiangsu',
-      label: 'Jiangsu',
+      value: 'USA',
+      label: '+01',
     },
   ];
   return (
-    <div className='flex bg-lightBackgroundColor dark:bg-darkBackgroundColor justify-center items-center min-h-screen w-full p-[20px]'>
+    <div className='relative flex flex-col bg-lightBackgroundColor dark:bg-darkBackgroundColor justify-center items-center min-h-screen w-full p-[20px]'>
+      <Header/>
       <div className="flex justify-center items-center w-[850px] h-[550px] bg-lightContentColor dark:bg-darkContentColor rounded-[30px] rounded-[0 0 30px rgba(0, 0, 0, 0.2)] m-[20px] overflow-hidden">
         <div className="bg-lightContentColor dark:bg-darkContentColor text-lightTextColor dark:text-darkTextColor w-1/2 h-full flex justify-center items-center">
           <div className="flex flex-col justify-center items-center">
             <div className='w-[360px] mb-[15px]'>
-              {/* BUG:该svg动画仅会在页面刷新时绘制，组件切换时不会显示 */}
               <HelloWithColor className="bg-lightBackgroundColor dark:bg-darkBackgroundColor" />
             </div>
             <h1 className="text-[36px] my-[-10px] mx-[0px]">Welcome Back!</h1>
@@ -140,19 +143,29 @@ const LoginPage = () => {
             </div>
             {/* 根据tabs的值切换相应的登录方式 */}
             {loginMode === "code" ? <form className="w-full" action="">
-              {/* 下一步优化，手机号输入框可以支持多国家，提供一个下拉框来选择区号
-              <Space.Compact>
-        <Select defaultValue="Zhejiang" options={options} />
-        <Input defaultValue="Xihu District, Hangzhou" />
-      </Space.Compact> */}
               <div className="flex justify-center items-center my-[15px] mx-0 font-medium border-solid border-2 border-lightBorderColor dark:border-darkBorderColor rounded-lg hover:border-primaryColor">
+                {/* 下一步优化，手机号输入框可以支持多国家，提供一个下拉框来选择区号
+                <Space.Compact>
+                  <Select
+                    // className='h-full bg-transparent hover:bg-transparent focus:bg-transparent border-none text-lightTextColor dark:text-darkTextColor focus:shadow-none'
+                    defaultValue="China"
+                    style={{ height: '100%', background: 'transparent', border: 'none', }}
+                    options={options} />
+                  <Input
+                    className="w-full py-[13px] pl-[20px] pr-[10px] bg-transparent hover:bg-transparent focus:bg-transparent border-none text-[16px] font-medium text-lightTextColor dark:text-darkTextColor focus:shadow-none placeholder:text-placeholderColor font-[baseFont]"
+                    placeholder="Phone Number"
+                    required
+                    name="phone"
+                    onChange={(e) => setPhone(e.target.value)} />
+                  <MobileOutlined className="text-[20px] pl-[10px] pr-[20px]" />
+                </Space.Compact> */}
                 <Input
-                  className="w-full py-[13px] pl-[20px] pr-[10px] bg-transparent hover:bg-transparent focus:bg-transparent border-none text-[16px] font-medium text-lightTextColor dark:text-darkTextColor focus:shadow-none placeholder:text-placeholderColor font-[baseFont]"
-                  placeholder="Phone Number"
-                  required
-                  name="phone"
-                  onChange={(e) => setPhone(e.target.value)} />
-                <MobileOutlined className="text-[20px] pl-[10px] pr-[20px]" />
+                    className="w-full py-[13px] pl-[20px] pr-[10px] bg-transparent hover:bg-transparent focus:bg-transparent border-none text-[16px] font-medium text-lightTextColor dark:text-darkTextColor focus:shadow-none placeholder:text-placeholderColor font-[baseFont]"
+                    placeholder="Phone Number"
+                    required
+                    name="phone"
+                    onChange={(e) => setPhone(e.target.value)} />
+                  <MobileOutlined className="text-[20px] pl-[10px] pr-[20px]" />
               </div>
               <div className="flex justify-center items-center my-[15px] mx-0 font-medium">
                 <div className="w-3/5 border-solid border-2 border-lightBorderColor dark:border-darkBorderColor rounded-lg hover:border-primaryColor">

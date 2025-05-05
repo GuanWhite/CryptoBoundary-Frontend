@@ -94,7 +94,7 @@ const RegisterPage = () => {
       // });
       // 模拟成功返回
       const data = {
-        status:true,
+        status: true,
       };
 
       if (data.status === false) {
@@ -122,6 +122,7 @@ const RegisterPage = () => {
             // 3.清空注册表单
             console.log('clearnRegisterForm1');
             // 不知道为什么这里不会执行清空
+            // 如何阻塞进程等用户操作完成后再进行执行
             setRegisterData({
               username: '',
               password: '',
