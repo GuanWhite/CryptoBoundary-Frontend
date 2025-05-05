@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input, notification } from 'antd';
+import { Input, notification, Modal } from 'antd';
 import { MailOutlined, LockOutlined, UserOutlined, GoogleOutlined, FacebookOutlined, GithubOutlined, LinkedinOutlined } from "@ant-design/icons";
 import { registerRoute } from "../../utils/APIRoutes";
 import axios from "axios";
@@ -17,17 +17,6 @@ const RegisterPage = () => {
     email: '',
   });
 
-
-  // const options = [
-  //   {
-  //     value: 'zhejiang',
-  //     label: 'Zhejiang',
-  //   },
-  //   {
-  //     value: 'jiangsu',
-  //     label: 'Jiangsu',
-  //   },
-  // ];
   const handleChange = (event) => {
     setRegisterData({ ...registerData, [event.target.name]: event.target.value });
   };
@@ -84,14 +73,15 @@ const RegisterPage = () => {
       // 失败逻辑
     }
   };
-  const [api, contextHolder] = notification.useNotification();
-  const openNotificationWithIcon = (type, msg, des) => {
-    api[type]({
-      message: msg,
-      description: des,
-    });
-  };
+  // const [api, contextHolder] = notification.useNotification();
+  // const openNotificationWithIcon = (type, msg, des) => {
+  //   api[type]({
+  //     message: msg,
+  //     description: des,
+  //   });
+  // };
 
+  const [modal, contextHolder] = Modal.useModal();
   const handleRegister = async (event) => {
     // event.preventDefault();
     // 1.验证邮箱验证码是否正确，正确才可以注册
@@ -104,11 +94,16 @@ const RegisterPage = () => {
       // });
       // 模拟成功返回
       const data = {
-        status: true,
+        status:true,
       };
 
       if (data.status === false) {
-        openNotificationWithIcon('error', 'Registration Failure', 'The server seems to have malfunctioned, please try again later!');
+        // openNotificationWithIcon('error', 'Registration Failure', 'The server seems to have malfunctioned, please try again later!');
+        modal.error({
+          title: 'Registration Failure',
+          content: 'The server seems to have malfunctioned, please try again later!',
+          onOk: () => { },
+        });
       }
       if (data.status === true) {
         // 设置本地存储 + 向服务器发送cookie
@@ -116,29 +111,40 @@ const RegisterPage = () => {
         //   process.env.REACT_APP_LOCALHOST_KEY,
         //   JSON.stringify(data.user)
         // );
-        // 2.清空注册表单
-        setRegisterData({
-          username: '',
-          password: '',
-          email: '',
+
+        // 2.提示“注册成功，现在去登陆吧”
+        // alert('注册成功，现在去登陆吧！');
+        // openNotificationWithIcon('success', 'Registered Successfully', 'Let\'s go log in now!');
+        modal.success({
+          title: 'Registered Successfully',
+          content: `Let\'s go login now!`,
+          onOk: () => {
+            // 3.清空注册表单
+            console.log('clearnRegisterForm1');
+            // 不知道为什么这里不会执行清空
+            setRegisterData({
+              username: '',
+              password: '',
+              email: '',
+            });
+            setRegisterCode('');
+            console.log('clearnRegisterForm2');
+            console.log(registerData, registerCode);
+          },
         });
-        setRegisterCode('');
-        // 3.提示“注册成功，现在去登陆吧”
-        alert('注册成功，现在去登陆吧！');
-        openNotificationWithIcon('success', 'Registered Successfully', 'Let\'s go log in now!');
       }
     } else {
-      openNotificationWithIcon('error', 'Registration Failure', 'Verification code filled in incorrectly!');
+      // openNotificationWithIcon('error', 'Registration Failure', 'Verification code filled in incorrectly!');
+      modal.error({
+        title: 'Registration Failure',
+        content: 'Verification code filled in incorrectly!',
+        onOk: () => { },
+      });
     }
   };
 
   return (
     <div className='flex bg-lightBackgroundColor dark:bg-darkBackgroundColor justify-center items-center min-h-screen w-full p-[20px]'>
-      {/* <Space.Compact>
-        <Select defaultValue="Zhejiang" options={options} />
-        <Input defaultValue="Xihu District, Hangzhou" />
-      </Space.Compact> */}
-      {contextHolder}
       <div className="flex justify-center items-center w-[850px] h-[550px] bg-lightContentColor dark:bg-darkContentColor rounded-[30px] rounded-[0 0 30px rgba(0, 0, 0, 0.2)] m-[20px] overflow-hidden">
         <div className="w-1/2 h-full bg-lightContentColor dark:bg-darkContentColor text-lightTextColor dark:text-darkTextColor flex justify-center items-center text-center p-[40px] z-1">
           <form className="w-full" action="">
@@ -156,7 +162,7 @@ const RegisterPage = () => {
               <Input
                 className="w-full py-[13px] pl-[20px] pr-[10px] bg-transparent hover:bg-transparent focus:bg-transparent border-none text-[16px] font-medium text-lightTextColor dark:text-darkTextColor focus:shadow-none placeholder:text-placeholderColor font-[baseFont]"
                 type="email"
-                placeholder="Email"
+                placeholder="Email Address"
                 required
                 name="email"
                 onChange={(e) => handleChange(e)} />
@@ -190,6 +196,7 @@ const RegisterPage = () => {
             </div>
             <button
               className="w-full h-[48px] bg-primaryColor dark:text-darkTextColor text-darkTextColor rounded-[8px] shadow-[0 0 10px rgba(0, 0, 0, 0.1)] border-none cursor-pointer text-[16px] font-semibold"
+              type="button"
               onClick={(e) => handleRegister(e)}>
               Register
             </button>
@@ -205,7 +212,7 @@ const RegisterPage = () => {
         <div className="bg-lightContentColor dark:bg-darkContentColor text-lightTextColor dark:text-darkTextColor w-1/2 h-full flex justify-center items-center">
           <div className="flex flex-col justify-center items-center">
             <div className='w-[360px] mb-[15px]'>
-              <HelloWithColor className="bg-lightBackgroundColor dark:bg-darkBackgroundColor"/>
+              <HelloWithColor className="bg-lightBackgroundColor dark:bg-darkBackgroundColor" />
               {/* <Hello className="bg-lightBackgroundColor dark:bg-darkBackgroundColor" /> */}
             </div>
             <h1 className="text-[36px] my-[-10px] mx-[0px]">Welcome My Friend!</h1>
@@ -214,6 +221,7 @@ const RegisterPage = () => {
           </div>
         </div>
       </div>
+      {contextHolder}
     </div>
   );
 };

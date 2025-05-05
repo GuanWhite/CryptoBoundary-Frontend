@@ -1,16 +1,29 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import './HelloWithColor.less';
 
 const HelloWithColor = () => {
   // 启动动画（添加 .fin 类）
-  window.onload = () => {
-    setTimeout(() => {
-      document.getElementById("container").classList.add("fin");
+  // window.onload = () => {
+  //   setTimeout(() => {
+  //     document.getElementById("container").classList.add("fin");
+  //   }, 500);
+  // };
+  const containerRef = useRef(null);
+  useEffect(() => {
+    // 组件挂载时触发动画，添加 .fin 类
+    const timer = setTimeout(() => {
+      containerRef.current?.classList.add("fin");
     }, 500);
-  };
+
+    // 组件卸载时清除动画状态
+    return () => {
+      clearTimeout(timer);
+      containerRef.current?.classList.remove("fin");
+    };
+  }, []); // 空依赖数组表示只在挂载/卸载时执行
 
   return (
-    <div id="container">
+    <div id="container" ref={containerRef}>
       <svg
         id="animated-svg"
         width="360"
