@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import HelloWithColor from '../../components/Hello/HelloWithColor';
 import StartButton from '../../components/StartButton/StartButton';
+import Header from '../../components/Header/Header';
 import { Input, notification, Modal, Space, Select } from 'antd';
 import { MailOutlined, LockOutlined, MobileOutlined, GoogleOutlined, FacebookOutlined, GithubOutlined, LinkedinOutlined } from "@ant-design/icons";
-import Header from '../../components/Header/Header';
+
 
 const LoginPage = () => {
   const [loginMode, setLoginMode] = useState("code"); // "code" or "password"
@@ -110,41 +111,46 @@ const LoginPage = () => {
       label: '+01',
     },
   ];
+
   return (
-    <div className='relative flex flex-col bg-lightBackgroundColor dark:bg-darkBackgroundColor justify-center items-center min-h-screen w-full p-[20px]'>
-      <Header/>
-      <div className="flex justify-center items-center w-[850px] h-[550px] bg-lightContentColor dark:bg-darkContentColor rounded-[30px] rounded-[0 0 30px rgba(0, 0, 0, 0.2)] m-[20px] overflow-hidden">
-        <div className="bg-lightContentColor dark:bg-darkContentColor text-lightTextColor dark:text-darkTextColor w-1/2 h-full flex justify-center items-center">
-          <div className="flex flex-col justify-center items-center">
-            <div className='w-[360px] mb-[15px]'>
-              <HelloWithColor className="bg-lightBackgroundColor dark:bg-darkBackgroundColor" />
+    // 加header会导致屏幕超长出现滚动条或主题内容不垂直居中问题（主题内容的父元素无法铺满剩余的高度）
+    // 【解决：父盒子flex flex-col min-h-screen；子元素flex-1自动填充剩余空间，不需要再写高度和宽度】
+    // 主体内容如何绝对在屏幕中间？用position才行？
+    <div className='flex flex-col min-h-screen bg-lightBackgroundColor dark:bg-darkBackgroundColor'>
+      <Header />
+      <div className='flex-1 bg-lightBackgroundColor dark:bg-darkBackgroundColor flex flex-col justify-center items-center p-[20px]'>
+        <div className="flex justify-center items-center w-[850px] h-[550px] bg-lightContentColor dark:bg-darkContentColor rounded-[30px] rounded-[0 0 30px rgba(0, 0, 0, 0.2)] m-[20px] overflow-hidden">
+          <div className="bg-lightContentColor dark:bg-darkContentColor text-lightTextColor dark:text-darkTextColor w-1/2 h-full flex justify-center items-center">
+            <div className="flex flex-col justify-center items-center">
+              <div className='w-[360px] mb-[15px]'>
+                <HelloWithColor className="bg-lightBackgroundColor dark:bg-darkBackgroundColor" />
+              </div>
+              <h1 className="text-[36px] my-[-10px] mx-[0px]">Welcome Back!</h1>
+              <p className='pt-[8px] pb-[16px]'>Don't have an account?</p>
+              <StartButton buttonName="Register" navProps="/register" />
             </div>
-            <h1 className="text-[36px] my-[-10px] mx-[0px]">Welcome Back!</h1>
-            <p className='pt-[8px] pb-[16px]'>Don't have an account?</p>
-            <StartButton buttonName="Register" navProps="/register" />
           </div>
-        </div>
-        <div className="w-1/2 h-full bg-lightContentColor dark:bg-darkContentColor text-lightTextColor dark:text-darkTextColor flex justify-center items-center text-center p-[40px] z-1">
-          <div className="w-full">
-            {/* 切换top */}
-            <div className="flex justify-evenly pb-3">
-              <button
-                onClick={() => setLoginMode("code")}
-                className={`text-lg ${loginMode === "code" ? "font-semibold text-primaryColor border-b-4 border-primaryColor" : ""}`}
-              >
-                验证码登录
-              </button>
-              <button
-                onClick={() => setLoginMode("password")}
-                className={`text-lg ${loginMode === "password" ? "font-semibold text-primaryColor border-b-4 border-primaryColor" : ""}`}
-              >
-                邮箱登录
-              </button>
-            </div>
-            {/* 根据tabs的值切换相应的登录方式 */}
-            {loginMode === "code" ? <form className="w-full" action="">
-              <div className="flex justify-center items-center my-[15px] mx-0 font-medium border-solid border-2 border-lightBorderColor dark:border-darkBorderColor rounded-lg hover:border-primaryColor">
-                {/* 下一步优化，手机号输入框可以支持多国家，提供一个下拉框来选择区号
+          <div className="w-1/2 h-full bg-lightContentColor dark:bg-darkContentColor text-lightTextColor dark:text-darkTextColor flex justify-center items-center text-center p-[40px] z-1">
+            <div className="w-full">
+              {/* 切换top */}
+              <div className="flex justify-evenly pb-3">
+                <button
+                  onClick={() => setLoginMode("code")}
+                  className={`text-lg ${loginMode === "code" ? "font-semibold text-primaryColor border-b-4 border-primaryColor" : ""}`}
+                >
+                  验证码登录
+                </button>
+                <button
+                  onClick={() => setLoginMode("password")}
+                  className={`text-lg ${loginMode === "password" ? "font-semibold text-primaryColor border-b-4 border-primaryColor" : ""}`}
+                >
+                  邮箱登录
+                </button>
+              </div>
+              {/* 根据tabs的值切换相应的登录方式 */}
+              {loginMode === "code" ? <form className="w-full" action="">
+                <div className="flex justify-center items-center my-[15px] mx-0 font-medium border-solid border-2 border-lightBorderColor dark:border-darkBorderColor rounded-lg hover:border-primaryColor">
+                  {/* 下一步优化，手机号输入框可以支持多国家，提供一个下拉框来选择区号
                 <Space.Compact>
                   <Select
                     // className='h-full bg-transparent hover:bg-transparent focus:bg-transparent border-none text-lightTextColor dark:text-darkTextColor focus:shadow-none'
@@ -159,66 +165,67 @@ const LoginPage = () => {
                     onChange={(e) => setPhone(e.target.value)} />
                   <MobileOutlined className="text-[20px] pl-[10px] pr-[20px]" />
                 </Space.Compact> */}
-                <Input
+                  <Input
                     className="w-full py-[13px] pl-[20px] pr-[10px] bg-transparent hover:bg-transparent focus:bg-transparent border-none text-[16px] font-medium text-lightTextColor dark:text-darkTextColor focus:shadow-none placeholder:text-placeholderColor font-[baseFont]"
                     placeholder="Phone Number"
                     required
                     name="phone"
                     onChange={(e) => setPhone(e.target.value)} />
                   <MobileOutlined className="text-[20px] pl-[10px] pr-[20px]" />
+                </div>
+                <div className="flex justify-center items-center my-[15px] mx-0 font-medium">
+                  <div className="w-3/5 border-solid border-2 border-lightBorderColor dark:border-darkBorderColor rounded-lg hover:border-primaryColor">
+                    <Input
+                      className="w-full py-[13px] px-[20px] bg-transparent hover:bg-transparent focus:bg-transparent border-none text-[16px] font-medium text-lightTextColor dark:text-darkTextColor focus:shadow-none placeholder:text-placeholderColor font-[baseFont]"
+                      placeholder="Verification code"
+                      required
+                      maxLength={6}
+                      onChange={(e) => setLoginCode(e.target.value)} />
+                  </div>
+                  <div className="w-2/5 ml-[20px] text-[16px]">
+                    {available ?
+                      (<div className="w-full h-full py-[13px] border-solid border-2 border-lightBorderColor dark:border-darkBorderColor rounded-lg cursor-not-allowed">{`Resend ${countdown}s`}</div>) :
+                      (<div className="w-full h-full py-[13px] border-solid border-2 border-lightBorderColor dark:border-darkBorderColor rounded-lg hover:border-primaryColor cursor-pointer" onClick={handleSendCode}>{`Send Code`}</div>)
+                    }
+                  </div>
+                </div>
+              </form> :
+                <form className="w-full" action="">
+                  <div className="flex justify-center items-center my-[15px] mx-0 font-medium border-solid border-2 border-lightBorderColor dark:border-darkBorderColor rounded-lg hover:border-primaryColor">
+                    <Input
+                      className="w-full py-[13px] pl-[20px] pr-[10px] bg-transparent hover:bg-transparent focus:bg-transparent border-none text-[16px] font-medium text-lightTextColor dark:text-darkTextColor focus:shadow-none placeholder:text-placeholderColor font-[baseFont]"
+                      type="email"
+                      placeholder="Email Address"
+                      required
+                      name="email"
+                      onChange={(e) => setEmail(e.target.value)} />
+                    <MailOutlined className="text-[20px] pl-[10px] pr-[20px]" />
+                  </div>
+                  <div className="flex justify-center items-center my-[15px] mx-0 font-medium border-solid border-2 border-lightBorderColor dark:border-darkBorderColor rounded-lg hover:border-primaryColor">
+                    <Input
+                      className="w-full py-[13px] pl-[20px] pr-[0px] bg-transparent hover:bg-transparent focus:bg-transparent border-none text-[16px] font-medium text-lightTextColor dark:text-darkTextColor focus:shadow-none placeholder:text-placeholderColor font-[baseFont]"
+                      type="password"
+                      placeholder="Password"
+                      required
+                      name="password"
+                      onChange={(e) => setPassword(e.target.value)} />
+                    <LockOutlined className="text-[20px] pl-[10px] pr-[20px]" />
+                  </div>
+                </form>
+              }
+              <button
+                className="w-full h-[48px] bg-primaryColor dark:text-darkTextColor text-darkTextColor rounded-[8px] shadow-[0 0 10px rgba(0, 0, 0, 0.1)] border-none cursor-pointer text-[16px] font-semibold"
+                type="button"
+                onClick={(e) => handleLogin(e)}>
+                Login
+              </button>
+              <p className="text-[14.5px] my-[10px] mx-[0px]">or register with social platforms</p>
+              <div className="flex justify-center">
+                <a className="inline-flex p-[10px] text-[24px] text-lightTextColor dark:text-darkTextColor no-underline mx-[8px]" href="#"><GoogleOutlined /></a>
+                <a className="inline-flex p-[10px] text-[24px] text-lightTextColor dark:text-darkTextColor no-underline mx-[8px]" href="#"><FacebookOutlined /></a>
+                <a className="inline-flex p-[10px] text-[24px] text-lightTextColor dark:text-darkTextColor no-underline mx-[8px]" href="#"><GithubOutlined /></a>
+                <a className="inline-flex p-[10px] text-[24px] text-lightTextColor dark:text-darkTextColor no-underline mx-[8px]" href="#"><LinkedinOutlined /></a>
               </div>
-              <div className="flex justify-center items-center my-[15px] mx-0 font-medium">
-                <div className="w-3/5 border-solid border-2 border-lightBorderColor dark:border-darkBorderColor rounded-lg hover:border-primaryColor">
-                  <Input
-                    className="w-full py-[13px] px-[20px] bg-transparent hover:bg-transparent focus:bg-transparent border-none text-[16px] font-medium text-lightTextColor dark:text-darkTextColor focus:shadow-none placeholder:text-placeholderColor font-[baseFont]"
-                    placeholder="Verification code"
-                    required
-                    maxLength={6}
-                    onChange={(e) => setLoginCode(e.target.value)} />
-                </div>
-                <div className="w-2/5 ml-[20px] text-[16px]">
-                  {available ?
-                    (<div className="w-full h-full py-[13px] border-solid border-2 border-lightBorderColor dark:border-darkBorderColor rounded-lg cursor-not-allowed">{`Resend ${countdown}s`}</div>) :
-                    (<div className="w-full h-full py-[13px] border-solid border-2 border-lightBorderColor dark:border-darkBorderColor rounded-lg hover:border-primaryColor cursor-pointer" onClick={handleSendCode}>{`Send Code`}</div>)
-                  }
-                </div>
-              </div>
-            </form> :
-              <form className="w-full" action="">
-                <div className="flex justify-center items-center my-[15px] mx-0 font-medium border-solid border-2 border-lightBorderColor dark:border-darkBorderColor rounded-lg hover:border-primaryColor">
-                  <Input
-                    className="w-full py-[13px] pl-[20px] pr-[10px] bg-transparent hover:bg-transparent focus:bg-transparent border-none text-[16px] font-medium text-lightTextColor dark:text-darkTextColor focus:shadow-none placeholder:text-placeholderColor font-[baseFont]"
-                    type="email"
-                    placeholder="Email Address"
-                    required
-                    name="email"
-                    onChange={(e) => setEmail(e.target.value)} />
-                  <MailOutlined className="text-[20px] pl-[10px] pr-[20px]" />
-                </div>
-                <div className="flex justify-center items-center my-[15px] mx-0 font-medium border-solid border-2 border-lightBorderColor dark:border-darkBorderColor rounded-lg hover:border-primaryColor">
-                  <Input
-                    className="w-full py-[13px] pl-[20px] pr-[0px] bg-transparent hover:bg-transparent focus:bg-transparent border-none text-[16px] font-medium text-lightTextColor dark:text-darkTextColor focus:shadow-none placeholder:text-placeholderColor font-[baseFont]"
-                    type="password"
-                    placeholder="Password"
-                    required
-                    name="password"
-                    onChange={(e) => setPassword(e.target.value)} />
-                  <LockOutlined className="text-[20px] pl-[10px] pr-[20px]" />
-                </div>
-              </form>
-            }
-            <button
-              className="w-full h-[48px] bg-primaryColor dark:text-darkTextColor text-darkTextColor rounded-[8px] shadow-[0 0 10px rgba(0, 0, 0, 0.1)] border-none cursor-pointer text-[16px] font-semibold"
-              type="button"
-              onClick={(e) => handleLogin(e)}>
-              Login
-            </button>
-            <p className="text-[14.5px] my-[10px] mx-[0px]">or register with social platforms</p>
-            <div className="flex justify-center">
-              <a className="inline-flex p-[10px] text-[24px] text-lightTextColor dark:text-darkTextColor no-underline mx-[8px]" href="#"><GoogleOutlined /></a>
-              <a className="inline-flex p-[10px] text-[24px] text-lightTextColor dark:text-darkTextColor no-underline mx-[8px]" href="#"><FacebookOutlined /></a>
-              <a className="inline-flex p-[10px] text-[24px] text-lightTextColor dark:text-darkTextColor no-underline mx-[8px]" href="#"><GithubOutlined /></a>
-              <a className="inline-flex p-[10px] text-[24px] text-lightTextColor dark:text-darkTextColor no-underline mx-[8px]" href="#"><LinkedinOutlined /></a>
             </div>
           </div>
         </div>

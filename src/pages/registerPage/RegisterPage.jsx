@@ -6,6 +6,7 @@ import axios from "axios";
 import StartButton from '../../components/StartButton/StartButton';
 import HelloWithColor from '../../components/Hello/HelloWithColor';
 import Hello from '../../components/Hello/Hello';
+import Header from '../../components/Header/Header';
 
 const RegisterPage = () => {
   const [registerCode, setRegisterCode] = useState(''); // 验证码
@@ -145,84 +146,87 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className='flex bg-lightBackgroundColor dark:bg-darkBackgroundColor justify-center items-center min-h-screen w-full p-[20px]'>
-      <div className="flex justify-center items-center w-[850px] h-[550px] bg-lightContentColor dark:bg-darkContentColor rounded-[30px] rounded-[0 0 30px rgba(0, 0, 0, 0.2)] m-[20px] overflow-hidden">
-        <div className="w-1/2 h-full bg-lightContentColor dark:bg-darkContentColor text-lightTextColor dark:text-darkTextColor flex justify-center items-center text-center p-[40px] z-1">
-          <form className="w-full" action="">
-            <h1 className="text-[36px] my-[-10px] mx-[0px]">Registration</h1>
-            <div className="flex justify-center items-center my-[15px] mx-0 font-medium border-solid border-2 border-lightBorderColor dark:border-darkBorderColor rounded-lg hover:border-primaryColor">
-              <Input
-                className="w-full py-[13px] pl-[20px] pr-[10px] bg-transparent hover:bg-transparent focus:bg-transparent border-none text-[16px] font-medium text-lightTextColor dark:text-darkTextColor focus:shadow-none placeholder:text-placeholderColor font-[baseFont]"
-                placeholder="Username"
-                required
-                name="username"
-                onChange={(e) => handleChange(e)} />
-              <UserOutlined className="text-[20px] pl-[10px] pr-[20px]" />
-            </div>
-            <div className="flex justify-center items-center my-[15px] mx-0 font-medium border-solid border-2 border-lightBorderColor dark:border-darkBorderColor rounded-lg hover:border-primaryColor">
-              <Input
-                className="w-full py-[13px] pl-[20px] pr-[10px] bg-transparent hover:bg-transparent focus:bg-transparent border-none text-[16px] font-medium text-lightTextColor dark:text-darkTextColor focus:shadow-none placeholder:text-placeholderColor font-[baseFont]"
-                type="email"
-                placeholder="Email Address"
-                required
-                name="email"
-                onChange={(e) => handleChange(e)} />
-              <MailOutlined className="text-[20px] pl-[10px] pr-[20px]" />
-            </div>
-            <div className="flex justify-center items-center my-[15px] mx-0 font-medium">
-              <div className="w-3/5 border-solid border-2 border-lightBorderColor dark:border-darkBorderColor rounded-lg hover:border-primaryColor">
+    <div className='flex flex-col min-h-screen bg-lightBackgroundColor dark:bg-darkBackgroundColor'>
+      <Header />
+      <div className='flex-1 flex justify-center items-center bg-lightBackgroundColor dark:bg-darkBackgroundColor p-[20px]'>
+        <div className="flex justify-center items-center w-[850px] h-[550px] bg-lightContentColor dark:bg-darkContentColor rounded-[30px] rounded-[0 0 30px rgba(0, 0, 0, 0.2)] m-[20px] overflow-hidden">
+          <div className="w-1/2 h-full bg-lightContentColor dark:bg-darkContentColor text-lightTextColor dark:text-darkTextColor flex justify-center items-center text-center p-[40px] z-1">
+            <form className="w-full" action="">
+              <h1 className="text-[36px] my-[-10px] mx-[0px]">Registration</h1>
+              <div className="flex justify-center items-center my-[15px] mx-0 font-medium border-solid border-2 border-lightBorderColor dark:border-darkBorderColor rounded-lg hover:border-primaryColor">
                 <Input
-                  className="w-full py-[13px] px-[20px] bg-transparent hover:bg-transparent focus:bg-transparent border-none text-[16px] font-medium text-lightTextColor dark:text-darkTextColor focus:shadow-none placeholder:text-placeholderColor font-[baseFont]"
-                  placeholder="Verification code"
+                  className="w-full py-[13px] pl-[20px] pr-[10px] bg-transparent hover:bg-transparent focus:bg-transparent border-none text-[16px] font-medium text-lightTextColor dark:text-darkTextColor focus:shadow-none placeholder:text-placeholderColor font-[baseFont]"
+                  placeholder="Username"
                   required
-                  maxLength={6}
-                  onChange={(e) => setRegisterCode(e.target.value)} />
+                  name="username"
+                  onChange={(e) => handleChange(e)} />
+                <UserOutlined className="text-[20px] pl-[10px] pr-[20px]" />
               </div>
-              <div className="w-2/5 ml-[20px] text-[16px]">
-                {isShowCode ?
-                  (<div className="w-full h-full py-[13px] border-solid border-2 border-lightBorderColor dark:border-darkBorderColor rounded-lg cursor-not-allowed">{`Resend ${time}s`}</div>) :
-                  (<div className="w-full h-full py-[13px] border-solid border-2 border-lightBorderColor dark:border-darkBorderColor rounded-lg hover:border-primaryColor cursor-pointer" onClick={handleSendCode}>{`Send Code`}</div>)
-                }
+              <div className="flex justify-center items-center my-[15px] mx-0 font-medium border-solid border-2 border-lightBorderColor dark:border-darkBorderColor rounded-lg hover:border-primaryColor">
+                <Input
+                  className="w-full py-[13px] pl-[20px] pr-[10px] bg-transparent hover:bg-transparent focus:bg-transparent border-none text-[16px] font-medium text-lightTextColor dark:text-darkTextColor focus:shadow-none placeholder:text-placeholderColor font-[baseFont]"
+                  type="email"
+                  placeholder="Email Address"
+                  required
+                  name="email"
+                  onChange={(e) => handleChange(e)} />
+                <MailOutlined className="text-[20px] pl-[10px] pr-[20px]" />
               </div>
+              <div className="flex justify-center items-center my-[15px] mx-0 font-medium">
+                <div className="w-3/5 border-solid border-2 border-lightBorderColor dark:border-darkBorderColor rounded-lg hover:border-primaryColor">
+                  <Input
+                    className="w-full py-[13px] px-[20px] bg-transparent hover:bg-transparent focus:bg-transparent border-none text-[16px] font-medium text-lightTextColor dark:text-darkTextColor focus:shadow-none placeholder:text-placeholderColor font-[baseFont]"
+                    placeholder="Verification code"
+                    required
+                    maxLength={6}
+                    onChange={(e) => setRegisterCode(e.target.value)} />
+                </div>
+                <div className="w-2/5 ml-[20px] text-[16px]">
+                  {isShowCode ?
+                    (<div className="w-full h-full py-[13px] border-solid border-2 border-lightBorderColor dark:border-darkBorderColor rounded-lg cursor-not-allowed">{`Resend ${time}s`}</div>) :
+                    (<div className="w-full h-full py-[13px] border-solid border-2 border-lightBorderColor dark:border-darkBorderColor rounded-lg hover:border-primaryColor cursor-pointer" onClick={handleSendCode}>{`Send Code`}</div>)
+                  }
+                </div>
+              </div>
+              <div className="flex justify-center items-center my-[15px] mx-0 font-medium border-solid border-2 border-lightBorderColor dark:border-darkBorderColor rounded-lg hover:border-primaryColor">
+                <Input
+                  className="w-full py-[13px] pl-[20px] pr-[0px] bg-transparent hover:bg-transparent focus:bg-transparent border-none text-[16px] font-medium text-lightTextColor dark:text-darkTextColor focus:shadow-none placeholder:text-placeholderColor font-[baseFont]"
+                  type="password"
+                  placeholder="Password"
+                  required
+                  name="password"
+                  onChange={(e) => handleChange(e)} />
+                <LockOutlined className="text-[20px] pl-[10px] pr-[20px]" />
+              </div>
+              <button
+                className="w-full h-[48px] bg-primaryColor dark:text-darkTextColor text-darkTextColor rounded-[8px] shadow-[0 0 10px rgba(0, 0, 0, 0.1)] border-none cursor-pointer text-[16px] font-semibold"
+                type="button"
+                onClick={(e) => handleRegister(e)}>
+                Register
+              </button>
+              <p className="text-[14.5px] my-[10px] mx-[0px]">or register with social platforms</p>
+              <div className="flex justify-center">
+                <a className="inline-flex p-[10px] text-[24px] text-lightTextColor dark:text-darkTextColor no-underline mx-[8px]" href="#"><GoogleOutlined /></a>
+                <a className="inline-flex p-[10px] text-[24px] text-lightTextColor dark:text-darkTextColor no-underline mx-[8px]" href="#"><FacebookOutlined /></a>
+                <a className="inline-flex p-[10px] text-[24px] text-lightTextColor dark:text-darkTextColor no-underline mx-[8px]" href="#"><GithubOutlined /></a>
+                <a className="inline-flex p-[10px] text-[24px] text-lightTextColor dark:text-darkTextColor no-underline mx-[8px]" href="#"><LinkedinOutlined /></a>
+              </div>
+            </form>
+          </div>
+          <div className="bg-lightContentColor dark:bg-darkContentColor text-lightTextColor dark:text-darkTextColor w-1/2 h-full flex justify-center items-center">
+            <div className="flex flex-col justify-center items-center">
+              <div className='w-[360px] mb-[15px]'>
+                <HelloWithColor className="bg-lightBackgroundColor dark:bg-darkBackgroundColor" />
+                {/* <Hello className="bg-lightBackgroundColor dark:bg-darkBackgroundColor" /> */}
+              </div>
+              <h1 className="text-[36px] my-[-10px] mx-[0px]">Welcome My Friend!</h1>
+              <p className='pt-[8px] pb-[16px]'>Already have an account?</p>
+              <StartButton buttonName="Login" navProps="/login" />
             </div>
-            <div className="flex justify-center items-center my-[15px] mx-0 font-medium border-solid border-2 border-lightBorderColor dark:border-darkBorderColor rounded-lg hover:border-primaryColor">
-              <Input
-                className="w-full py-[13px] pl-[20px] pr-[0px] bg-transparent hover:bg-transparent focus:bg-transparent border-none text-[16px] font-medium text-lightTextColor dark:text-darkTextColor focus:shadow-none placeholder:text-placeholderColor font-[baseFont]"
-                type="password"
-                placeholder="Password"
-                required
-                name="password"
-                onChange={(e) => handleChange(e)} />
-              <LockOutlined className="text-[20px] pl-[10px] pr-[20px]" />
-            </div>
-            <button
-              className="w-full h-[48px] bg-primaryColor dark:text-darkTextColor text-darkTextColor rounded-[8px] shadow-[0 0 10px rgba(0, 0, 0, 0.1)] border-none cursor-pointer text-[16px] font-semibold"
-              type="button"
-              onClick={(e) => handleRegister(e)}>
-              Register
-            </button>
-            <p className="text-[14.5px] my-[10px] mx-[0px]">or register with social platforms</p>
-            <div className="flex justify-center">
-              <a className="inline-flex p-[10px] text-[24px] text-lightTextColor dark:text-darkTextColor no-underline mx-[8px]" href="#"><GoogleOutlined /></a>
-              <a className="inline-flex p-[10px] text-[24px] text-lightTextColor dark:text-darkTextColor no-underline mx-[8px]" href="#"><FacebookOutlined /></a>
-              <a className="inline-flex p-[10px] text-[24px] text-lightTextColor dark:text-darkTextColor no-underline mx-[8px]" href="#"><GithubOutlined /></a>
-              <a className="inline-flex p-[10px] text-[24px] text-lightTextColor dark:text-darkTextColor no-underline mx-[8px]" href="#"><LinkedinOutlined /></a>
-            </div>
-          </form>
-        </div>
-        <div className="bg-lightContentColor dark:bg-darkContentColor text-lightTextColor dark:text-darkTextColor w-1/2 h-full flex justify-center items-center">
-          <div className="flex flex-col justify-center items-center">
-            <div className='w-[360px] mb-[15px]'>
-              <HelloWithColor className="bg-lightBackgroundColor dark:bg-darkBackgroundColor" />
-              {/* <Hello className="bg-lightBackgroundColor dark:bg-darkBackgroundColor" /> */}
-            </div>
-            <h1 className="text-[36px] my-[-10px] mx-[0px]">Welcome My Friend!</h1>
-            <p className='pt-[8px] pb-[16px]'>Already have an account?</p>
-            <StartButton buttonName="Login" navProps="/login" />
           </div>
         </div>
+        {contextHolder}
       </div>
-      {contextHolder}
     </div>
   );
 };

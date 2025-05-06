@@ -28,6 +28,8 @@ export default {
       'baseFont': ['Nunito Sans', 'system-ui', 'Avenir', 'Helvetica', 'Arial', 'sans-serif'],
     },
   },
-  plugins: [],
+  plugins: [
+    require("@tailwindcss/line-clamp"),
+  ],
 }
 

@@ -4,7 +4,7 @@ import StartButton from "../../components/StartButton/StartButton";
 
 
 function NotFoundPage() {
-  
+
   return (
     <main className="errorpage-outdiv">
       <div className="errorpage-container">
@@ -19,7 +19,7 @@ function NotFoundPage() {
               How you got here is a mystery.
               But you can click the button below to go back to the homepage.
             </p>
-            <StartButton buttonName="HOME" navProps="/home" />
+            <StartButton buttonName="HOME" navProps="/" />
           </div>
         </div>
       </div>

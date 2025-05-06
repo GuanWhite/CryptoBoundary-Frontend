@@ -4,7 +4,7 @@ import { Switch } from "antd";
 import { SunOutlined, MoonOutlined } from "@ant-design/icons";
 
 export default function ThemeToggle() {
-  const { theme, setTheme } = useContext(ThemeContext);
+  const { setTheme } = useContext(ThemeContext);
   const [darkMode, setDarkMode] = useState(() => {
     return localStorage.getItem("theme") === "dark";
   });
