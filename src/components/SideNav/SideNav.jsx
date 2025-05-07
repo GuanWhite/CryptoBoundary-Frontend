@@ -99,7 +99,7 @@ export default function SideNav({ theme = "dark" }) {
         items={items}
       />
       <div className='w-full flex justify-center items-center px-[24px] py-[10px]'>
-        <ThemeToggle />
+        <ThemeToggle/>
       </div>
     </div>
   );
