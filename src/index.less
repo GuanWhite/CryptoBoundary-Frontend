@@ -1,9 +1,9 @@
-@import url('https://fonts.googleapis.com/css?family=Nunito+Sans');
+// @import url('https://fonts.googleapis.com/css?family=Nunito+Sans');
+@import url(./assets/fonts/NunitoSans/NunitoSans.css);
 @baseFontFamily: 'Nunito Sans', system-ui, Avenir, Helvetica, Arial, sans-serif;
-
 // @baseFontFamily: "lucida grande", "lucida sans unicode", lucida, helvetica, "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
 
-// z-labriary使用的字体
+// z-labriary使用的字体族
 // font-family: Stolzl Book, Helvetica, Arial, sans-serif;
 
 // chatGPT使用的字体族
@@ -17,18 +17,40 @@
 @--CornFlowerBlue: #6495ED;
 // @colorPicker: #d8d8d8
 // @--background-color:linear-gradient(90deg, #e2e2e2, #c9d6ff);
+
 * {
-  margin: 0;
-  /* 去掉默认的外边距 */
+  margin: 0; // 去掉默认的外边距
   padding: 0;
   box-sizing: border-box;
-  font-family: @baseFontFamily;
+  font-family: @baseFontFamily; // tailwind.config.js中配置过了，这里是为了兼容历史问题
 }
-
 
 html,
 body {
   height: 100%;
+}
+
+// 用tailwind规则配置滚动条样式
+@layer utilities {
+  .scrollbar::-webkit-scrollbar {
+    width: 5px;
+    height: 10px;
+  }
+
+  // .scrollbar::-webkit-scrollbar-track {
+  //   border-radius: 100vh;
+  //   background: #d09815;
+  // }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    background: #99b8f2;
+    border-radius: 100vh;
+    // border: 3px solid #f6f7ed;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #82a9f1;
+  }
 }
 
 
@@ -37,49 +59,3 @@ body {
 //   color: pink;
 //   background: red;
 // }
-
-// .wrapper {
-//   display: grid;
-//   height: 800px;
-//   grid-gap: 10px;
-//   // grid-template-columns: 100px auto 50px;
-//   // grid-template-rows: 100px auto 50px;
-//   // grid-template-areas:
-//   //   "header header header"
-//   //   "leftSideBar content rightSideBar"
-//   //   "footer footer  footer";
-
-//   grid-template:
-//     "header header header" 100px
-//     "leftSideBar content rightSideBar" auto
-//     "footer footer  footer" 50px / 100px auto 50px;
-
-//   // background: pink;
-//   // color: #444;
-// }
-
-// .item:nth-child(1) {
-//   // background: red;
-//   grid-area: header;
-// }
-
-// .item:nth-child(2) {
-//   // background: blue;
-//   grid-area: leftSideBar;
-// }
-
-// .item:nth-child(3) {
-//   // background: green;
-//   grid-area: content;
-// }
-
-// .item:nth-child(4) {
-//   // background: darkblue;
-//   grid-area: rightSideBar;
-// }
-
-// .item:nth-child(5) {
-//   // background: darkgreen;
-//   grid-area: footer;
-// }
-

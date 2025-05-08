@@ -20,13 +20,21 @@ export default function CommunityCard() {
         </div>
       </div>
 
-      <div className="p-6">
+      <div className="p-6 w-full">
         <h5 className="truncate mb-2 block text-xl font-bold leading-snug text-lightTextColor dark:text-darkTextColor antialiased">
           Community NameCommunity NameCommunity NameCommunity NameCommunity NameCommunity Name
         </h5>
-        {/* BUG：line-clamp-5不起作用，无法截断 ；实在不行考虑限制最高高度*/}
-        <p className="block line-clamp-6 max-h-[144px] text-ellipsis font-light text-gray-700 dark:text-[#F6F0FC] antialiased">
-          Community describe. Nulla dolor velit adipisicing duis excepteur esse in duis nostrud occaecat mollit incididunt deserunt sunt. Ut ut sunt laborum ex occaecat eu tempor labore enim adipisicing minim ad. Est in quis eu dolore occaecat excepteur fugiat dolore nisi aliqua fugiat enim ut cillum. Labore enim duis nostrud eu. Est ut eiusmod consequat irure quis deserunt ex. Enim laboris dolor magna pariatur. Dolor et ad sint voluptate sunt elit mollit officia ad enim sit consectetur enim.
+        {/*
+          BUG：line-clamp-5不起作用，无法截断 ；实在不行考虑限制最高高度
+          fixed：
+            1、删除 max-h-[144px]：line-clamp 本身通过行数控制高度，固定高度会与行数控制逻辑冲突
+            2、添加 overflow-hidden：强制隐藏超出容器部分（line-clamp 生效必要条件）
+            3、保持 text-ellipsis：显示省略号（需配合 overflow 使用）和 line-clamp-6
+            4、添加 break-words：允许长单词换行（避免单个单词过长撑破布局）
+            5、父容器需有宽度约束（示例中父容器 p-6 的父级应有宽度限制），若外层没有明确宽度，可在当前容器添加 max-w-[...]
+        */}
+        <p className="break-words overflow-hidden line-clamp-6 text-ellipsis font-light text-gray-700 dark:text-[#F6F0FC] antialiased">
+          Community describe. Nulla dolor velit adipisicingadipisicingadipisicingadipisicing duis excepteur esse in duis nostrud occaecat mollit incididunt deserunt sunt. Ut ut sunt laborum ex occaecat eu tempor labore enim adipisicing minim ad. Est in quis eu dolore occaecat excepteur fugiat dolore nisi aliqua fugiat enim ut cillum. Labore enim duis nostrud eu. Est ut eiusmod consequat irure quis deserunt ex. Enim laboris dolor magna pariatur. Dolor et ad sint voluptate sunt elit mollit officia ad enim sit consectetur enim.
         </p>
       </div>
 

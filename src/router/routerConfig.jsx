@@ -5,6 +5,7 @@ import NotFoundPage from "../pages/notFoundPage/NotFoundPage";
 import HomePage from "../pages/homePage/HomePage";
 import ChatPage from "../pages/chatPage/ChatPage";
 import ContactsPage from "../pages/contactsPage/ContactsPage";
+import ChatsPage from "../pages/chatsPage/ChatsPage";
 import CommunitysHomePage from "../pages/communitysHomePage/CommunitysHomePage";
 import { createBrowserRouter } from "react-router";
 
@@ -24,6 +25,10 @@ const routes = [
       {
         path: 'contacts',
         element: <ContactsPage />,
+      },
+      {
+        path: 'chats',
+        element: <ChatsPage />,
       },
       {
         path: 'allcommunitys',

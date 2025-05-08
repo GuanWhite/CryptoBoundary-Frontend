@@ -17,9 +17,13 @@ const items = [
     icon: <OpenAIOutlined />,
   },
   {
-    key: 'contacts',
-    label: 'Contacts',
+    key: 'easychat',
+    label: 'Easychat',
     icon: <TeamOutlined />,
+    children: [
+      { key: 'contacts', label: 'Contacts' },
+      { key: 'chats', label: 'Chats' },
+    ],
   },
   {
     key: 'communitys',

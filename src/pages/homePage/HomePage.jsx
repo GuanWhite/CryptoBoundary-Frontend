@@ -16,7 +16,7 @@ const HomePage = () => {
   });
 
   const location = useLocation();
-  console.log('location:', location);
+  // console.log('location:', location);
 
   return (
     <div className="min-h-screen w-full flex bg-lightBackgroundColor dark:bg-darkBackgroundColor">
