@@ -18,7 +18,7 @@ export default function ContactListCard() {
       </div>
       {/* 
         BUG：名字div的长度无法截断且会挤占头像的位置导致头像无法正常显示 
-        fiexed：
+        fixed：
           1、给头像的div设置flex-shrink-0阻止flex项收缩；（非必须设置）
           2、给名字的div添加 min-w-0 覆盖默认最小宽度限制；（必须设置！因为该设置允许内容收缩）
           3、给H3的父元素加上显式宽度w-full，truncate生效的前提是其父元素有宽度限制（必须设置，否则会向右突破边界，不会截断）

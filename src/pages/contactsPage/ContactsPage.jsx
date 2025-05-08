@@ -2,6 +2,7 @@ import React from 'react';
 import ContactListCard from '../../components/ContactListCard/ContactListCard';
 import AddFriendButton from '../../components/AddFriendButton/AddFriendButton';
 import SearchBox from '../../components/SearchBox/SearchBox';
+import EndLine from '../../components/EndLine/EndLine';
 
 export default function ContactsPage() {
   return (
@@ -27,8 +28,8 @@ export default function ContactsPage() {
           <ContactListCard />
           <ContactListCard />
         </div>
-        {/* 结束标志 */}
-        <div className="w-full mt-[1.5em] pt-[1.2em] border-t-[0.15em] border-dashed border-[rgba(0,0,0,0.15)]" />
+        {/* 列表结束标志 */}
+        <EndLine />
       </div>
       {/* 
         在右侧展示联系人的相关信息和管理联系人（修改备注，删除联系人，朋友的来源），未点击联系人卡片时显示“快去找人聊天吧”，
