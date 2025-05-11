@@ -9,8 +9,7 @@ export default function SendMessageButton() {
       >
         <span
           class="truncate eaes-in-out duration-300 group-active:-translate-x-96 group-focus:translate-x-96"
-        >Send Message</span
-        >
+        >Send Message</span>
         <div
           class="absolute flex flex-row justify-center items-center gap-2 -translate-x-96 eaes-in-out duration-300 group-active:translate-x-0 group-focus:translate-x-0"
         >

@@ -10,7 +10,7 @@ export default {
       colors: {
         // 'backgroundColor': 'linear-gradient(90deg, #e2e2e2, #c9d6ff)',
         // 渐变的写法是“bg-gradient-to-r from-blue-500 to-green-300”（从左到右，从蓝色到绿色）
-        'lightBackgroundColor': '#ffffff',
+        'lightBackgroundColor': '#fbfbfb',
         'lightContentColor': '#F3F4F6',
         'lightSidenavColor': '#f3f5f6',
         'lightTextColor': '#0f172a',

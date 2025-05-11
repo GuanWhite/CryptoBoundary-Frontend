@@ -1,21 +1,8 @@
 import React, { useState } from 'react';
 import { Input, Button } from 'antd';
 
-
 const { TextArea } = Input;
 
-// const InputBox = () => {
-//   return (
-//     <div className='inputbox-container'>
-//       <div className="inputbox-inputArea">
-//         <input type={"text"} placeholder="Ask anything"></input>
-//       </div>
-//       <div className="inputbox-buttonArea">
-//         <button className="inputbox-button">send</button>
-//       </div>
-//     </div>
-//   );
-// };
 const InputBox = () => {
   const [value, setValue] = useState('');
   const [loadings, setLoadings] = useState([]);
@@ -41,7 +28,7 @@ const InputBox = () => {
     <div className='font-baseFont bg-[#F3F4F6] dark:bg-[#404045] h-fit w-full rounded-2xl p-4'>
       <div className="bg-[#F3F4F6] dark:bg-[#404045] h-fit w-full p-2">
         <TextArea
-          className="font-baseFont border-none text-base bg-[#F3F4F6] hover:bg-[#F3F4F6] focus:bg-[#F3F4F6] dark:bg-[#404045] dark:hover:bg-[#404045] dark:focus:bg-[#404045] dark:text-[#f5f5f5] focus:shadow-none placeholder:text-slate-400"
+          className="overflow-auto scrollbar font-baseFont border-none text-base bg-[#F3F4F6] hover:bg-[#F3F4F6] focus:bg-[#F3F4F6] dark:bg-[#404045] dark:hover:bg-[#404045] dark:focus:bg-[#404045] dark:text-[#f5f5f5] focus:shadow-none placeholder:text-slate-400"
           value={value}
           onChange={(e) => setValue(e.target.value)}
           placeholder="Ask anything..."

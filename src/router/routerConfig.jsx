@@ -7,6 +7,7 @@ import ChatPage from "../pages/chatPage/ChatPage";
 import ContactsPage from "../pages/contactsPage/ContactsPage";
 import ChatsPage from "../pages/chatsPage/ChatsPage";
 import CommunitysHomePage from "../pages/communitysHomePage/CommunitysHomePage";
+import MyProfilePage from "../pages/myProfilePage/MyProfilePage";
 import { createBrowserRouter } from "react-router";
 
 const routes = [
@@ -16,7 +17,7 @@ const routes = [
     children: [
       {
         path: 'profile',
-        element: <div>My Profile</div>,
+        element: <MyProfilePage />,
       },
       {
         path: 'chat',
@@ -44,7 +45,7 @@ const routes = [
       },
       {
         path: 'setting',
-        element: <div>Setting</div>,
+        element: <div>System Settings</div>,
       },
     ],
   },

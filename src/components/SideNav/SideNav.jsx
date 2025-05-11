@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router";
-import { AppstoreOutlined, SlidersOutlined, SettingOutlined, OpenAIOutlined, ProfileOutlined, DiscordOutlined, DollarOutlined, TeamOutlined } from '@ant-design/icons';
+import {
+  AppstoreOutlined,
+  SlidersOutlined,
+  SettingOutlined,
+  OpenAIOutlined,
+  ProfileOutlined,
+  DiscordOutlined,
+  DollarOutlined,
+  TeamOutlined
+} from '@ant-design/icons';
 import { Menu } from 'antd';
 import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import logoSVG from "../../assets/react.svg";
@@ -103,7 +112,12 @@ export default function SideNav({ theme = "dark" }) {
         items={items}
       />
       <div className='w-full flex justify-center items-center px-[24px] py-[10px]'>
-        <ThemeToggle/>
+        <ThemeToggle />
+      </div>
+
+      {/* 用户状态信息工具箱 */}
+      <div className=''>
+
       </div>
     </div>
   );

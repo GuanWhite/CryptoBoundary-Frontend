@@ -16,7 +16,7 @@ export default function ConversationListCard({ count = 100 }) {
         {/* 这里放用户头像 */}
         <img
           src={BG1}
-          alt="Community"
+          alt="User"
           className="w-full h-full object-cover rounded-full" />
       </div>
 
