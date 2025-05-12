@@ -18,6 +18,7 @@ export default function MyProfilePage() {
     introduction: "I am a student",
     avatarURL: BG1,
     bannerURL: "",
+    bannerColor: "#6495ED",
   };
   useEffect(() => {
     // 通过请求或get本地存储获取用户信息
@@ -32,6 +33,7 @@ export default function MyProfilePage() {
   const [introduction, setIntroduction] = useState(userData.introduction);
   const [avatarUrl, setAvatarUrl] = useState(userData.avatarURL);
   const [bannerUrl, setBannerUrl] = useState(userData.bannerURL);
+  const [bannerColor, setBannerColor] = useState(userData.bannerColor);
 
   const [isAvatarModalVisible, setIsAvatarModalVisible] = useState(false);
   const [isBannerModalVisible, setIsBannerModalVisible] = useState(false);
@@ -50,6 +52,10 @@ export default function MyProfilePage() {
   const setBannerUrlTool = (url) => {
     setBannerUrl(url);
   };
+  const setBannerColorTool = (color) => {
+    setBannerColor(color);
+    // 存储到本地进行持久化，防止刷新页面后失效
+  };
 
   const handleUploadAvatar = () => {
     setIsAvatarModalVisible(true);
@@ -65,7 +71,17 @@ export default function MyProfilePage() {
         {/* 背景框，为遮罩层添加上传文件的弹窗和背景遮罩，弹窗中有colorPicker */}
         <div
           onClick={handleUploadBanner}
-          className="w-full h-[120px] bg-blue-400 rounded-t-lg relative group overflow-hidden">
+          // Tailwind CSS 是一个 原子类框架，它在 构建阶段（build time） 使用工具（如 PostCSS 或 CLI）静态分析你的类名，比如 bg-red-500、bg-[#2ccf6d]，然后只编译用到的类名。
+          // 但当你用变量拼接（bg-[#${bannerColor}]）时，Tailwind 无法提前识别变量值，所以对应的 CSS 类就不会被生成。
+          // 所以我们需要使用 inline style 来动态设置背景颜色。
+          className={`w-full h-[120px] rounded-t-lg relative group overflow-hidden`}
+          style={{ backgroundColor: `${bannerColor}` }}
+        >
+          {bannerUrl === "" ? (<></>) : (
+            <img
+              src={bannerUrl}
+              alt="BannerImgae"
+              className="w-full h-full object-cover" />)}
           <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer text-white text-xl font-medium">
             <EditOutlined className="mr-[5px]" /> Replace banner
           </div>
@@ -74,6 +90,8 @@ export default function MyProfilePage() {
           visible={isBannerModalVisible}
           handleVisible={handleBannerModalVisible}
           setBannerUrl={setBannerUrlTool}
+          bannerColor={bannerColor}
+          setBannerColor={setBannerColorTool}
         />
         {/* 头像和昵称 */}
         <div className="w-full h-[80px] flex items-center px-[20px]">
