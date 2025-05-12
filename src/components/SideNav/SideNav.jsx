@@ -79,7 +79,7 @@ const items = [
   },
   {
     key: 'setting',
-    label: 'Setting',
+    label: 'Settings',
     icon: <SettingOutlined />,
   },
 ];
