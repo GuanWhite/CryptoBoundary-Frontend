@@ -65,17 +65,17 @@ export default function SelectBannerModal({
   return (
     <Modal
       width={568}
-      height={540}
+      height={490}
       centered
       open={visible}
       footer={null}  // 禁用默认的底部按钮
       // confirmLoading={confirmLoading}
       onCancel={handleCancel}
     >
-      <div className="p-6 w-[520px] h-[500px] flex flex-col justify-center items-center">
+      <div className="p-6 w-[520px] h-[450px] flex flex-col justify-center items-center">
         <h2 className="text-xl font-semibold">Select an Image or Change Banner Color</h2>
         <div className='w-full flex justify-start my-[20px]'>
-          <div className='mr-[15px]'>
+          <div className='mr-[15px] flex flex-col justify-center gap-3'>
             <Upload
               // name="avatar" // 发到后台的文件参数名
               // withCredentials	//上传请求时是否携带 cookie
@@ -112,6 +112,14 @@ export default function SelectBannerModal({
             <div className='font-thin text-base w-[230px]'>
               Upload a PNG, JPG, WEPG, or GIF under 4MB. Images should be at least 680x240.
             </div>
+            {/* 添加一个reset按钮，用于清除banner图片（现有逻辑是一旦上传了图片就一直显示图片，无法再显示color） */}
+            <button
+              onClick={setBannerUrl("")}
+              className="h-[40px] font-bold border-none cursor-pointer rounded-[0.75em] bg-blue-700">
+              <span className="h-full block box-border border-2 border-blue-700 rounded-[0.75em] bg-blue-500 text-[16px]/[40px] text-white -translate-y-[0.2em] transition-transform duration-100 ease-linear hover:-translate-y-[0.33em] active:translate-y-0">
+                Reset
+              </span>
+            </button>
           </div>
 
           <ColorPicker
@@ -122,10 +130,9 @@ export default function SelectBannerModal({
             disabledAlpha
             format={formatHex}
             onFormatChange={setFormatHex}
-            value={bannerColor}
+            value={colorHex}
             onChange={handleColorChange}
           />
-          {/* <span>{bannerColor}</span> */}
         </div>
       </div>
     </Modal>

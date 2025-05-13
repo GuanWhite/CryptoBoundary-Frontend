@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import BG1 from "../../assets/bg1.jpg";
 import {
   EditOutlined
@@ -6,8 +6,8 @@ import {
 import { Avatar, Button } from 'antd';
 import SelectImageModal from "../../components/SelectImageModal/SelectImageModal";
 import SelectBannerModal from "../../components/SelectBannerModal/SelectBannerModal";
-
-
+import { throttle } from '../../utils/throttle';
+import { debounce } from '../../utils/debounce';
 export default function MyProfilePage() {
   const userData = {
     displayName: "GYL",
@@ -52,10 +52,15 @@ export default function MyProfilePage() {
   const setBannerUrlTool = (url) => {
     setBannerUrl(url);
   };
-  const setBannerColorTool = (color) => {
-    setBannerColor(color);
-    // 存储到本地进行持久化，防止刷新页面后失效
-  };
+  const setBannerColorTool = useMemo(() => {
+    // 要加防抖，否则子组件频繁调用父组件的setBannerColor会导致React超出最大更新深度而崩溃
+    // 用防抖而不用节流的原因是：只需要在最后一次设置到父组件中即可，子组件中colorPicker跟随的颜色不绑定父组件的state，所以不妨碍colorPicker中流畅的显色展示
+    return debounce((color) => {
+      setBannerColor(color);
+      // 存储到本地进行持久化，防止刷新页面后失效
+      // localStorage.setItem('bannerColor', color);
+    }, 300);
+  }, []);
 
   const handleUploadAvatar = () => {
     setIsAvatarModalVisible(true);
@@ -122,62 +127,68 @@ export default function MyProfilePage() {
 
         {/* 相关信息 */}
         <div className="w-full flex-1 rounded-b-lg px-[20px] pb-[20px]">
-          <div className="flex flex-col w-full h-full bg-lightBackgroundColor dark:bg-darkBackgroundColor rounded-lg text-base font-semibold text-lightTextColor dark:text-darkTextColor">
+          <div className="flex flex-col w-full h-full pt-[10px] bg-lightBackgroundColor dark:bg-darkBackgroundColor rounded-lg text-base font-semibold text-lightTextColor dark:text-darkTextColor">
             {/* 昵称（最开始用户的昵称等于用户名）、性别、用户名、邮箱、手机号码、个人简介。 修改密码放在setting中 */}
             <div className="w-full h-[60px] px-[20px] flex justify-between items-center">
               <div>{`Display Name: ${displayName}`}</div>
-              <Button
-                // onClick={}
-                type="primary"
-                className="text-[16px] rounded-[6px]" >
-                Edit
-              </Button>
+              <button
+                // onClick={ }
+                className="h-[40px] text-[16px] font-bold border-none cursor-pointer rounded-[0.75em] bg-blue-700">
+                <span className="h-full block box-border border-2 border-blue-700 rounded-[0.75em] px-6 py-[8px] bg-blue-500 text-white -translate-y-[0.2em] transition-transform duration-100 ease-linear hover:-translate-y-[0.33em] active:translate-y-0">
+                  Edit
+                </span>
+              </button>
             </div>
             <div className="w-full h-[60px] px-[20px] flex justify-between items-center">
               <div>{`Gender: ${gender}`}</div>
-              <Button
-                // onClick={}
-                type="primary"
-                className="text-[16px] rounded-[6px]" >
-                Edit
-              </Button>
+              <button
+                // onClick={ }
+                className="h-[40px] text-[16px] font-bold border-none cursor-pointer rounded-[0.75em] bg-blue-700">
+                <span className="h-full block box-border border-2 border-blue-700 rounded-[0.75em] px-6 py-[8px] bg-blue-500 text-white -translate-y-[0.2em] transition-transform duration-100 ease-linear hover:-translate-y-[0.33em] active:translate-y-0">
+                  Edit
+                </span>
+              </button>
             </div>
             <div className="w-full h-[60px] px-[20px] flex justify-between items-center">
               <div>{`Username: ${username}`}</div>
-              <Button
-                // onClick={}
-                type="primary"
-                className="text-[16px] rounded-[6px]" >
-                Edit
-              </Button>
+              <button
+                // onClick={ }
+                className="h-[40px] text-[16px] font-bold border-none cursor-pointer rounded-[0.75em] bg-blue-700">
+                <span className="h-full block box-border border-2 border-blue-700 rounded-[0.75em] px-6 py-[8px] bg-blue-500 text-white -translate-y-[0.2em] transition-transform duration-100 ease-linear hover:-translate-y-[0.33em] active:translate-y-0">
+                  Edit
+                </span>
+              </button>
             </div>
             <div className="w-full h-[60px] px-[20px] flex justify-between items-center">
               <div>{`Email: ${email}`}</div>
-              <Button
-                // onClick={}
-                type="primary"
-                className="text-[16px] rounded-[6px]" >
-                Edit
-              </Button>
+              <button
+                // onClick={ }
+                className="h-[40px] text-[16px] font-bold border-none cursor-pointer rounded-[0.75em] bg-blue-700">
+                <span className="h-full block box-border border-2 border-blue-700 rounded-[0.75em] px-6 py-[8px] bg-blue-500 text-white -translate-y-[0.2em] transition-transform duration-100 ease-linear hover:-translate-y-[0.33em] active:translate-y-0">
+                  Edit
+                </span>
+              </button>
             </div>
             <div className="w-full h-[60px] px-[20px] flex justify-between items-center">
               <div>{`Phone Number: ${phoneNumber}`}</div>
-              <Button
-                // onClick={}
-                type="primary"
-                className="text-[16px] rounded-[6px]" >
-                Edit
-              </Button>
+              <button
+                // onClick={ }
+                className="h-[40px] text-[16px] font-bold border-none cursor-pointer rounded-[0.75em] bg-blue-700">
+                <span className="h-full block box-border border-2 border-blue-700 rounded-[0.75em] px-6 py-[8px] bg-blue-500 text-white -translate-y-[0.2em] transition-transform duration-100 ease-linear hover:-translate-y-[0.33em] active:translate-y-0">
+                  Edit
+                </span>
+              </button>
             </div>
             <div className="w-full flex flex-col flex-1 px-[20px] py-[14px]">
               <div className='flex justify-between items-center mb-3'>
                 <div>{`Introduction: `}</div>
-                <Button
-                  // onClick={}
-                  type="primary"
-                  className="text-[16px] rounded-[6px]" >
-                  Edit
-                </Button>
+                <button
+                  // onClick={ }
+                  className="h-[40px] text-[16px] font-bold border-none cursor-pointer rounded-[0.75em] bg-blue-700">
+                  <span className="h-full block box-border border-2 border-blue-700 rounded-[0.75em] px-6 py-[8px] bg-blue-500 text-white -translate-y-[0.2em] transition-transform duration-100 ease-linear hover:-translate-y-[0.33em] active:translate-y-0">
+                    Edit
+                  </span>
+                </button>
               </div>
               <div className='w-full flex-1 font-medium break-words overflow-hidden line-clamp-4 text-ellipsis'>
                 {introduction}
