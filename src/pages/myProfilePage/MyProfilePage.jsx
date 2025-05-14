@@ -8,6 +8,7 @@ import SelectImageModal from "../../components/SelectImageModal/SelectImageModal
 import SelectBannerModal from "../../components/SelectBannerModal/SelectBannerModal";
 import { throttle } from '../../utils/throttle';
 import { debounce } from '../../utils/debounce';
+
 export default function MyProfilePage() {
   const userData = {
     displayName: "GYL",
