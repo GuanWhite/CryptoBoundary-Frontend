@@ -344,6 +344,10 @@ function Login() {
             <button className="btn login-btn" onClick={switchAnimation}>Login</button>
           </div>
         </div>
+        <div className="top:calc(50%, 50px)\margin\-margin\flex\grid">
+          
+
+        </div>
       </div>
     </div>
   );
