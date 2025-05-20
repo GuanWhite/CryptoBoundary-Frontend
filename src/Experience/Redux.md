@@ -2041,6 +2041,890 @@ Hireee
 1、请你自我介绍一下你自己？ 回答提示：一般人回答这个问题过于平常，只说姓名、年龄、爱好、工作经验，这些在简历上都有。其实，企业最希望知道的是求职者能否胜任工作，包括：最强的技能…
 
 蓝兰兰
+# 类型
+
+类型：一系列值及可以对其执行的操作。
+
+TypeScript 的常用类型包括：
+
+1. 基础类型:string、number、boolean、null、undefined、symbol、bigint
+2. 复杂类型:array、tuple、enum、object
+3. 特殊类型:any、unknown、never、void
+4. 高级类型和操作：联合类型`|`、交叉类型`&`、类型别名 `type`、接口`interface`.
+
+<img src="TypeScript.assets/image-20250507144221580.png" alt="image-20250507144221580" style="zoom:50%;" />
+
+## 类型系统
+
+类型系统就是类型检查器为程序分配类型时使用的一系列规则。
+
+一般来说，类型系统有两种：
+
+1. 通过显式句法告诉编译器所有值的类型。
+2. 自动推导值的类型。
+
+> 不同语言采用不同的类型系统：
+>
+> - JavaScript、Python和Ruby在运行时推导类型;
+> - Haskell 和 OCaml 在编译时推导和检查类型;
+> - Scala和TypeScript要求显式声明部分类型，然后在编译时推导和检查余下的部分;
+> - Java和C几乎需要显式注解所有类型然后在编译时检查。
+
+TypeScript身兼两种类型系统，可以显式注解类型，也可以让TypeScript推导多数类型。为了显式告知TypeScript你使用的是什么类型，需要使用注解，注解的形式为: `value: type`，下面是一些示例：
+
+```ts
+// 标示注解，即声明了类型
+let a: number = 1 								 	//a是一个数字 
+let b: string = 'hello'						 	//b是一个字符串
+let c: boolean[] = [true, false]		//c是一个布尔值数组
+
+// 去掉注解，让自动TypeScript推导类型，即变成了JS
+let a = 1								//a是一个数字
+let b = 'hello'					//b是一个字符串
+let c = [true, false] 	//c是一个布尔值数组
+```
+
+一般来说，最好让TypeScript推导类型，少数情况下才显式注解类型。
+
+### TS vs JS
+
+| 类型系统特性      | JavaScript       | TypeScript       |
+| ----------------- | ---------------- | ---------------- |
+| 类型是如何绑定的? | 动态             | 静态             |
+| 是否自动转换类型? | 是               | 否(多数时候)     |
+| 何时检查类型?     | 运行时           | 编译时           |
+| 何时报告错误?     | 运行时(多数时候) | 编译时(多数时候) |
+
+## 类型自面量
+
+把类型设为某个值，就限制了变量在所有类型值中只能取指定的那个值。这个特性称为类型字面量(typeliteral)，即**仅表示一个值的类型**。
+
+```ts
+let e: true = true		// true
+let f: true = false		// Error T2322:Type 'false' is not assignable to type 'true'.
+```
+
+## 对象字面量
+
+可以用于声明对象类型，对象字面量句法的意思是，让TS知道“这个东西的结构是这样的。”这个“东西”可能是一个对象字面量，也可能是一个类。
+
+与目前所讲的基本类型(boolean、number、bigint、string和symbol)不同，使用const声明对象不会导致TypeScript把推导的类型缩窄。这是因为JavaScript对象是可变的，所以在TypeScript看来，创建对象之后你可能会更新对象的字段。
+
+## any
+
+any是类型的教父。为达目的，它不惜一切代价，但是不要轻易请它出面，除非迫不得已。
+
+在TypeScript中，编译时一切都要有类型，如果你(程序员)和TypeScript(类型检査器)无法确定类型是什么，默认为any。这是兜底类型但应该尽量避免使用。
+
+因为any包含所有值，而且可以对其做任何操作。这意味着，any类型的值可以做加法可以做乘法，也可以调用.pizza()方法，一切皆可。这使得any类型的值就像常规的JavaScript一样，类型检查器完全发挥不了作用。
+
+如果一定要使用any，则必须显示声明any类型，否则当TS推导出值的类型为any将会抛出运行时异常。
+
+## unknown
+
+少数情况下，如果你确实无法预知一个值的类型，不要使用any，应该使用unknown。与any类似，unknown也表示任何值，但是TypeScript会要求你再做检查，细化类型。
+
+unknown 类型支持的操作：
+
+- 比较：`==`、`===`、`||`、`&&`和`?`
+- 否定：`!`
+- `typeof`和`instanceof`运算符进行细化
+
+
+
+注意：
+
+1. TypeScript不会把任何值推导为unknown类型，必须显式注解（变量a）
+2. unknown 类型的值可以比较（变量b）
+3. 执行操作时不能假定unknown类型的值为某种特定类型（变量c），必须先向TypeScript证明一个值确实是某个类型（变量d）
+
+```ts
+let a: unknown = 30  	// unknown
+let b = a === 123			// boolean
+let c = a + 10				//Error TS2571:0bject is of type 'unknown'.
+if(typeof a === 'number'){
+  let d = a + 10			// number
+}
+```
+
+## null、undefined、void 和 never
+
+在TypeScript中与JS类似，`null`类型的含义是缺少值，其值只有 `null` 一个值，`undefined`类型的含义是尚未赋值的变量，其值只有`undefined`一个值。除此之外，TypeScript还有`void`和`never` 类型。这两个类型有明确的特殊作用，进一步划分不同情况下的“不存在”含义：
+
+`void`是函数没有显式返回任何值（例如console.log）时的返回类型;
+
+`never`是函数根本不返回（例如函数抛出异常，或者永远运行下去）时使用的类型。
+
+如果说unknown是其他每个类型的父类型，那么never就是其他每个类型的子类型。我们可以把never理解为“兜底类型”。这意味着，never类型可赋值给其他任何类型，在任何地方都能放心使用never类型的值。
+
+## boolean
+
+boolean类型有两个值：true和false。该类型的值可以比较(使用`==`、`||`、`&&`和`?`)、可以否定(使用`!`)，此外则没有多少操作。
+
+声明Boolean类型的四种方式：
+
+1. 可以让 TypeScript 推导出值的类型为 boolean(a和b)
+2. 可以让 TypeScript推导出值为某个具体的布尔值(c)
+3. 可以明确告诉 TypeScript，值的类型为boolean(d)
+4. 可以明确告诉 TypeScript，值为某个具体的布尔值(e和f)
+
+```ts
+let a = true 						// boolean
+var b = false						// boolean
+const c = true					// true
+let d: boolean = true		// boolean
+let e: true = true			// true
+let f: true = false			//Error TS2322:Type'false'is not assignable// to type 'true'.
+```
+
+一般来说，我们在程序中采用第一种或第二种方式。极少数情况下使用第四种方式，仅当需要额外提升类型安全时(后文将对此举例)。第三种方式几乎从不使用。
+
+## number
+
+number 包括所有数字：整数、浮点数、正数、负数、Infinity、NaN等。
+
+显然：数字可以做算术运算，例如加(+)、减(-)、求模(%)和比较(<)。
+
+处理较长的数字时，为了便于辨识数字，建议使用数字分隔符。在类型和值所在的位置上都可以使用数字分隔符。
+
+```
+let oneMillion = 1_000_000			//等同于1000000
+let twoMillion: 2_000_000 = 2_000_000
+```
+
+## bigint
+
+bigint是JavaScript和TypeScript新引入的类型，在处理较大的整数时，不用再担心舍入误差。number类型表示的整数最大为$2^{53}$，bigint能表示的数比这大得多。
+
+bigint类型包含所有BigInt数，支持加(+)、减(-)、乘(*)、除(/)和比较(＞)。
+
+## string
+
+string包含所有字符串，以及可以对字符串执行的操作，例如拼接(+)、切片(.slice)等。
+
+## symbol
+
+ES2015推出的新类型。常用于代替对象和映射的字符串键，确保使用正确的已知键，以防键被意外设置，例如设置对象的默认选代器(Symbol.iterator)，或者在运行时覆盖不管对象是什么的实例(Symbol.hasnstance)。
+
+## object
+
+TypeScript的对象类型表示对象的结构。注意，通过对象类型无法区分不同的简单对象(使用`{}`创建)或复杂的对象(使用`new Blah`创建)。
+
+这是一种设计选择，JavaScript一般采用结构化类型，TypeScript直接沿用，而没有采用名义化类型。
+
+为对象写注解：
+
+```ts
+let c:{
+	firstName: string,
+  lastName: string
+} = {
+  frstName: 'john',
+  lastName:'barrowman
+}
+
+或
+
+let c:{
+	firstName: string,
+  lastName: string
+}
+c = {
+  frstName: 'john',
+  lastName:'barrowman
+}
+```
+
+注意：
+
+1. 对象的注解要明确赋值，非可选的属性一定要有，且不多不少。
+
+2. 用修饰符`?`表示可选属性，或缺不报错。
+
+3. 使用索引签名 `[key: T]: U` 来指定对象有任意数量的属性。
+
+   这种句法的意思是，“在这个对象中类型为T的键对应的值为U类型。”借助索引签名，除显式声明的键之外，可以放心添加更多的键。注意，键的类型T必须可赋值给number或string。
+
+4. 可以用修饰符`readonly`把字符段标记为只读，类似于`const`声明的变量。
+
+
+
+综上所述，在TypeScript中声明对象类型有四种方式：
+
+1. 对象字面量表示法(例如`{a:string}`)，也称对象的结构。如果知道对象有哪些字段，或者对象的值都为相同的类型，使用这种方式。
+2. 空对象字面量表示法(`{}`)。尽量避免使用这种方式。
+3. `object`类型。如果需要一个对象,但对对象的字段没有要求，使用这种方式。
+4. `Object`类型。尽量避免使用这种方式。
+
+## array
+
+TypeScript 支持两种注解数组类型的句法，二者的作用和性能无异，本书采用T[]句法，因为写法更简洁。
+
+```
+T[]
+和
+Array<T>
+其中T代表数据类型，如number，string...
+```
+
+一般来说，数组是要保证同质化的，即不建议存不同类型的数据，但在创建时可以存放不同类型的数据，TS会将数据的联合类型推断为数组的类型。如下面的例子：
+
+```ts
+let d = [1,'a',true]   //(string|number|boolean)[]
+d.push({a:10})    // Error 2345:Argument of type '{a:10}' is not assignable to parameter of type 'string | number | boolean'.
+```
+
+与上面的情况类似，下面的例子也比较特殊。初始化空数组时，TypeScript不知道数组中元素的类型，推导出的类型为any。向数组中添加元素后，TypeScript开始拼凑数组的类型。当数组离开定义时所在的作用域后（buildArray函数外），TypeScript将最终确定一个类型，不再扩张：
+
+```ts
+function buildArray(){
+  let a = []  	// any[]
+  a.push(1)			// number[]
+  a.push('x')		//(string|number)[]
+  return a
+}
+
+let myArray = buildArray()	//(string| number)[]
+myArray.push(true)		//Error 2345:Argument of type 'true' is not assignable to parameter of type 'string | number'.
+```
+
+## tuple
+
+元组是array的子类型，是定义数组的一种特殊方式，长度固定，各索引位上的值具有固定的已知类型。与其他多数类型不同，声明元组时必须显式注解类型。这是因为，创建元组使用的句法与数组相同(都使用方括号)，而TypeScript遇到方括号，推导出来的是数组的类型。
+
+## enum
+
+枚举的作用是列举类型中包含的各个值。这是一种无序数据结构，把键映射到值上。枚举可以理解为编译时键固定的对象，访问键时，TypeScript将检查指定的键是否存在。
+
+枚举分为两种（按约定，枚举名称为大写的单数形式。枚举中的键也为大写。）：
+
+- 字符串到字符串之间的映射
+
+  ```ts
+  enum Language {
+  	English,
+    Spanish,
+    Russian
+  }
+  ```
+
+- 字符串到数字之间的映射
+
+  ```ts
+  enum Language {
+    English = 0,
+    Spanish = 1,
+    Russian = 2
+  }
+  ```
+
+- 枚举的值可以混用字符串和数字
+
+  ```ts
+  enum Color {
+  	Red = '#c10000'
+  	Blue = '#007ac1'
+  	Pink = 0xc10050,		//十六进制字面量
+  	White = 255					//十进制字面量
+  }
+  ```
+
+
+
+枚举中的值使用**点号**或**方括号表示法**访问，就像访问常规对象中的值一样：
+
+```ts
+let myFirstLanguage = Language.Russian			// Language
+let mySecondLanguage = Language['English']	// Language
+
+// 甚至可以用值访问，这是仅当枚举没有被const给保护的时候
+let myThredLanguage = Language[0]  					// string
+let myErrorLanguage = Language[6]						// string(!!!!)
+// 其实Language[6]不存在，但是TypeScript并不阻止你这么做。为了避免这种不安全的访问操作，可以通过const enum指定使用枚举的安全子集。
+// const enum不允许反向查找，行为与常规的JavaScript对象很像。另外，默认也不生成任何JavaScript代码，而是在用到枚举成员的地方内插对应的值(例如，TypeScript将把Language.Spanish替换成对应的值，即1)。
+```
+
+注意：**在枚举中应该只使用字符串值**
+
+```ts
+// 错误示范：
+const enum Flippable{
+	Burger,
+	Chair,
+	Cup,
+	Skateboard,
+  Table
+}
+function flip(f:Flippable){
+  return 'fipped it';
+}
+flip(Flippable.chair)		// 'fipped it'
+flip(Flippable.cup)			// 'fipped it'
+flip(12)								// 'fipped it'(!!!)
+// 赋值非预期的参数也会导致执行。这个行为是TypeScript的赋值规则导致的不良后果，为了修正这个问题，在枚举中应该只使用字符串值。
+
+//正确示范：
+const enum Flippable{
+	Burger ='Burger',
+	Chair ='Chair',
+	Cup ='Cup',
+  Skateboard ='Skateboard',
+  Table ='Table
+}
+function fip(f: Flippable){
+  return 'fipped it'
+}
+flip(Flippable.chair)		// 'fipped it
+flip(Flippable.Cup)			// 'fipped it
+flip(12)								//Error TS2345:Argument of type'12'is not assignable to parameter of type 'Flippable'.
+flip('Hat')							//Error TS2345:Argument of type "Hat"'is not assignable to parameter of type 'Flippable'.
+```
+
+
+
+## 类型别名
+
+我们可以使用变量声明(let、const和var)为值声明别名，类似地，还可以为类型声明别名。具体做法如下：
+
+```ts
+type Age = number
+type Person = {
+	name: string,
+  age: Age
+}
+```
+
+注意：
+
+1. TypeScript无法推导类型别名，因此必须显式注解。
+2. 使用类型别名的地方都可以替换成源类型，程序的语义不受影响。
+3. 与JavaScript中的变量声明(let、const和var)一样，同一类型不能声明两次。
+4. 同样与let和const一样的是，类型别名采用块级作用域。每一块代码和每一个函数都有自己的作用域，内部的类型别名将遮盖外部的类型别名。
+
+## 联合与交叉类型
+
+```ts
+// 联合类型：允许变量是其中的一种或同时是所有类似
+function printId(id: string | number): void {
+   console.log(`ID: ${id}`);
+}
+
+// 交叉类型：允许变量是声明的交集。
+interface Person {
+   name: string;
+}
+
+interface Employee {
+   employeeId: number;
+}
+
+type EmployeePerson = Person & Employee;
+
+const emp: EmployeePerson = { name: "Alice", employeeId: 101 };
+```
+
+
+
+# 函数
+
+## 声明和调用函数
+
+通常，需要显式注解函数的参数。因为TypeScript能推导出函数体中的类型，但是多数情况下无法推导出参数的类型，只在少数特殊情况下能根据上下文推导出参数的类型。
+
+返回类型能推导出来不过也可以显式注解，但建议省略，因为TS可以自行推导。
+
+**声明函数的方式：**
+
+1. 具名函数
+
+   ```ts
+   function greet(name:string){
+   	return 'hello' + name
+   }
+   ```
+
+2. 函数表达式
+
+   ```ts
+   let greet2 = function(name: string){
+   	return 'hello' + name
+   }
+   ```
+
+3. 箭头函数表达式
+
+   ```ts
+   let greet3 = (name:string) => {
+   	return 'hello' + name
+   }
+   ```
+
+4. 箭头函数表达式简写形式
+
+   ```ts
+   let greet4 = (name:string) => 'hello' + name
+   ```
+
+5. 函数构造方法
+
+   ```ts
+   let greet5 = new Function('name', 'return "hello" + name')
+   // 这种方法不建议，因为没有体现到TS的类型，它可以使用任何参数调用函数，即使是不合法的行为，TS也不会制止。
+   ```
+
+## 可选和默认参数
+
+与对象和元组类型一样，可以使用`?`把参数标记为可选的。声明函数的参数时，必要的参数放在前面，随后才是可选的参数：
+
+```ts
+function log(message: string, userId?: string){
+  let time = new Date().toLocaleTimeString()
+  console.log(time, message, userId || 'Not signed in')
+}
+log('Page loaded')								// Logs "12:38:31 PM Page loaded Not signed in"
+log('User signed in','da763be')		// Logs "12:38:31 PM User signed in da763be'
+```
+
+与在JavaScript中一样，可以为可选参数提供默认值。这样做在语义上与把参数标记为可选的一样，即在调用时无需传入参数的值（区别是，带默认值的参数不要求放在参数列表的末尾，而可选参数必须放在末尾）：
+
+```ts
+function log(message: string, userId = 'Not signed in'){
+  let time = new Date().toLocaleTimeString()
+  console.log(time, message, userId)
+}
+log('Page loaded')								// Logs "12:38:31 PM Page loaded Not signed in"
+log('User signed in','da763be')		// Logs "12:38:31 PM User signed in da763be'
+```
+
+注意，我们为userId提供了默认值，而且删除了可选参数注解`?`。这个参数在调用时可以不提供值。TypeScript足够智能，能根据默认值推导出参数的类型，从而保证代码简洁、易于理解。
+
+当然，如果愿意也可以显式注解默认参数的类型，就像没有默认值的参数一样：
+
+```ts
+type Context = {
+	appId?: string
+	userId?: string
+}
+function log(message: string, context: Context = {}){
+  let time = new Date().toIsOstring()
+  console.log(time,message, context.userId)
+}
+```
+
+较之可选参数，更常使用默认参数。
+
+## 剩余参数
+
+一个函数最多只能有一个剩余参数，而且必须位于参数列表的最后。
+
+以TypeScript内置函数`console.log`的接口为例，该方法接受一个可选的参数`message`，以及任意个要输出的额外参数：
+
+```ts
+interface Console{
+  log(message?: any, ...optionalParams: any[]): void
+}
+```
+
+## call、apply和bind
+
+调用函数，除了使用圆括号`()`之外，JavaScript至少还支持两种其他方式。以本章前面的add函数为例：
+
+```ts
+function add(a:number,b:number):number{
+  return a+b
+}
+add(10，20)									//求值结果为30
+add.apply(null,[10,20]))		//求值结果为30
+add.call(null,10,20)				//求值结果为30
+add.bind(null,10,20)()			//求值结果为30
+```
+
+`apply()`为函数内部的this绑定一个值，然后展开第二个参数，作为参数传给要调用的函数。
+
+`call()`的用法类似，不过是按顺序应用参数的，而不做展开。
+
+`bind()`差不多，也为函数的this和参数绑定值。不过，bind并不调用函数而是返回一个新函数，让你通过`()`、`.call`或`.apply`调用，而且可以再传入参数，绑定到尚未绑定值的参数上。
+
+## 注解this的类型
+
+如果函数使用`this`，请在函数的第一个参数中声明`this`的类型(放在其他参数之前)，这样每次调用函数时，TypeScript将确保`this`的确是你预期的类型。this不是常规的参数，而是保留字，是函数签名的一部分：
+
+```ts
+function fancyDate(this: Date){
+  return ${this.getDate()}/${this.getMonth()}/${this.getFullYear()}
+}
+```
+
+现在，调用`fancyDate`函数将得到如下结果，可以避免this类型错误时导致的运行时错误：
+
+```ts
+fancyDate.call(new Date) //求值结果为"6/13/2008"
+fancyDate()//Error TS2684:The 'this' context of type 'void' is not assignable to method's 'this of type 'Date'.
+```
+
+## 生成器函数
+
+生成器函数（简称生成器）是生成一系列值的便利方式。生成器的使用方可以精确控制生成什么值。生成器是惰性的,只在使用方要求时才计算下一个值。鉴于此，可以利用生成器实现一些其他方式难以实现的操作，例如生成无穷列表。
+
+生成器是JS中的一个特性，且在TS中同样支持。
+
+## 迭代器
+
+迭代器是生成器的相对面：生成器是生成一系列值的方式，而迭代器是使用这些值的方式。
+
+## 调用签名
+
+一般来说，函数本身的类型是`Function`，类似于`object`可以描述所有的对象，`Function`也可以描述所有的函数，这并不是我们想要的，因为这样不能体现具体一个函数的具体类型。
+
+我们使用**调用签名**（类型签名）来表示函数的类型，使用方法如下：
+
+```ts
+// 简写型调用签名
+type addFunc = (a: number, b: number) => number
+
+// 完整型调用签名
+type addFunc = {
+   (a: number, b: number): number
+}
+```
+
+注意，调用签名的句法与箭头函数十分相似，这是有意为之的。如果把函数做为参数传给另一个函数，或者作为其他函数的返回值，就要使用这样的句法注解类型。
+
+函数的调用签名只包含类型层面的代码，即只有类型，没有值。因此，函数的调用签名可以表示**参数的类型、this的类型、返回值的类型、剩余参数的类型和可选参数的类型**，但是无法表示默认值（因为默认值是值不是类型）。调用签名没有函数的定义体，无法推导出返回类型，所以必须显式注解。
+
+具体示例，使用单独的调用签名表示函数的类型，然后绑定给类型别名：
+
+```ts
+//function greet(name: string)
+type Greet=(name:string) => string
+
+//function log(message: string,userId?:string)
+type Log=(message:string,userId?:string) => void
+
+//function sumVariadicSafe(...numbers: number[]): number
+type SumVariadicSafe=(...numbers: number[]) => number
+```
+
+使用调用签名声明函数的示例：
+
+```ts
+type Log = (message:string, userId?:string) => void
+
+let log:Log = (  							// 1
+  message,										// 2
+  userId = 'Not signed in'		// 3
+)=>{													// 4
+  let time = new Date().toISostring()
+  console.log(time, message, userId)
+}
+```
+
+解释：
+
+1. 声明一个函数表达式log，显式注解其类型为Log。
+2. 不必再次注解参数的类型，因为在定义Log类型时已经注解了message的类型为 string。这里不用再次注解，TypeScript能从 Log 中推导出来。
+3. 为userd设置一个默认值。userId的类型可以从Log的签名中获取，但是默认值却不得而知，因为Log是类型，不包含值。
+4. 无需再次注解返回类型，因为在Log类型中已经声明为void。
+
+## 上下文类型推导
+
+注意，上一节的示例是我们见过的第一次不用显式注解函数参数类型的情况。由于我们已经把 log的类型声明为 Log，所以 TypeScript能从上下文中推导出message的类型为string。这是TypeScript类型推导的一个强大特性，称为上下文类型推导(contextualtyping)。
+
+## 函数类型重载
+
+[TS中的函数重载【渡一教育】_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1kS421w7DR/?spm_id_from=333.337.search-card.all.click&vd_source=6c5598aa8c959c49f206edcf7b5182d2)
+
+## 泛型 Generics
+
+TypeScript 的泛型是在类型层面施加约束的占位类型，也称多态类型参数。即一种让类型可以参数化的工具。它不仅仅局限于某个特定的类型，而是可以接受任意的类型参数。泛型的主要目的是增强代码的复用性，同时保持良好的类型安全性。
+
+### 基本用法
+
+代码示例：
+
+```typescript
+// 简单示例
+function getFirst<T>(arr: T[]): T {
+  return arr[0];
+}
+
+// 函数调用时，需要提供类型参数。
+getFirst<number>([1, 2, 3]);
+```
+
+上面示例中，函数`getFirst()`的函数名后面尖括号的部分`<T>`，就是类型参数，参数要放在一对尖括号（`<>`）里面。本例只有一个类型参数`T`，可以将其理解为类型声明需要的变量，需要在调用时传入具体的参数类型。
+
+当参数简单时TypeScript 会从实际参数，推断出类型参数 T 的值是什么。但有些复杂的使用场景，TypeScript 可能推断不出类型参数的值，这时就必须显式给出了。如：
+
+```typescript
+function comb<T>(arr1: T[], arr2: T[]): T[] {
+  return arr1.concat(arr2);
+}
+```
+
+上面示例中，两个参数`arr1`、`arr2`和返回值都是同一个类型。如果不给出类型参数的值，下面的调用会报错。
+
+```typescript
+comb([1, 2], ["a", "b"]); // 报错
+```
+
+上面示例会报错，TypeScript 认为两个参数不是同一个类型。但是，如果类型参数是一个联合类型，就不会报错。
+
+```typescript
+comb<number | string>([1, 2], ["a", "b"]); // 正确
+```
+
+
+
+对于函数重载的用法：
+
+```ts
+// 定义函数重载签名
+type Filter = {
+	<T>(array: T[], f: (item:T) = >boolean): T[]
+}
+
+let filter:Filter = (array,f) => {
+  let result = []
+  for(let i=0; i<array.length; i++){
+    let item = array[i]
+    if(f(item)){
+			result.push(item)
+    }
+  }
+  return result
+}
+
+//(a)T绑定为 number
+filter([1，2，3], _ => _ > 2)
+//(b)T绑定为 string
+filter(['a', 'b'], _ => _ !== 'b')
+//(c)T绑定为{firstName:string}
+let names = {
+  {firstName:'beth'},
+  {firstName:'caitlyn'},
+  {firstName:'xin'}
+}
+filter(names, _ => _.firstName.startsWith('b'))
+```
+
+TypeScript根据传入的参数的类型推导泛型绑定的类型。下面分析一下TypeScript如何绑定(a)情况下T的类型：
+
+1. 根据filter的类型签名，TypeScript知道array中的元素为某种类型T。
+2. TypeScript知道传入的数组是[1，2，3]，因此T必定是`number`。
+3. TypeScript遇到T，便把它替换成`number`。因此，参数`f:(item:T)=>boolean`将变成`f:(item:number)=>boolean`，返回类型`T[]`将变成`number[]`。
+4. 经检查，TypeScript确认这些类型都满足可赋值性，而且传入的f函数可赋值给刚推导出的签名。
+
+### 泛型的绑定时机
+
+TypeScript在使用泛型时为泛型绑定具体类型：
+
+- 对函数来说，在调用函数时；
+- 对类来说，在实例化类时；
+- 对类型别名和接口来说，在使用别名和实现接口时；
+
+### 泛型的声明位置
+
+只要是TypeScript支持的声明调用签名的方式，都可以在签名中加入泛型：
+
+```ts
+type Filter = { // 1
+	<T>(array: T[], f: (item: T) => boolean): T[]
+}
+let filter:Filter = //..
+
+type Filter<T> = { // 2
+  (array: T[], f: (item: T) => boolean): T[]
+}
+let filter: Filter<number> = //..
+
+type Filter = <T>(array: [], f: (item: T) => boolean) => T[]  // 3
+let filter: Filter = //...
+
+type Filter<T> = (array: T[], f: (item: T) => boolean) => T[]  // 4
+let filter: Filter<string> = //...
+    
+function filter<T>(array: T[], f: (item: T) => boolean): T[]{  // 5
+  //...
+}
+```
+
+1. 一个完整的调用签名，T的作用域在单个签名中。鉴于此，TypeScript将在调用filter类型的函数时为签名中的T绑定具体类型。每次调用filter将为T绑定独立的类型。
+2. 一个完整的调用签名，T的作用域涵盖全部签名。由于T是Filter类型的一部分（而不属于某个具体的签名），因此TypeScript将在声明Filter类型的函数时绑定T。
+3. 与1类似，不过声明的不是完整调用签名，而是简写形式。
+4. 与2类似，不过声明的不是完整调用签名，而是简写形式。
+5. 一个具名函数调用签名，T的作用域在签名中。TypeScript将在调用filter时为T绑定具体类型，而且每次调用filter将为T绑定独立的类型。
+
+
+
+再举个例子：编写map函数。map的作用与filter基本一样，但是不从数组中删除元素，而是通过映射函数转换各个元素。
+
+```ts
+function map<T, U>(array: T[], f: (item: T) => U): U[] {
+  let res = []
+  for(let i = 0; i < array.length; i++){
+    res[i] = f(array[i])
+  }
+  return res;
+}
+```
+
+多数情况下，TypeScript能自动推导出泛型。例如调用前面编写的`map`函数，经TypeScript推导，T的类型是`string`，U的类型是`boolean`：
+
+```ts
+map(
+  ['a', 'b', 'c'],
+  _ => _ === 'a'
+)
+```
+
+不过，也可以显式注解泛型。显式注解泛型时，要么所有必须的泛型都注解，要么都不注解：
+
+```ts
+map <string,boolean>(
+  ['a', 'b', 'c'],
+  _ => _ === 'a'
+)
+
+map <string>(	//Error TS2558:Expected 2 type arguments, but got 1.
+  ['a', 'b', 'c'],
+  _ => _ === 'a'
+)
+```
+
+### 泛型别名
+
+```ts
+type Filter<T> = { // 2
+  (array: T[], f: (item: T) => boolean): T[]
+}
+
+type MyEvent<T> = {
+  target: T
+  type: string
+}
+```
+
+上面这种声明方法也称为**泛型别名**，即在类型别名中使用了泛型。
+
+注意：在类型别名中只有这一个地方可以声明泛型，即紧随类型别名的名称之后、赋值运算符(=)之前。
+
+MyEvent的target属性指向触发事件的元素，比如一个`<button/>`、一个`<div/>`等。例如，可以像下面这样描述一个按钮事件：
+
+```ts
+type ButtonEvent = MyEvent<HTMLButtonElement>
+```
+
+使用MyEvent这样的泛型时，必须显式绑定类型参数，TypeScript无法自行推导：
+
+```ts
+let myEvent: MyEvent<HTMLButtonElement | null> = {
+	target: document.querySelector('#myButton'),
+	type: 'click'
+}
+```
+
+我们可以使用 MyEvent构建其他类型，比如说TimedEvent。绑定TimedEvent中的泛型T时，TypeScript同时还会把它绑定给MyEvent：
+
+```ts
+type TimedEvent<T> = {
+  event: MyEvent<T>
+  from: Date
+	to: Date
+}
+```
+
+泛型别名也可以在函数的签名中使用。TypeScript为T绑定类型时，还会自动为MyEvent绑定：
+
+```ts
+// 声明
+function triggerEvent<T>(event: MyEvent<T>): void {
+  // ...
+}
+
+// 调用
+triggerEvent({	// T是Eement | null 
+  target: document.querySelector('#myButton'),
+  type: "mouseover"
+})
+```
+
+说明：
+
+1. 调用 triggerEvent 时传入一个对象。
+2. 根据函数的签名，TypeScript认定传入的参数类型必为`MyEvent<T>`。TypeScript还发现定义 `MyEvent<T>`时声明的类型为`{target:T, type:string}`。
+3. TypeScript发现传给该对象target字段的值为`document.querySelector('#myButton')`。这意味着，T必定为`document.querySelector('#myButton')`的类型，即为`Eement | null`。因此T绑定为`Eement | null`。
+4. TypeScript检查全部代码，把T出现的每一处替换为`Eement | null`。
+5. TypeScript确认所有类型都满足可赋值性，确保代码是类型安全的。
+
+# 类和接口
+
+### 接口`interface`
+
+接口(Interface)是TypeScript 中用于定义对象结构的工具。它允许我们描述对象的形状，比如对象有哪些属性以及属性的类型。这有助于在代码中提高类型检查的精确度，让代码更为严谨。简单来说，接口就是一种声明，但不会在编译后生成任何代码。定义接口很简单，使用 interface 关键字来声明接口，然后在大括号{}内描述属性和类型。比如：
+
+```typescript
+// 定义一个名为Person的接口，它应该具有2个属性和1个方法
+interface Person {
+  name: string;
+  age: number;
+  greet: () => void;
+}
+```
+
+
+
+接口和类型别名通常可以互换使用，但接口更适合用于定义对象结构，而类型别名更灵活，甚至可以表示联合类型或交叉类型。
+
+```typescript
+type StringOrNumber = string | number;  // 联合类型
+type PersonWithAddress = Person & { address: string };  // 交叉类型
+```
+
+
+
+# 八股题
+
+
+
+
+
+## 装饰器 Decorator
+
+装饰器（Decorator）是一种语法结构，用来在定义时修改或添加类（class）的种特定行为。
+
+在语法上，装饰器有如下几个特征。
+
+（1）第一个字符（或者说前缀）是`@`，后面是一个表达式。
+
+（2）`@`后面的表达式，必须是一个函数（或者执行后可以得到一个函数）。
+
+（3）这个函数接受所修饰对象的一些相关值作为参数。
+
+（4）这个函数要么不返回值，要么返回一个新对象取代所修饰的目标对象。
+
+
+
+代码示例：
+
+```typescript
+function simpleDecorator(target: any, context: any) {
+  console.log("hi, this is " + target);
+  return target;
+}
+
+@simpleDecorator
+class A {} // "hi, this is class A {}"
+```
+
+类`A`在执行前会先执行装饰器`simpleDecorator()`，并且会向装饰器自动传入参数。
+
+
+
+# END
+
+
+
 
 
 选择语言
