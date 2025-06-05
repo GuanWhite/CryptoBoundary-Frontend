@@ -15,19 +15,25 @@
 @--white: #fff;
 @--green: #2ccf6d;
 @--CornFlowerBlue: #6495ED;
-// @colorPicker: #393a41;
+@colorPicker: #f9f9f9;
 // @--background-color:linear-gradient(90deg, #e2e2e2, #c9d6ff);
 
 * {
   margin: 0; // 去掉默认的外边距
   padding: 0;
   box-sizing: border-box;
+  border: 0 solid;
   font-family: @baseFontFamily; // tailwind.config.js中配置过了，这里是为了兼容历史问题
 }
 
-html,
+html {
+  height: 100%;
+  // font-size: 10px; // 设置默认字体大小
+  // scroll-behavior: smooth; // 平滑滚动
+}
 body {
   height: 100%;
+  font-size: 14px; // 设置默认字体大小
 }
 
 // 用tailwind规则配置滚动条样式

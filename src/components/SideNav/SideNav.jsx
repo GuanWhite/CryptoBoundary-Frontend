@@ -8,7 +8,8 @@ import {
   ProfileOutlined,
   DiscordOutlined,
   DollarOutlined,
-  TeamOutlined
+  TeamOutlined,
+  YoutubeOutlined
 } from '@ant-design/icons';
 import { Menu } from 'antd';
 import ThemeToggle from '../ThemeToggle/ThemeToggle';
@@ -54,10 +55,22 @@ const items = [
     label: 'Crypto Exchange',
     icon: <SlidersOutlined />,
     children: [
-      { key: '1', label: 'Option 1' },
-      { key: '2', label: 'Option 2' },
-      { key: '3', label: 'Option 3' },
-      { key: '4', label: 'Option 4' },
+      { key: 'assets', label: 'Assets' },
+      { key: 'trade', label: 'Trade' },
+      // { key: '3', label: 'Option 3' },
+      // { key: '4', label: 'Option 4' },
+    ],
+  },
+  {
+    key: 'youtube',
+    label: 'YouTube',
+    icon: <YoutubeOutlined />,
+    children: [
+      { key: 'youtubeHome', label: 'Home' },
+      { key: 'youtubeSubscriptions', label: 'Subscriptions' },
+      { key: 'youtubeHistory', label: 'History' },
+      { key: 'youtubeLiked', label: 'Liked' },
+      { key: 'youtubePalylists', label: 'Palylists' },
     ],
   },
   {
