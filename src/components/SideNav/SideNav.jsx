@@ -108,7 +108,7 @@ export default function SideNav({ theme = "dark" }) {
     navigate(`/${e.key}`);
   };
   return (
-    <div className='w-[205px] min-h-screen bg-lightSidenavColor dark:bg-darkSidenavColor text-lightTextColor dark:text-darkTextColor'>
+    <div className='w-[205px] min-h-screen bg-lightSidenavColor dark:bg-darkSidenavColor text-lightTextColor dark:text-darkTextColor select-none'>
       {/* 添加一些其他的信息 */}
       <div className='w-full h-[80px] flex justify-center items-center px-[24px]'>
         <img src={logoSVG} alt="logo" className="size-[40px]" />
