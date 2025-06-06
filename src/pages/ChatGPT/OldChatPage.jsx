@@ -2,8 +2,7 @@ import "./ChatPage.less";
 import React from 'react';
 import InputBox from "../../components/InputBox/InputBox";
 
-const ChatPage = () => {
-
+export default function OldChatPage() {
   return (
     // 浅色：侧边栏#f3f5f6 输入框边框#dce0e9 输入框#F3F4F6 背景#ffffff
     // 深色：侧边栏#212327 输入框边框#5a5a69 输入框#404045 背景#292a2d
@@ -23,6 +22,4 @@ const ChatPage = () => {
       </div>
     </div>
   );
-};
-
-export default ChatPage;
+}

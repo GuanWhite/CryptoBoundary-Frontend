@@ -5,9 +5,10 @@ import {
   SearchOutlined,
   OpenAIOutlined,
 } from '@ant-design/icons';
+import { Tooltip } from 'antd';
 import SideBarItem from './SideBarItem';
 
-export default function SideBar({isOpenSideBar, setIsOpenSideBar}) {
+export default function SideBar({ isOpenSideBar, setIsOpenSideBar }) {
   const closeSideBar = () => {
     setIsOpenSideBar(prev => !prev);
   };
@@ -19,16 +20,20 @@ export default function SideBar({isOpenSideBar, setIsOpenSideBar}) {
     <div className='min-h-screen w-[210px] flex flex-col dark:bg-[#171717] bg-[#f9f9f9] max-h-screen overflow-auto scrollbar '>
       {/* 工具箱 */}
       <div className="sticky top-0 flex justify-between items-center pt-[12px] px-[8px] h-[56px] dark:bg-[#171717] bg-[#f9f9f9]">
-        <button
-          className="hover:bg-[#e7e7e7] dark:hover:bg-[#3a3a3a] size-[40px] rounded-lg px-2"
-          onClick={newChat}>
-          <OpenAIOutlined className="text-[24px]" />
-        </button>
-        <button
-          className="hover:bg-[#e7e7e7] dark:hover:bg-[#3a3a3a] size-[40px] rounded-lg px-2"
-          onClick={closeSideBar}>
-          <CloseOutlined className="text-[24px]" />
-        </button>
+        <Tooltip placement="right" title="New a chat">
+          <button
+            className="hover:bg-[#e7e7e7] dark:hover:bg-[#3a3a3a] size-[40px] rounded-lg px-2"
+            onClick={newChat}>
+            <OpenAIOutlined className="text-[24px]" />
+          </button>
+        </Tooltip>
+        <Tooltip placement="left" title="Close sidebar">
+          <button
+            className="hover:bg-[#e7e7e7] dark:hover:bg-[#3a3a3a] size-[40px] rounded-lg px-2"
+            onClick={closeSideBar}>
+            <CloseOutlined className="text-[24px]" />
+          </button>
+        </Tooltip>
       </div>
 
       {/* 功能栏 */}
