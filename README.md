@@ -23,6 +23,7 @@ the technology stack used in this project is:
 - Redux
 - Axios
 - React-Router
+- TailwindCSS
 - Less
 - Ant Design
 
