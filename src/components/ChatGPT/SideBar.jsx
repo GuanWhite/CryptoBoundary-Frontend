@@ -8,12 +8,14 @@ import {
 import { Tooltip } from 'antd';
 import SideBarItem from './SideBarItem';
 
-export default function SideBar({ isOpenSideBar, setIsOpenSideBar }) {
+
+export default function SideBar({ isOpenSideBar, setIsOpenSideBar, setChatID, data }) {
   const closeSideBar = () => {
     setIsOpenSideBar(prev => !prev);
   };
   const newChat = () => {
     console.log("new chat");
+    setChatID(''); // 清空当前聊天ID，表示新建聊天
   };
 
   return (
@@ -59,86 +61,16 @@ export default function SideBar({ isOpenSideBar, setIsOpenSideBar }) {
         <div className='mx-[6px] px-[10px] py-[8px] flex items-center text-[#babac1] cursor-default'>
           Chat history
         </div>
-        <SideBarItem context={'Test content'} />
-        <SideBarItem context={'User Greeting'} />
-        <SideBarItem context={'May i help you'} />
-        <SideBarItem context={'Pages notFoundPage NotFoundPage'} />
-        <SideBarItem context={'Test content'} />
-        <SideBarItem context={'User Greeting'} />
-        <SideBarItem context={'May i help you'} />
-        <SideBarItem context={'Pages notFoundPage NotFoundPage'} /><SideBarItem context={'Test content'} />
-        <SideBarItem context={'User Greeting'} />
-        <SideBarItem context={'May i help you'} />
-        <SideBarItem context={'Pages notFoundPage NotFoundPage'} /><SideBarItem context={'Test content'} />
-        <SideBarItem context={'User Greeting'} />
-        <SideBarItem context={'May i help you'} />
-        <SideBarItem context={'Pages notFoundPage NotFoundPage'} /><SideBarItem context={'Test content'} />
-        <SideBarItem context={'User Greeting'} />
-        <SideBarItem context={'May i help you'} />
-        <SideBarItem context={'Pages notFoundPage NotFoundPage'} /><SideBarItem context={'Test content'} />
-        <SideBarItem context={'User Greeting'} />
-        <SideBarItem context={'May i help you'} />
-        <SideBarItem context={'Pages notFoundPage NotFoundPage'} /><SideBarItem context={'Test content'} />
-        <SideBarItem context={'User Greeting'} />
-        <SideBarItem context={'May i help you'} />
-        <SideBarItem context={'Pages notFoundPage NotFoundPage'} /><SideBarItem context={'Test content'} />
-        <SideBarItem context={'User Greeting'} />
-        <SideBarItem context={'May i help you'} />
-        <SideBarItem context={'Pages notFoundPage NotFoundPage'} /><SideBarItem context={'Test content'} />
-        <SideBarItem context={'User Greeting'} />
-        <SideBarItem context={'May i help you'} />
-        <SideBarItem context={'Pages notFoundPage NotFoundPage'} /><SideBarItem context={'Test content'} />
-        <SideBarItem context={'User Greeting'} />
-        <SideBarItem context={'May i help you'} />
-        <SideBarItem context={'Pages notFoundPage NotFoundPage'} /><SideBarItem context={'Test content'} />
-        <SideBarItem context={'User Greeting'} />
-        <SideBarItem context={'May i help you'} />
-        <SideBarItem context={'Pages notFoundPage NotFoundPage'} /><SideBarItem context={'Test content'} />
-        <SideBarItem context={'User Greeting'} />
-        <SideBarItem context={'May i help you'} />
-        <SideBarItem context={'Pages notFoundPage NotFoundPage'} /><SideBarItem context={'Test content'} />
-        <SideBarItem context={'User Greeting'} />
-        <SideBarItem context={'May i help you'} />
-        <SideBarItem context={'Pages notFoundPage NotFoundPage'} /><SideBarItem context={'Test content'} />
-        <SideBarItem context={'User Greeting'} />
-        <SideBarItem context={'May i help you'} />
-        <SideBarItem context={'Pages notFoundPage NotFoundPage'} /><SideBarItem context={'Test content'} />
-        <SideBarItem context={'User Greeting'} />
-        <SideBarItem context={'May i help you'} />
-        <SideBarItem context={'Pages notFoundPage NotFoundPage'} /><SideBarItem context={'Test content'} />
-        <SideBarItem context={'User Greeting'} />
-        <SideBarItem context={'May i help you'} />
-        <SideBarItem context={'Pages notFoundPage NotFoundPage'} /><SideBarItem context={'Test content'} />
-        <SideBarItem context={'User Greeting'} />
-        <SideBarItem context={'May i help you'} />
-        <SideBarItem context={'Pages notFoundPage NotFoundPage'} /><SideBarItem context={'Test content'} />
-        <SideBarItem context={'User Greeting'} />
-        <SideBarItem context={'May i help you'} />
-        <SideBarItem context={'Pages notFoundPage NotFoundPage'} /><SideBarItem context={'Test content'} />
-        <SideBarItem context={'User Greeting'} />
-        <SideBarItem context={'May i help you'} />
-        <SideBarItem context={'Pages notFoundPage NotFoundPage'} /><SideBarItem context={'Test content'} />
-        <SideBarItem context={'User Greeting'} />
-        <SideBarItem context={'May i help you'} />
-        <SideBarItem context={'Pages notFoundPage NotFoundPage'} /><SideBarItem context={'Test content'} />
-        <SideBarItem context={'User Greeting'} />
-        <SideBarItem context={'May i help you'} />
-        <SideBarItem context={'Pages notFoundPage NotFoundPage'} /><SideBarItem context={'Test content'} />
-        <SideBarItem context={'User Greeting'} />
-        <SideBarItem context={'May i help you'} />
-        <SideBarItem context={'Pages notFoundPage NotFoundPage'} /><SideBarItem context={'Test content'} />
-        <SideBarItem context={'User Greeting'} />
-        <SideBarItem context={'May i help you'} />
-        <SideBarItem context={'Pages notFoundPage NotFoundPage'} /><SideBarItem context={'Test content'} />
-        <SideBarItem context={'User Greeting'} />
-        <SideBarItem context={'May i help you'} />
-        <SideBarItem context={'Pages notFoundPage NotFoundPage'} /><SideBarItem context={'Test content'} />
-        <SideBarItem context={'User Greeting'} />
-        <SideBarItem context={'May i help you'} />
-        <SideBarItem context={'Pages notFoundPage NotFoundPage'} /><SideBarItem context={'Test content'} />
-        <SideBarItem context={'User Greeting'} />
-        <SideBarItem context={'May i help you'} />
-        <SideBarItem context={'Pages notFoundPage NotFoundPage'} />
+        {data.map((item, index) => {
+          return (
+            <SideBarItem
+              key={index}
+              chatId={item.conversation_id}
+              setChatID={setChatID}
+              context={item.conversation_title}
+            />
+          );
+        })}
       </div>
     </div>
   );

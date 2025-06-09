@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { Input, Upload, Tooltip } from 'antd';
 import {
   PlusOutlined,
@@ -9,7 +10,30 @@ const { TextArea } = Input;
 const InputBox = () => {
   const [value, setValue] = useState('');
 
-  const handleClick = () => { };
+  const handleSubmit = async () => {
+    const message = {
+      role: 'user',
+      content: value.trim(),
+      createAt: new Date().toISOString(),
+      user: {
+        userId: '12345',
+      }
+    };
+    console.log(message);
+
+    try {
+      await axios.post('/api/chat', message); // 假设后端API为/api/chat
+      setValue(''); // 清空输入框
+    } catch (error) {
+      /* 进行错误提示，GPT的做法是：
+          1.根据某些信息生成一个会话ID，并创建一个会话页面（不知道网络不好时，仅在前端能不能确保该步骤完成）
+          2.把用户输入的内容先渲染到该会话的首部
+          3.并向后端发送请求，获取GPT的回复
+          4.生成GPT回复的占位组件，若请求失败则在该组件中显示错误信息
+          5.若请求成功，则替换占位组件为GPT的回复内容
+      */
+    }
+  };
 
   return (
     // 浅色：侧边栏#f3f5f6 输入框边框#dce0e9 输入框#F3F4F6 背景#ffffff
@@ -35,7 +59,7 @@ const InputBox = () => {
         <button
           className="size-[36px] rounded-full bg-black text-white hover:bg-gray-600 flex justify-center items-center disabled:bg-gray-300 disabled:cursor-not-allowed dark:bg-white dark:text-black dark:hover:bg-gray-300 dark:disabled:bg-gray-500 dark:disabled:text-gray-400"
           disabled={value.trim() === ''}
-          onClick={handleClick}>
+          onClick={handleSubmit}>
           <svg viewBox='0 0 32 32' fill='none'>
             <path
               fillRule='evenodd'

@@ -46,9 +46,9 @@ const MenuItemDetail = ({
         {icon}
       </div>
       <div className="flex-1 cursor-default">
-        <div className="text-sm font-medium">{title}</div>
+        <div className="text-nowrap text-sm font-medium">{title}</div>
         {description && (
-          <div className="text-xs">{description}</div>
+          <div className="text-nowrap text-xs">{description}</div>
         )}
       </div>
       <div>{element}</div>
