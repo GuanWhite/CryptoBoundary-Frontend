@@ -23,6 +23,9 @@ export default {
         'primaryColor': '#6495ED',
         'placeholderColor': '#babac1',
       },
+      gridTemplateColumns: {
+        'v4': 'repeat(4, minmax(300px, 1fr))',
+      },
     },
     fontFamily: {
       'baseFont': ['Nunito Sans', 'system-ui', 'Avenir', 'Helvetica', 'Arial', 'sans-serif'],

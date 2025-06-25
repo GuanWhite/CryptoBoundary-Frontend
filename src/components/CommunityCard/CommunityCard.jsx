@@ -6,7 +6,7 @@ import BG1 from "../../assets/bg1.jpg";
 
 export default function CommunityCard() {
   return (
-    <div className="relative mt-[60px] mb-[5px] flex w-80 flex-col rounded-xl bg-lightContentColor dark:bg-darkContentColor shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+    <div className="relative mt-[60px] mb-[5px] flex flex-col rounded-xl bg-lightContentColor dark:bg-darkContentColor shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
       <div className="relative mx-4 -mt-6 h-40 overflow-hidden rounded-xl bg-clip-border shadow-lg group">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600">
           <img
@@ -20,7 +20,7 @@ export default function CommunityCard() {
         </div>
       </div>
 
-      <div className="p-6 w-full">
+      <div className="p-6 w-[300px]">
         <h5 className="truncate mb-2 block text-xl font-bold leading-snug text-lightTextColor dark:text-darkTextColor antialiased">
           Community NameCommunity NameCommunity NameCommunity NameCommunity NameCommunity Name
         </h5>
@@ -40,7 +40,7 @@ export default function CommunityCard() {
 
       <div className="p-6 pt-0">
         <button
-          className=" w-full px-6 py-3 font-bold text-white rounded-lg bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 shadow-lg shadow-blue-500/30 hover:shadow-blue-500/40 transition-all duration-300 hover:-translate-y-0.5"
+          className="w-full px-6 py-3 font-bold text-white rounded-lg bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 shadow-lg shadow-blue-500/30 hover:shadow-blue-500/40 transition-all duration-300 hover:-translate-y-0.5"
           onClick={() => { console.log('Join Now'); }}>
           Join Now
         </button>
