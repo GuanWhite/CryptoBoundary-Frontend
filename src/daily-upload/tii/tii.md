@@ -150,8 +150,38 @@ The topic is interesting, however, the paper fails to discuss the following:
 
 
 ### work1
+（从网络博客中）：
+1. https://4o4notfound.org/index.php/archives/169/
+2. https://tianchi.aliyun.com/forum/post/33296
+3. https://mp.weixin.qq.com/s/s4ieR17-sisJFwl4j2_v0A
 
-我们选取了常见的攻击和一般化的渗透流程，并从中分析和提取涉及到的特征。
+（从误报数据集中）：从原数据中筛选出各个攻击的名称，以及其对应的出现过的特征名称
+1. 先生成提取字段的脚本
+2. 提取数据
+3. 按攻击名称分组，筛选需要的攻击及其对应的特征
+
+（从att&ck模型中）：我们从att&ck模型中选取了与我们的私有数据集有交集的常见攻击和一般化渗透手段，并综合私有数据集的告警特征和att&ck分析案例中的数据模型覆盖范围（Data Model Coverage）中的特征，竭尽详细地提取出了我们提出的特征集合。
+
+案例分析：https://car.mitre.org/analytics/
+1. 创建或修改进程、计划任务：https://car.mitre.org/analytics/CAR-2013-01-002/
+2. 生成cmd.exe进程（命令和脚本解释器）：https://car.mitre.org/analytics/CAR-2013-02-003/
+3. SMB写入请求（横向工具传输、远程服务）：https://car.mitre.org/analytics/CAR-2013-05-003/
+4. SMB复制和执行（远程服务）：https://car.mitre.org/analytics/CAR-2013-05-005/
+5. 运行具有相同哈希和不同名称的可执行文件（伪装）：https://car.mitre.org/analytics/CAR-2013-05-009/
+6. Service Outlier 可执行文件（创建或修改系统进程）：https://car.mitre.org/analytics/CAR-2013-09-005/
+7. 用户登录活动监控（远程服务、有效账户）：https://car.mitre.org/analytics/CAR-2013-10-001/
+8. 通过负载库进行 DLL 注入（进程注入、提权）：https://car.mitre.org/analytics/CAR-2013-10-002/
+9. UAC绕过（提权）：https://car.mitre.org/analytics/CAR-2019-04-001/
+10. 访问权限修改（文件和目录权限修改）：https://car.mitre.org/analytics/CAR-2019-07-001/
+11. 本地网络探查（网络嗅探）：https://car.mitre.org/analytics/CAR-2020-11-002/
+12. 使用 Mavinject 进行 DLL 注射（进程注入）：https://car.mitre.org/analytics/CAR-2020-11-003/
+13. 本地权限组发现（权限组发现）：https://car.mitre.org/analytics/CAR-2020-11-006/
+14. 使用 DDE 漏洞生成的异常子进程（进程间通信）：https://car.mitre.org/analytics/CAR-2021-01-006/
+15. 获取系统权限（提权）：https://car.mitre.org/analytics/CAR-2021-02-002/
+16. windows进程伪装（伪装）：https://car.mitre.org/analytics/CAR-2021-04-001/
+17. BITSAdmin 下载文件（工具传输）：https://car.mitre.org/analytics/CAR-2021-05-005/
+18. 创建管理员账户（创建账户）：https://car.mitre.org/analytics/CAR-2021-05-010/
+19. 在可疑文件路径中创建服务（系统服务）：https://car.mitre.org/analytics/CAR-2021-05-012/
 
 [MITRE ATT&CK® --- MITRE ATT&CK®](https://attack.mitre.org/#)
 
@@ -174,6 +204,128 @@ The topic is interesting, however, the paper fails to discuss the following:
    [Boot or Logon Autostart Execution, Technique T1547 - Enterprise | MITRE ATT&CK®](https://attack.mitre.org/techniques/T1547/)
 
    [Boot or Logon Initialization Scripts, Technique T1037 - Enterprise | MITRE ATT&CK®](https://attack.mitre.org/techniques/T1037/)
+
+（ai分析）
+
+下面是一个总结类文章，涵盖了常见网络攻击类型及其在流量数据上的特征表现，这些特征可以帮助识别潜在的攻击行为。
+
+常见攻击类型及其流量特征：
+
+1. DDoS攻击（分布式拒绝服务）
+- **流量特征**：
+  - 流量激增：短时间内流量异常暴涨
+  - 来源分散：来自大量不同IP地址的请求
+  - 协议异常：大量UDP/ICMP包（UDP洪水、ICMP洪水）
+  - 连接异常：大量半开连接（SYN洪水）
+  - 请求模式：重复请求模式（HTTP洪水）
+
+2. SQL注入攻击
+- **流量特征**：
+  - SQL关键字：请求中包含SELECT、UNION、DROP等关键字
+  - 特殊字符：大量单引号(')、分号(;)、注释符(--)
+  - 异常长度：URL或POST数据异常长
+  - 错误响应：服务器频繁返回500错误
+  - 请求频率：短时间内针对同一URL的多次尝试
+
+3. XSS跨站脚本攻击
+- **流量特征**：
+  - 脚本标签：请求中包含<script>、javascript:等
+  - 事件处理程序：onload、onerror等事件属性
+  - 编码内容：大量HTML实体编码(%3Cscript%3E)
+  - 来源可疑：来自非常规来源的请求
+  - 响应内容：响应中包含注入的脚本
+
+4. 暴力破解攻击
+- **流量特征**：
+  - 高频尝试：短时间内大量登录尝试
+  - 凭证变化：每次尝试使用不同用户名/密码
+  - 错误率：极高的401/403错误率
+  - 来源集中：通常来自少量IP地址
+  - 模式重复：固定间隔的重复尝试
+
+5. 端口扫描
+- **流量特征**：
+  - 多端口连接：同一源IP连接多个不同端口
+  - SYN扫描：大量SYN请求无后续ACK
+  - 连接失败：高比例的连接失败
+  - 时序模式：固定时间间隔的探测
+  - 目标分散：针对多个目标IP的探测
+
+6. 勒索软件通信
+- **流量特征**：
+  - 加密流量：大量TLS/SSL加密连接
+  - C2通信：周期性连接到命令控制服务器
+- 异常文件操作：大量文件读写请求
+  - 数据外泄：异常的大规模数据上传
+  - 协议异常：非常规端口上的HTTP/HTTPS
+
+
+关键检测指标
+| 检测指标 | 计算公式 | 攻击关联 |
+|---------|---------|---------|
+| **请求熵** | H = -Σ(p(x)log₂p(x)) | 低熵值可能表示DDoS攻击 |
+| **错误率** | 错误响应/总请求 | 高错误率可能表示扫描/注入攻击 |
+| **协议分布** | 各协议流量比例 | 异常协议分布可能表示C2通信 |
+| **连接完成率** | 完成连接/发起连接 | 低完成率可能表示端口扫描 |
+| **数据不对称** | 上传/下载比例 | 高上传比例可能表示数据外泄 |
+
+防御建议
+
+1. **基线建立**：
+   - 建立正常流量行为基线
+   - 持续监控偏离基线的异常行为
+
+2. **多层检测**：
+   ```mermaid
+   graph TD
+   A[网络层检测] -->|SYN洪水| B[传输层检测]
+   B -->|异常连接模式| C[应用层检测]
+   C -->|恶意内容| D[行为分析]
+   D -->|机器学习| E[威胁情报]
+   ```
+
+3. **自动化响应**：
+   - 自动阻断异常源IP
+   - 动态调整防火墙规则
+   - 实时流量清洗
+
+4. **深度包检测**：
+   - 检查HTTP头部异常
+   - 分析SSL/TLS握手特征
+   - 检测加密流量的元数据特征
+
+学习资源推荐
+
+1. **OWASP攻击特征文档**：
+   - 链接：https://owasp.org/www-community/attacks/
+   - 内容：详细的Web应用攻击特征和防御方法
+
+2. **SANS安全白皮书**：
+   - 链接：https://www.sans.org/white-papers/
+   - 内容：网络流量分析和攻击检测技术
+
+3. **MITRE ATT&CK框架**：
+   - 链接：https://attack.mitre.org/
+   - 内容：全面的攻击技术和检测方法
+
+4. **Cloudflare安全博客**：
+   - 链接：https://blog.cloudflare.com/
+   - 内容：实时攻击流量分析和防御案例
+
+5. **Cisco年度安全报告**：
+   - 链接：https://www.cisco.com/c/en/us/products/security/security-reports.html
+   - 内容：最新攻击趋势和流量特征分析
+
+总结
+
+通过分析网络流量特征识别攻击需要关注：
+1. **流量模式变化**：突增、突减或异常分布
+2. **协议和端口异常**：非常规协议使用
+3. **内容特征**：恶意关键字和编码模式
+4. **来源行为**：IP信誉和访问模式
+5. **加密流量特征**：证书、握手和元数据
+
+结合传统规则和现代机器学习方法，建立多层次的检测体系，可以有效识别各种网络攻击。定期更新威胁情报和调整检测策略也是保持防御有效性的关键。
 
 ## 降维方法对比（1.3，4.7，4.10）
 
